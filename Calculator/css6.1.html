@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>css6.1</title>
+<script src='js/myjs1.4.js'></script>
+<script src='js/base.js'></script>
+<script src='js/base/stracture.js'></script>
+<script src='js/base/convert.js'></script>
+<script src='js/base/Calculators.js'></script>
+<script src='js/base/compute.js'></script>
+</head>
+<body>
+<script type="application/javascript" >
+var calv2 = null;
+var intNumber = collections.base.compute.intNumber;
+var intNumbers = collections.base.compute.intNumbers;
+var eT = collections.base.enumerableTree;
+window.onload = function(){
+  var base = collections.base;
+  var Calculators = collections.base.Calculators;
+  var calculV2 = new Calculators.CalculatorV2();
+
+  calv2 = calculV2;
+
+  var display = (function(){
+    var f = function(){};
+    f['display'] = cm.getIdEle('display');
+    f['show'] = cm.getIdEle('show');
+    f['detail-process'] = cm.getIdEle('detail-process');
+    f['memory'] = cm.getIdEle('memory');
+    f['level']  = cm.getIdEle('level');
+    return f;
+  }());
+
+  window.onkeydown = function(e){
+    showResult(calculV2.action(e.key));
+  };
+  // 设置key值
+  !(function(){
+    var target = document.getElementById('box');
+    var tds = target.querySelectorAll('td');
+    for(var i = 0,len = tds.length; i < len; i++){
+      var value = '';
+      var ele = tds[i].firstChild;
+      do{
+        if(!ele) continue;
+        if(ele.nodeType === 3) {
+          if(ele.id == false) continue;
+          cm.bind_event(tds[i],'click',action);
+          break;
+        }
+        ele = ele.nextSibling;
+        //如果 ele 为undefined那么 !==null则永远成立
+      }while(ele !== null);
+    }
+
+    if(display['memory'].firstChild === null){
+        display['memory'].append(document.createTextNode(''));
+    }
+    if(display['level'].firstChild === null){
+        display['level'].append(document.createTextNode(''));
+    }
+  }());
+
+  function showResult(result){
+    // 计算值。
+    //!result.error 
+    //?
+     (display['show'].firstChild.nodeValue =  result.value)
+    //: (display['show'].firstChild.nodeValue = result.value);
+    // 显示详细过程。
+    display['detail-process'].firstChild.nodeValue = result.process;
+    // memory存值则显示M。
+    if(result.memory != '0'){
+      var memory = display['memory'].firstChild.nodeValue;
+      (memory.indexOf('M') < 0) && (display['memory'].firstChild.nodeValue = 'M');
+    }
+    else{
+      display['memory'].firstChild.nodeValue = '';
+    }
+    // 公式等级，0则不显示。
+    if(result.level){
+      var memory = display['level'].firstChild.nodeValue;
+      (memory.indexOf('(') < 0) && (display['level'].firstChild.nodeValue = '(=' + result.level);
+    }
+    else{
+      display['level'].firstChild.nodeValue = '';
+    }
+  }
+
+  function action(_e){
+    var target = cm.getThisEle(this,_e);
+    var key = target.id;
+    var isDisable = target.getAttribute('__disable');
+    if(!isDisable){
+      showResult(calculV2.action(key));
+    }
+  }
+  function showFilter(str,count){
+  
+    if(str instanceof String || typeof str === 'string' || typeof str === 'number'){
+      var count = parseInt(count);
+          count = count !== count ? 18 : count;
+      if(str.length > count){
+        str += '';
+
+        var value = parseFloat(str);
+        
+        if(value !== value || Math.abs(value) === Infinity) 
+          throw new TypeError('str converted non is a number:' + value);
+        
+        if(str.indexOf('.') > -1){
+          var roundAge = count - (str.split('.')[0].length + 1);
+          value = value.toFixed(roundAge);
+          str = (Math.floor(value) == value) ? parseInt(value) : value;
+        }
+      }
+    }
+    else{
+      throw new TypeError('str is:' + typeof str + '. must is a string type or number type.');
+    }
+    return str;
+  }
+
+}
+
+// 回看一下/**ObjectId**/
+</script>
+
+<style>
+
+#box { background-color:#E0EEEE;float:left;width:484px;padding:5px;}
+.wrap { display:block;float:left; }
+#display { 
+  float:left;
+  width:470px;
+  height:46px;
+  padding:4px;
+  border-radius:2px;
+  border:1px solid #AAAAAA;
+  margin-left:2px;
+  background: -webkit-linear-gradient(rgb(233, 233, 252), #F8F8FF);
+  position: relative;
+  }
+#show {
+  font-size:25px;
+  position: absolute;
+  bottom:-2px;
+  right:0px;
+  text-align:right;
+  padding-right:8px;
+  padding-bottom:0px;
+}
+#detail-process {
+  position: absolute;
+  top:2px;
+  right:0px;
+  text-align:right;
+  padding-right:10px;
+  font-size:18px;
+  color:#222;
+}
+#memory {
+  position: absolute;
+  bottom:0px;
+  left:0px;
+  text-align:right;
+  padding-left:10px;
+  font-size:22px;
+  color:#333;
+}
+#normal,#mathFun { border:0px; }
+#normal td,#mathFun td{ 
+  width:40px;
+  height:30px;
+  text-align:center;
+  padding:2px;
+  margin:2px;
+  font-size:12px;
+  border-radius:2px;
+  -webkit-user-select:none;
+}
+
+#measure{
+  -webkit-user-select:none;
+  border-radius:2px;
+  border:1px solid #AAAAAA;
+  margin:2px 2px 0px 2px;
+  width:238px;
+}
+#measure td{
+  width: 76px;
+  height: 26px;
+  font-size:12px;
+  padding:2px;
+  text-align:left;
+}
+
+
+.white,.blue,.indentation{ border:1px solid #AAAAAA; }
+.indentation {
+  -webkit-user-select:none;
+  background-color: inherit;
+}
+.white {
+  background-color:white;
+  background: -webkit-linear-gradient(white, #F8F8FF);
+  
+}
+.blue {
+  background: -webkit-linear-gradient(white, #E0EEEE);
+}
+.white:hover,.blue:hover{
+  border:1px solid #FFB90F;
+  background: -webkit-linear-gradient(white, #FFEC8B);
+  box-shadow: #ffff99 0px 0px 2px;
+}
+.indentation:hover{
+  border:1px solid #FFB90F;
+  background: -webkit-linear-gradient(#e9c377, #FAFAD2);
+}
+.white:active,.blue:active {
+  border:1px solid #FFB90F;
+  background: -webkit-linear-gradient(#FFEC8B,white);
+  box-shadow: #ffff99 0px 0px 2px;
+}
+.indentation:active {
+  border:1px solid #FFB90F;
+  background: -webkit-linear-gradient(rgb(255, 179, 0), white);
+}
+.empty{
+  border:1px solid #AAAAAA;
+}
+.disable{
+  background-color:#AAA;
+  color:#555;
+  border: 1px solid #BBB;
+}
+#memory,#detail-process{
+  -webkit-user-select:none;
+}
+
+.c555{
+  color:#555;
+}
+</style>
+
+<div id='box'>
+  <div class='wrap'>
+    <div id='display' >
+      <span id='detail-process'>0</span>
+      <span id='memory'></span>
+      <span id='show'>0</span>
+    </div>
+  </div>
+  <div class='wrap'>
+    <table id='measure'>
+      <tr class='c555'>
+        <td  __disable='1'><input disabled="disabled" __disable='1' type='radio' name='degree' checked='checked'/>度</td><td  __disable='1'><input disabled="disabled" __disable='1' type='radio' name='degree'/>弧度</td><td  __disable='1'><input disabled="disabled" __disable='1' type='radio' name='degree'/>梯度</td>
+      </tr>
+    </table>
+    <table id='mathFun'>
+      <tr>
+        <td __disable='1' class='empty' id='level'></td><td class='disable' __disable='1'>inv</td><td class='disable' __disable='1'>in</td><td id='left_parenthese' class='blue'>(</td><td id='right_parenthese' class='blue'>)</td>
+      </tr>
+      <tr>
+        <td id='convertToInt' class='blue'>Int</td><td id='sinh' class='blue'>sinh</td><td id='sin' class='blue'>sin</td><td id='xPow2' class='blue'>x²</td><td class='disable' __disable='1'>n!</td>
+      </tr>
+      <tr>
+        <td class='disable' __disable='1'>dms</td><td id='cosh' class='blue'>cosh</td><td id='cos' class='blue'>cos</td><td id='xPowY' class='blue'>x^y</td><td class='disable' __disable='1'>y√x</td>
+      </tr>
+      <tr>
+        <td id='pi' class='blue'>π</td><td id='tanh' class='blue'>tanh</td><td id='tan' class='blue'>tan</td><td id='xPow3' class='blue'>x^3</td><td class='disable' __disable='1'>3√x</td>
+      </tr>
+      <tr>
+        <td class='disable' __disable='1'>F-E</td><td class='disable' __disable='1'>Exp</td><td id='mod' class='blue'>Mod</td><td id='log10' class='blue'>log10</td><td id='tenPowN' class='blue'>10^x</td>
+      </tr>
+    </table>
+  </div>
+  <div class='wrap'>
+    <table id='normal'>
+      <tr>
+        <td id='memory_clear' class='indentation'>MC</td><td id='memory_read' class='indentation'>MR</td><td id='memory_save' class='indentation'>MS</td><td id='memory_add' class='indentation'>M+</td><td id='memory_subtract' class='indentation'>M-</td>
+      </tr>
+      <tr>
+        <td id='backspace' class='blue'>←</td><td id='allClear' class='blue'>AC</td><td id='clear' class='blue'>C</td><td id='negative' class='blue'>±</td><td id='sqrt' class='blue'>√</td>
+      </tr>
+      <tr>
+        <td id='seven' class='white'>7</td><td id='eight' class='white'>8</td><td id='nine' class='white'>9</td><td id='divide' class='blue'>/</td><td id='percent' class='disable' __disable='1'>%</td>
+      </tr>
+      <tr>
+        <td id='four' class='white'>4</td><td id='five' class='white'>5</td><td id='six' class='white'>6</td><td id='muliply' class='blue'>*</td><td id='reciproc' class='blue'>1/x</td>
+      </tr>
+      <tr>
+        <td id='one' class='white'>1</td><td id='two' class='white'>2</td><td id='three' class='white'>3</td><td id='subtract' class='blue'>-</td><td id='enter' class='blue' rowspan="2">=</td>
+      </tr>
+      <tr>
+        <td id='zero' colspan='2' class='white'>0</td><td id='point' class='white'>.</td><td id='add' class='blue'>+</td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>
