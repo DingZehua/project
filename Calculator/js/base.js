@@ -629,7 +629,6 @@ collections.base = (function(){
       // o['get' + proName] = get;
       // o['set' + proName] = set;
       o[proName] = value;
-      o[proName] = value;
     }
 
     function get(){
@@ -724,7 +723,6 @@ collections.base = (function(){
   base.method.showAttr = showAttr;
 
   base.CONST = {};
-  base.CONST.ERR_ = ERR_;
   base.CONST.ERR_ = ERR_;
   return base;
 }());
