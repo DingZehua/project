@@ -34,5 +34,6 @@
   <li> 4.将v0.1和v0.2合并在一起.</li>
   <li> 5.编写可以转换成大写的类对象，增加在UI界面中.</li>
 </ul>
+<p>Preview</p>
 <img src='https://github.com/DingZehua/Calculator/blob/master/calv2.png'/>
 <img src='https://github.com/DingZehua/Calculator/blob/master/calv2.1.png'/>
