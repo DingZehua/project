@@ -1,13 +1,13 @@
 # Development Log
-A simple calcaulator written by JavaScript.
+<p>A simple calcaulator written by JavaScript.</p>
 
-<h3>Features </h>
+<h3>Features</h>
 <ul>
   <li>面向对象架构.</li>
   <li>集成+简单的组合类.</li>
 </ul>
 <h3>Update record</h>
-<span>v0.1</span>
+<p>v0.1</p>
 <ul>
   <li>了解程序运行流程.</li>
   <li>制定代码框架.</li>
@@ -15,7 +15,7 @@ A simple calcaulator written by JavaScript.
   <li>编写简单的左右操作符四则运算.</li>
   <li>实现基本的运算</li>
 </ul>
-<span>v0.2</span>
+<p>v0.2</p>
 <ul>
   <li>升级代码框架.</li>
   <li>优化前端UI.</>
