@@ -1,4 +1,4 @@
 # Development Log
-A simple calcaulator written by JavaScript
+A simple calcaulator written by JavaScript.
 
-features 
+<span> features 
