@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Calculator</title>
+<title>css6.1</title>
 <script src='js/myjs1.4.js'></script>
 <script src='js/base.js'></script>
 <script src='js/base/stracture.js'></script>
@@ -14,7 +14,6 @@
 <script type="application/javascript" >
 window.onload = function(){
   var base = collections.base;
-  var Calculators = collections.base.Calculators;
   var calculV2 = new Calculators.CalculatorV2();
 
   var display = (function(){
@@ -118,6 +117,7 @@ window.onload = function(){
   }
 
 }
+
 </script>
 
 <style>
@@ -134,24 +134,29 @@ window.onload = function(){
   margin-left:2px;
   background: -webkit-linear-gradient(rgb(233, 233, 252), #F8F8FF);
   position: relative;
+  overflow: hidden;
   }
 #show {
   font-size:25px;
   position: absolute;
   bottom:-2px;
-  right:0px;
+  right:8px;
   text-align:right;
-  padding-right:8px;
   padding-bottom:0px;
+  display: block;
+  max-width: 80%;
+  overflow: hidden;
 }
 #detail-process {
   position: absolute;
   top:2px;
-  right:0px;
+  right:9px;
   text-align:right;
-  padding-right:10px;
   font-size:18px;
   color:#222;
+  display: block;
+  max-width: 60%;
+  overflow: hidden;
 }
 #memory {
   position: absolute;
