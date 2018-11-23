@@ -34,14 +34,16 @@ window.onload = function(){
     var target = document.getElementById('box');
     var tds = target.querySelectorAll('td');
     for(var i = 0,len = tds.length; i < len; i++){
-      var value = '';
       var ele = tds[i].firstChild;
       do{
+        // 查看是否为null，如果是为null那么则跳过，有可能第一个也是null.跳过之后会给while条件终止掉循环。
         if(!ele) continue;
         if(ele.nodeType === 3) {
-          if(ele.id == false) continue;
-          cm.bind_event(tds[i],'click',action);
-          break;
+          // 如果里面有文字内容，那么则给它绑定一个事件。
+          if(ele.nodeValue){
+            cm.bind_event(tds[i],'click',action);
+            break;
+          }
         }
         ele = ele.nextSibling;
         //如果 ele 为undefined那么 !==null则永远成立
