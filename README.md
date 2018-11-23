@@ -1,6 +1,6 @@
 # Development Log
-<p>A simple calcaulator written by JavaScript.</p>
-
+<span>A imperfect calculator.</span>
+<span>            written by JavaScript.</span>
 <h3>features</h3>
 
 <ul>
