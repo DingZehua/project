@@ -889,7 +889,13 @@ collections.base.Calculators = (function(){
           function(node){
             // 处理OneCompV节点。
             if(!Calv2Engine.prototype.isPrototypeOf(node)){
-              detailProcess += node.toString();
+              // 在输入状态下不显示指数。
+              if(node.value.status === cvStatus.LAST){
+                detailProcess += node.value.toString();
+              }
+              else{
+                detailProcess += node.toString();
+              }
             }
             else{
             // 处理 Calv2Engine节点。
@@ -1106,9 +1112,6 @@ collections.base.Calculators = (function(){
           if(!this.result.error){
             var value = '0';
             CalculatorV2.activeSet.active(key,this);
-            // 处理在输入状态下，在小数点后面无法输入0.
-            var value = '0';
-            CalculatorV2.activeSet.active(key,this);
             // 处理在输入状态下小数点后面无法输入0.
             if(this.display.value.status !== cvStatus.LAST){
               value = this.display.get();
@@ -1116,13 +1119,12 @@ collections.base.Calculators = (function(){
             else{
               value = this.input.value.value;
             }
-            
+
             // 如果结果是Infinity,那么这则直接报错。
             if(Math.abs(value) === Infinity){
               throw new errorInfo('Compute value is Infinity.',
                         value,BASE_CONST.ERR_.PARAM,CAL_ERROR.VALUE_CORRECT);
             }
-            
             this.result.level = this.cur.level;
             this.result.value = value + ''; // 转换成字符串。
             this.result.error = false;
