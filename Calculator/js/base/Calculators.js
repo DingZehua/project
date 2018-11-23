@@ -924,8 +924,7 @@ collections.base.Calculators = (function(){
         return this.valueOf();
       },
       resetResult : function(){
-        this.result.value.value = '0';
-        this.result.value.status = cvStatus.AGAIN;
+        this.result.value.reset();
       }
     }
   );
@@ -1322,8 +1321,8 @@ collections.base.Calculators = (function(){
         // 将公式里的值计算进去，然后清除掉。
         this.cur.reduceResult();
         // 之所以要把显示权放到，这里是因为在所有的nodes节点释放之后重新新建的，没有输入权。
-        this.input = this.cur.head;
-        this.display = this.cur.result;
+        this.input = this.cur.result;
+        this.display = this.input;
       },
       resultAssignHead : function(){
         if(this.display === this.cur.result
@@ -1387,7 +1386,10 @@ collections.base.Calculators = (function(){
         this.display = this.input;
         this.display.value.value = Math.PI;
         this.display.value.changedFirst();
-        this.cur.resetResult();
+        // 输入权是result的时候不清空。
+        if(this.display !== this.cur.result){
+          this.cur.resetResult();
+        }
       },
       setZero : function(){
         if(this.cur.foot instanceof Calv2Engine){
@@ -1473,70 +1475,3 @@ collections.base.Calculators = (function(){
 
   return Calculators;
 }());
-
-// 下一部扩大，UI面板功能。--
-// 然后编写括号的功能。--
-// 等于号功能--
-// memory--
-// 注意除了setResult方法,只有在剩下一个compV和result并且在计算时,才有权力拿到display权。其他一切有关操作，都要拿回input和display权。
-
-// allCompute在剩下一个OneCal对象时有问题。--
-// 编写右括号功能。--
-// 计算值--
-
-// 函数枚举类。XX
-// 解决TO:的东西。--
-// 数学函数,在OneComV给valueOf()重写功能，覆盖掉父类的get()。--
-// 计算一个数，还有返回一个字符串。--
-// 释放功能和公式功能用同一个运行函数XX
-
-/* --------------------------------------------------------- */
-// 对值的最大长度（最大值以及最小值），对算数错误的处理（例如x/0的错误)，XX,后续做。
-// 以及NAV还有Infin的错误，以及超出最大值的错误。--
-// 错误是否能够输入，有多少错误类型，例如：除数不能为0、计算错误。。。
-// 做一个返回信息的对象，XX
-// 包含错误的信息,error:true、false表示是否有错误，错误信息msg,以及错误代码msgNumber--
-// 返回公式过程，以及计算值。--
-// 以及在错误的状态下能做什么操作，清除，输入数字，四则运算，数学函数,--
-// 错误清除的范围:一个oneComv和calEngine或者是整条公式,。--
-// 错误要锁定哪些操作不能使用。--
-// 使用运算符号没有转回显示权。--
-// allClear、clear清除不掉，等于Infin的时候显示错误。--
-// 只有result没有显示数学函数。--
-// 100 Mod 2 = cos(0)有bug。--
-// 在初始状态下，只有一位操作数，确认结果，结果还可以输入。--
-// 如果计算结果是错误的话，不会立即报错，--
-// 还有memory也要测试;设定一下禁用功能，--
-// 没有功能就不发送请求。--
-// 用webPack打包。
-/* --------------------------------------------------------- */
-
-// 处理退格键的问题--
-
-// 使用到合并函数功能可以在javascript权威指南第六章函数功能去查看。
-
-// 做一个可以遍历整个树的函数，并且有一个函数参数，还有一个This参数，
-// 最重要的是，在遍历的过程中，能规避被删除节点，或者新增节点,或者节点移动带来异常的功能。
-
-// 做一个单个收集节点的函数,用Set收集，然后放在set里面。
-// 只剩下result和oneCompV的时候计算的时候要做些调整。XX
-
-// TODO:mathName做计算。--
-
-// OneCompV和CompV的get()是不同的结果,把需要把公式计算的全都修改好。--
-// OneCompV是包含计算数学函数的，而compV不包含。
-// computeValue 的值是要包含数学函数的，而这个值是要放在它的compV里面的不是在OneCompV里面的，
-// 而且数学函数不复制过去。
-
-// 如果用数学函数的话，那么在oneCompV类里面增加属性.--
-// 或者写一个继承OneCompV的数学函数类和一个OneCal类,里面有一个list存放对变量先后计算的数学函数列表。--
-
-// 详细过程可以用Array.join ，通过对每个对象运算之后得出的结果，然后合并。--
-// 编写计算器规范
-// 运算符，对变量的控制，以及规则，怎么写，用组合类写，以及显示出来，操控画面滚动的程序。
-
-// 操控画面滚动的程序，用object.defineProperty、__defineGeter__、__defineSetter__功能。
-// 用compose,[left||right]parita函数功能去处理三角函数cosh、cos,int、2派.
-
-// Exp如果display等于result那么则不计算。
-// 加入一个指数修正，还有禁用功能列表的功能.
