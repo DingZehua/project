@@ -74,8 +74,7 @@ window.onload = function(){
     }
     // 公式等级，0则不显示。
     if(result.level){
-      var memory = display['level'].firstChild.nodeValue;
-      (memory.indexOf('(') < 0) && (display['level'].firstChild.nodeValue = '(=' + result.level);
+      var memory = display['level'].firstChild.nodeValue = '(=' + result.level;
     }
     else{
       display['level'].firstChild.nodeValue = '';
