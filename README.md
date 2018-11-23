@@ -19,7 +19,7 @@
 </ul>
 <p>v0.2 -- Finish Time : <strong>2018-11-23</strong></p>
 <ul>
-  <li>修复三个版本留下来的BUG.</li>
+  <li>修复上个版本留下来的BUG.</li>
   <li>升级代码框架.</li>
   <li>优化前端UI.</>
   <li>增加功能：动态显示算式表达式.</li>
