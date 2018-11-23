@@ -1104,14 +1104,26 @@ collections.base.Calculators = (function(){
         key = this.ConverToWord(key); 
         try{
           if(!this.result.error){
+            var value = '0';
             CalculatorV2.activeSet.active(key,this);
-            var value = this.display.get();
-            this.result.level = this.cur.level;
+            // 处理在输入状态下，在小数点后面无法输入0.
+            var value = '0';
+            CalculatorV2.activeSet.active(key,this);
+            // 处理在输入状态下小数点后面无法输入0.
+            if(this.display.value.status !== cvStatus.LAST){
+              value = this.display.get();
+            }
+            else{
+              value = this.input.value.value;
+            }
+            
             // 如果结果是Infinity,那么这则直接报错。
             if(Math.abs(value) === Infinity){
               throw new errorInfo('Compute value is Infinity.',
                         value,BASE_CONST.ERR_.PARAM,CAL_ERROR.VALUE_CORRECT);
             }
+            
+            this.result.level = this.cur.level;
             this.result.value = value + ''; // 转换成字符串。
             this.result.error = false;
             this.result.memory = this.memory.value.value;
