@@ -7,7 +7,8 @@
   <li>面向对象架构.</li>
   <li>集成+简单的组合类.</li>
 </ul>
-<h3>Update record</h>
+<h3>Update record</h3>
+
 <p>v0.1</p>
 <ul>
   <li>了解程序运行流程.</li>
