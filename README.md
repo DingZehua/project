@@ -1,4 +1,4 @@
 # Development Log
 A simple calcaulator written by JavaScript.
 
-<span> features 
+<span style='font-weight:600;' > features </span>
