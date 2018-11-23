@@ -9,7 +9,7 @@
 </ul>
 <h3>update record</h3>
 
-<p>v0.1 -- Finish Time:{2018-10-25}</p>
+<p>v0.1 -- Finish Time:<strong>2018-10-25</strong></p>
 <ul>
   <li>了解程序运行流程.</li>
   <li>制定代码框架.</li>
@@ -17,7 +17,7 @@
   <li>编写简单的左右操作符四则运算.</li>
   <li>实现基本的运算</li>
 </ul>
-<p>v0.2 -- Finish Time:{2018-11-23}</p>
+<p>v0.2 -- Finish Time:<strong>2018-11-23</strong></p>
 <ul>
   <li>修复三个版本留下来的BUG.</li>
   <li>升级代码框架.</li>
