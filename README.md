@@ -5,7 +5,7 @@
 
 <ul>
   <li>面向对象架构.</li>
-  <li>集成+简单的组合类.</li>
+  <li>继承+简单的组合类.</li>
 </ul>
 <h3>update record</h3>
 
