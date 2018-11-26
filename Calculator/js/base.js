@@ -3,7 +3,21 @@ collections.base = (function(){
   var base = {};
   base.method = {};
 
-
+  if(Object.assign === undefined) {
+    Object.assign = function(target) {
+      if(target === undefined) {
+        throw "Cannot be null or undefined to object";
+      }
+      for(var i = 1,len = arguments.length; i < len ; i++) {
+        var source = arguments[i];
+        for(var key in source) {
+          if(source.hasOwnProperty(key))
+            target[key] = source[key];
+        }
+      }
+      return target;
+    }
+  }
 
   var extend = function(o,m){
     if(o == null || m == null) throw('object or method not undefined');
