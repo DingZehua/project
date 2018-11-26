@@ -366,6 +366,9 @@ collections.base.Calculators = (function(){
     convertToInt : function(value){
       return parseInt(value);
     },
+    negative : function(value){
+      return value * -1;
+    },
     contains : function(key){
       return key in this;
     }
@@ -455,8 +458,8 @@ collections.base.Calculators = (function(){
       //如果为重置状态那么复制left的值
       if(this.input === this.leftSide 
       && this.rightSide.status === ComputeVal.STATUS_CODE.AGAIN
-      ||  ( this.leftSide.status === ComputeVal.STATUS_CODE.LAST 
-        &&  this.rightSide.status === ComputeVal.STATUS_CODE.FIRST)) { 
+      || (this.leftSide.status === ComputeVal.STATUS_CODE.LAST 
+      &&  this.rightSide.status === ComputeVal.STATUS_CODE.FIRST)) { 
         this.leftSide.assginTo(this.rightSide); 
         this.leftSide.changedFirst();
       }
@@ -947,7 +950,7 @@ collections.base.Calculators = (function(){
     'backspace'         : {'methodName':'setValue','value':'b'},
     'allclear'          : {'methodName':'allClear','value':null},
     'clear'             : {'methodName':'clear','value':null},
-    'negative'          : {'methodName':'setValue','value':'-'},
+    'negative'          : {'methodName':'addMath','value':'negative'},
     'sqrt'              : {'methodName':'addMath','value':'sqrt'},
     'divide'            : {'methodName':'arithmetic','value':SIGN_GRADE.divide},
     'muliply'           : {'methodName':'arithmetic','value':SIGN_GRADE.muliply},
@@ -1206,12 +1209,13 @@ collections.base.Calculators = (function(){
       },
       setValue : function(key){
         // 如果最后一个是子公式，那么则删除这个子公式。
-       if(this.cur.foot instanceof Calv2Engine){
+        if(this.cur.foot instanceof Calv2Engine){
           if(key === 'b') {
             return;
           }
           this.input = this.cur.footReset();
         }
+
         // 输入状态下，变量取得显示权。
         this.display = this.input;
         if(this.input.value.status === cvStatus.AGAIN 
@@ -1345,6 +1349,7 @@ collections.base.Calculators = (function(){
         }
       },
       ConverToWord : function(key){
+        // 将key转换成小写。
         key = key.toLowerCase();
         if(CalculatorV2.eNum[key]){
           // 将字符转换成英文单词
@@ -1424,7 +1429,6 @@ collections.base.Calculators = (function(){
         this.input = this.init();
         this.cur.resetResult();
         this.display = this.input;
-        this.result.process = '0';
         this.cur.oper.currect = this.cur.oper.empty;
       },
       // 清除当前变量。
@@ -1441,6 +1445,7 @@ collections.base.Calculators = (function(){
         this.result.error = false;
         this.result.value = '0';
         this.result.level = this.cur.level;
+        this.result.process = '0';
         baseMethod.clealArr(this.cur.result.mathNames);
       }
     },
