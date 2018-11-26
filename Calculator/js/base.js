@@ -499,7 +499,7 @@ collections.base = (function(){
     return a - b;
   }
   function descend(a,b){
-    return a - b;
+    return b - a;
   }
 
   var clealArr = function(arr){
