@@ -1206,15 +1206,11 @@ collections.base.Calculators = (function(){
       },
       setValue : function(key){
         // 如果最后一个是子公式，那么则删除这个子公式。
-        if(this.cur.foot instanceof Calv2Engine && key !== 'b'){
+       if(this.cur.foot instanceof Calv2Engine){
+          if(key === 'b') {
+            return;
+          }
           this.input = this.cur.footReset();
-        } 
-        else if(this.cur.foot instanceof Calv2Engine && key === 'b'){
-          return;
-        }
-
-        if(this.cur.result === this.display && key === 'b'){
-          return;
         }
         // 输入状态下，变量取得显示权。
         this.display = this.input;
