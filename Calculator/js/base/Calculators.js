@@ -1339,11 +1339,12 @@ collections.base.Calculators = (function(){
         this.display = this.input;
       },
       resultAssignHead : function(){
+        // 将results的数学函数，还有值赋值给head。
         if(this.display === this.cur.result
           && this.display.value.status !== cvStatus.AGAIN
           && this.cur.head.value.status !== cvStatus.LAST){
              this.cur.head.value.toValue(
-              this.display.get()
+              this.display.value.get()
             );
           this.cur.head.mathNames = baseMethod.clealArr(this.cur.result.mathNames);
         }
