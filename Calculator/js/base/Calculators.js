@@ -1282,9 +1282,9 @@ collections.base.Calculators = (function(){
             this.input = curCal.foot;
             this.display = this.input;
           }
-          // 根目录只剩下一个，可以用于计算。
-          this.cur.oper.currect = this.cur.oper[SIGN];
         }
+        // 根目录只剩下一个，可以用于计算。
+        this.cur.oper.currect = this.cur.oper[SIGN];
       },
       setResult : function(){
         this.cur = this.root;
