@@ -1,5 +1,5 @@
 # Development Log
-<span>A simple calculator Written by JavaScript.</span></br>
+<span>A simple calculator Written by JavaScript.</span><br/>
 <h3>features</h3>
 
 <ul>
