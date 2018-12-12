@@ -1,8 +1,5 @@
 first add line.
 add 2 line.
-<<<<<<< HEAD
-add conflict line 3.
-=======
 add conflict line 1.
 add conflict line 2.
->>>>>>> conf1
+add exp line.
