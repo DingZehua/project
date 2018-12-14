@@ -1,4 +1,0 @@
-first add line.
-add 2 line.
-add conflict line 1.
-add conflict line 2.
