@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <head>
 <style>
+  .parent {
+    width:200px;
+    height:200px;
+    position:relative;
+    border:1px solid red;
+    overflow:hidden;
+    background-color:transparent;
+  }
+  .child{
+    width:100px;
+    height:100px;
+    position:absolute;
+    border:1px solid red;
+    background-color:blue;
+    clip:rect(0px 100px 100px 0px);
+  }
+  ._clip {
+    width:200px;
+    height:200px;
+    border:1px solid red;
+    clip:rect(0px 0px 0px 0px);
+  }
+  ._img{
+    clip:rect(0px 50px 50px 0px)
+  }
 </style>
 <script src='js/base.js'></script>
 <script>
@@ -46,5 +71,12 @@
 </script>
 </head>
 <body>
+  <div class='parent'>
+    <div class='child'></div>
+  </div>
+  <div class='_clip'>
+    clip_clip_clip_clip_clip_clip_clip_clip_clip_clip_clip_clip_
+  </div>
+  <img class='_img' src='file:///E:/OneDrive/Calculator/calv2.1.png'/>
 </body>
 </html>
