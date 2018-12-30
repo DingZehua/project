@@ -33,7 +33,34 @@
   }
 </style>
 <script src='js/base.js'></script>
-<script></script>
+<script>
+// 例16-4:查询计算样式与设置内联样式.
+// 用指定的因子缩放元素e的文本尺寸
+function scale(e, factor) {
+  // 用计算样式查询当前文本的尺寸.
+  var size = parseInt(window.getComputedStyle(e))['fontSize'];
+  // 用内联样式来放大尺寸.
+  e.style.fontSize = size * factor + 'px';
+}
+// 用指定的银子修改元素e的背景颜色.
+// factor > 1 颜色变浅, factor < 1 颜色变暗.
+function scaleColor(e ,factor) {
+  var color = window.getComputedStyle(e,null).backgroundColor;          // 查询.
+  var components = color.match(/\d+/g);   // 解析r、g、b和a分量.
+  for(var i = 0; i < 3 ; i++) {
+    var x = Number(components[i]) * factor;                             // 缩放每个值.
+    components[i] = Math.round(Math.min(x,255));                                    // 设置边界并取整.
+  }
+  if(components.length === 3) {  // rgb()颜色.
+    e.style.backgroundColor = 'rgb(' + components.join() + ')' ;
+  }
+  else {  // rgba()颜色.
+    e.style.backgroundColor = 'rgba(' + components.join() + ')' ;
+  }
+}
+
+
+</script>
 </head>
 <body>
 <!-- 定义一个窗口："window" div有一个标题栏和 -->
@@ -55,6 +82,6 @@ This is another window. Its <tt>z-index</tt> puts it on top of the other one.
 CSS styles make its content area translucent, in browsers that support that.
 </div>
 </div>
-<div id='st' style='left:;margin:1px 2px 3px 4px'></div>
+<div id='st' style='position:absolute;top:350px;;'> transition animate </div>
 </body>
 </html>
