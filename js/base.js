@@ -64,10 +64,16 @@ collections.base = (function(){
     return sort;
   }());
 
-  Array.prototype.heapSort = function(order){
-    heapSort(this,order);
-    return this;
-  };
+  Object.defineProperty(Array.prototype,'heapSort',
+    {
+      value : function(order){
+        heapSort(this,order);
+        return this;
+      },
+      writable : true,
+      configurable : true,
+      enumerable : false
+    });
 
   var extend = function(o,m){
     if(o == null || m == null) throw('object or method not undefined');
