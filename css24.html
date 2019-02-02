@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>css</title>
+</head>
+<body>
+<script type="application/javascript">
+
+window.onload = function() {
+  var ss = document.styleSheets[0];                   // 得到第一个样式表.
+  var rules = ss.cssRules? ss.cssRules : ss.rules;    // 得到样式表规则.
+  
+  for(var i = 0; i < rules.length ; i++) {            // 遍历这些规则.
+    var rule = rules[i];    
+    if(!rule.selectorText) continue;  // 跳过@import和非样式规则.
+    
+    var selector = rule.selectorText;   // 选择器.
+    var ruleText = rule.style.cssText;  // 文本形式的样式.
+
+    // 如果规则应用在h1元素上，也将其应用到h2元素上.
+    // 注意：仅当选择器在字面上为"h1"时这才起作用.
+    if (selector == 'h1') {
+      if(ss.insertRule) ss.insertRule('h2 {' + ruleText + '}',rules.length);
+      else if(ss.addRule) ss.addRule('h2',ruleText,rules.length);
+    }
+
+    // 如果规则设置了text-decoration属性，则将其删除.
+    if (rule.style.textDecoration)  {
+      if (ss.deleteRule) ss.deleteRule(i);
+      else if (ss.removeRule) ss.removeRule(i);
+      i--;    // 调整循环索引，因为以上的规则i+1现在即为规则i. 
+    }
+  }
+}
+
+// 例16-6: 创建一个新样式表
+// 对文档添加一个样式表，用指定的样式填充它.
+// style参数可能是字符组或对象。如果它是是字符串，就把它作为样式表的文本.
+// 如果它是对象，将每个定义样式规则的每个属性添加到样式表中.
+// 属性名即为选择器，其值即为对应的样式.
+function addStyles(styles) {
+  // 首先，创建一个新样式表.
+  var styleElt, styleSheet;
+  if (document.createStyleSheet) { // 如果定义了IE的API，即可使用它.
+    styleSheet = document.createStyleSheet();
+  }
+  else {
+    var head = document.getElementsByTagName('head')[0];
+    styleElt = document.createElement('style');           // 新的<style>元素.
+    head.appendChild(styleElt);                           // 把它插入<head>中.
+    // 现在，新的样式表应该是最后一个.
+    styleSheet = document.styleSheets[document.styleSheets.length-1];
+  }
+
+  // 现在像其中插入样式.
+  if (typeof styles === 'string') {
+    // 参数是样式表文本.
+    if(styleElt) styleElt.innerHTML = styles;
+    else styleSheet.cssText = styles;         // IE API;
+  }
+  else {
+    // 参数对象是待插入的单独规则的对象.
+    var i = 0;
+    for(selector in styles) {
+      if (styleSheet.insertRule) {
+        var rule = selector + ' {' + styles[selector] + '}';
+        styleSheet.insertRule(rule,i++);
+      }
+      else {
+        styleSheet.addRule(selector,styles[selector],i++);
+      }
+    }
+  }
+}
+</script>
+
+<style id='st'>
+#box { background-color:#E0EEEE;float:left;width:484px;padding:5px;}
+.wrap { display:block;float:left; }
+#display { 
+  float:left;
+  width:470px;
+  height:46px;
+  padding:4px;
+  border-radius:2px;
+  border:1px solid #AAAAAA;
+  margin-left:2px;
+  background: -webkit-linear-gradient(rgb(233, 233, 252), #F8F8FF);
+  position: relative;
+  overflow: hidden;
+  }
+#show {
+  font-size:25px;
+  position: absolute;
+  bottom:-2px;
+  right:8px;
+  text-align:right;
+  padding-bottom:0px;
+  display: block;
+  max-width: 80%;
+  overflow: hidden;
+}
+#detail-process {
+  position: absolute;
+  top:2px;
+  right:9px;
+  text-align:right;
+  font-size:18px;
+  color:#222;
+  display: block;
+  max-width: 100%;
+}
+#memory {
+  position: absolute;
+  bottom:0px;
+  left:0px;
+  text-align:right;
+  padding-left:10px;
+  font-size:22px;
+  color:#333;
+}
+#normal,#mathFun { border:0px; }
+#normal td,#mathFun td{ 
+  width:40px;
+  height:30px;
+  text-align:center;
+  padding:2px;
+  margin:2px;
+  font-size:12px;
+  border-radius:2px;
+  -webkit-user-select:none;
+}
+
+#measure{
+  -webkit-user-select:none;
+  border-radius:2px;
+  border:1px solid #AAAAAA;
+  margin:2px 2px 0px 2px;
+  width:238px;
+}
+#measure td{
+  width: 76px;
+  height: 26px;
+  font-size:12px;
+  padding:2px;
+  text-align:left;
+}
+
+
+.white,.blue,.indentation{ border:1px solid #AAAAAA; }
+.indentation {
+  -webkit-user-select:none;
+  background-color: inherit;
+}
+.white {
+  background-color:white;
+  background: -webkit-linear-gradient(white, #F8F8FF);
+  
+}
+.blue {
+  background: -webkit-linear-gradient(white, #E0EEEE);
+}
+.white:hover,.blue:hover{
+  border:1px solid #FFB90F;
+  background: -webkit-linear-gradient(white, #FFEC8B);
+  box-shadow: #ffff99 0px 0px 2px;
+}
+.indentation:hover{
+  border:1px solid #FFB90F;
+  background: -webkit-linear-gradient(#e9c377, #FAFAD2);
+}
+.white:active,.blue:active {
+  border:1px solid #FFB90F;
+  background: -webkit-linear-gradient(#FFEC8B,white);
+  box-shadow: #ffff99 0px 0px 2px;
+}
+.indentation:active {
+  border:1px solid #FFB90F;
+  background: -webkit-linear-gradient(rgb(255, 179, 0), white);
+}
+.empty{
+  border:1px solid #AAAAAA;
+}
+.disable{
+  background-color:#AAA;
+  color:#555;
+  border: 1px solid #BBB;
+}
+#memory,#detail-process{
+  -webkit-user-select:none;
+}
+
+.c555{                                                       
+  color:#555;
+}
+
+h1 {
+  color:red;
+}
+
+.de {
+  text-decoration:#222;
+  text-decoration-line: line-through;
+}
+
+</style>
+<h1 class='de'> h1 title </h1>
+<h2> h2 title</h2>
+<div id='box'>
+  <div class='wrap'>
+    <div id='display' >
+      <span id='detail-process'>0</span>
+      <span id='memory'></span>
+      <span id='show'>0</span>
+    </div>
+  </div>
+  <div class='wrap'>
+    <table id='measure'>
+      <tr class='c555'>
+        <td  __disable='1'><input disabled="disabled" __disable='1' type='radio' name='degree' checked='checked'/>度</td><td  __disable='1'><input disabled="disabled" __disable='1' type='radio' name='degree'/>弧度</td><td  __disable='1'><input disabled="disabled" __disable='1' type='radio' name='degree'/>梯度</td>
+      </tr>
+    </table>
+    <table id='mathFun'>
+      <tr>
+        <td __disable='1' class='empty' id='level'></td><td class='disable' __disable='1'>inv</td><td class='disable' __disable='1'>in</td><td id='left_parenthese' class='blue'>(</td><td id='right_parenthese' class='blue'>)</td>
+      </tr>
+      <tr>
+        <td id='convertToInt' class='blue'>Int</td><td id='sinh' class='blue'>sinh</td><td id='sin' class='blue'>sin</td><td id='xPow2' class='blue'>x²</td><td class='disable' __disable='1'>n!</td>
+      </tr>
+      <tr>
+        <td class='disable' __disable='1'>dms</td><td id='cosh' class='blue'>cosh</td><td id='cos' class='blue'>cos</td><td id='xPowY' class='blue'>x^y</td><td class='disable' __disable='1'>y√x</td>
+      </tr>
+      <tr>
+        <td id='pi' class='blue'>π</td><td id='tanh' class='blue'>tanh</td><td id='tan' class='blue'>tan</td><td id='xPow3' class='blue'>x^3</td><td class='disable' __disable='1'>3√x</td>
+      </tr>
+      <tr>
+        <td class='disable' __disable='1'>F-E</td><td class='disable' __disable='1'>Exp</td><td id='mod' class='blue'>Mod</td><td id='log10' class='blue'>log10</td><td id='tenPowN' class='blue'>10^x</td>
+      </tr>
+    </table>
+  </div>
+  <div class='wrap'>
+    <table id='normal'>
+      <tr>
+        <td id='memory_clear' class='indentation'>MC</td><td id='memory_read' class='indentation'>MR</td><td id='memory_save' class='indentation'>MS</td><td id='memory_add' class='indentation'>M+</td><td id='memory_subtract' class='indentation'>M-</td>
+      </tr>
+      <tr>
+        <td id='backspace' class='blue'>←</td><td id='allClear' class='blue'>AC</td><td id='clear' class='blue'>C</td><td id='negative' class='blue'>±</td><td id='sqrt' class='blue'>√</td>
+      </tr>
+      <tr>
+        <td id='seven' class='white'>7</td><td id='eight' class='white'>8</td><td id='nine' class='white'>9</td><td id='divide' class='blue'>/</td><td id='percent' class='disable' __disable='1'>%</td>
+      </tr>
+      <tr>
+        <td id='four' class='white'>4</td><td id='five' class='white'>5</td><td id='six' class='white'>6</td><td id='muliply' class='blue'>*</td><td id='reciproc' class='blue'>1/x</td>
+      </tr>
+      <tr>
+        <td id='one' class='white'>1</td><td id='two' class='white'>2</td><td id='three' class='white'>3</td><td id='subtract' class='blue'>-</td><td id='enter' class='blue' rowspan="2">=</td>
+      </tr>
+      <tr>
+        <td id='zero' colspan='2' class='white'>0</td><td id='point' class='white'>.</td><td id='add' class='blue'>+</td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

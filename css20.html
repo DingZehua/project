@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<head>
+<style>
+  .parent {
+    width:200px;
+    height:200px;
+    position:relative;
+    border:1px solid red;
+    overflow:hidden;
+    background-color:transparent;
+  }
+  .child{
+    width:100px;
+    height:100px;
+    position:absolute;
+    border:1px solid red;
+    background-color:blue;
+    clip:rect(0px 100px 100px 0px);
+  }
+  ._clip {
+    width:200px;
+    height:200px;
+    border:1px solid red;
+    clip:rect(0px 0px 0px 0px);
+  }
+  ._img{
+    clip:rect(0px 50px 50px 0px)
+  }
+</style>
+<script src='js/base.js'></script>
+<script>
+  var HeapSort = function(){};
+  HeapSort.prototype = {
+    constructor : constructor,
+    main : function(arr){
+      this.sort(arr);
+      console.log(arr);
+    },
+    sort : function(arr) {
+      for(var i = Math.floor(arr.length / 2 - 1); i >= 0 ; i--){
+        this.adjustHeap(arr,i,arr.length);
+      }
+      for(var j = arr.length - 1; j > 0 ; j--){
+        this.swap(arr,0,j);
+        this.adjustHeap(arr,0,j)
+      }
+    },
+    adjustHeap(arr ,i ,length) {
+      var temp = arr[i];
+      for(var k=i*2+1; k < length; k = k*2+1) {
+        if(k+1 < length && arr[k] < arr[k+1]) {
+          k++;
+        }
+        if(arr[k] > temp) {
+          arr[i] = arr[k];
+          i = k;
+        }else {
+          break;
+        }
+        arr[i] = temp;
+      }
+    },
+    swap : function(arr ,a ,b) {
+      var temp = arr[a];
+      arr[a] = arr[b];
+      arr[b] = temp;
+    }
+  };
+
+  var hs = new HeapSort();
+</script>
+</head>
+<body>
+  <div class='parent'>
+    <div class='child'></div>
+  </div>
+  <div class='_clip'>
+    clip_clip_clip_clip_clip_clip_clip_clip_clip_clip_clip_clip_
+  </div>
+  <img class='_img' src='file:///E:/OneDrive/Calculator/calv2.1.png'/>
+</body>
+</html>

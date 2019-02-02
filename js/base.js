@@ -19,6 +19,62 @@ collections.base = (function(){
     }
   }
 
+  var heapSort = (function(){
+    var ascend = function(a,b){
+      return a < b;
+    }
+
+    var descend = function(a,b){
+      return a > b;
+    }
+
+    var sort = function(arr,order) {
+      sort.compare = !order ? ascend : descend ;
+      for(var i = Math.floor(arr.length / 2 -1); i >= 0 ; i--) {
+        adjust(i,arr.length,arr);
+      }
+      for(var index = arr.length - 1; index > -1 ; index--) {
+        swap(0,index,arr);
+        adjust(0,index,arr);
+      }
+      return arr;
+    }
+
+    var adjust = function(i,length,arr) {
+      var temp = arr[i];
+      for(var k = i * 2 + 1; k < length ; k = k*2 + 1) {
+        if(k + 1 < length && sort.compare(arr[k],arr[k + 1])) {
+          k++;
+        }
+        if(sort.compare(arr[i],arr[k])) {
+          arr[i] = arr[k];
+          arr[k] = temp;
+          i = k;
+        }
+        else {
+          break;
+        }
+      }
+    }
+    var swap = function(from,to,arr) {
+      var temp = arr[from];
+      arr[from] = arr[to];
+      arr[to] = temp;
+    }
+    return sort;
+  }());
+
+  Object.defineProperty(Array.prototype,'heapSort',
+    {
+      value : function(order){
+        heapSort(this,order);
+        return this;
+      },
+      writable : true,
+      configurable : true,
+      enumerable : false
+    });
+
   var extend = function(o,m){
     if(o == null || m == null) throw('object or method not undefined');
     for(var name in m){
@@ -735,6 +791,7 @@ collections.base = (function(){
   base.method.isChildClass = isChildClass;
   base.method.hideAttr = hideAttr;
   base.method.showAttr = showAttr;
+  base.method.heapSort = heapSort;
 
   base.CONST = {};
   base.CONST.ERR_ = ERR_;

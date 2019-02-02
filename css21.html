@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<head>
+<style type='text/css'>
+  div.window {   /* 指定窗口的尺寸和边款 */ 
+    position : absolute;              /* position在其他地方指定 */
+    width:300px; height:200px;        /* 窗口尺寸，不含边款 */
+    border: 3px outset gray;        /* 注意3D "outset" 边框效果 */
+  }
+  
+  div.titlebar { /* 指定窗口内容的尺寸、定位和样式 */
+    position: absolute;               /* 它是一个定位元素 */
+    top: 0px; height:18px;            /* 标题栏18px + 加内边距和边框 */
+    width:290px;                      /* 290 + 5px 左、右内边距 =300 */
+    background-color: #aaa;         /* 标题栏颜色 */
+    border-bottom:groove gray 2px;  /* 标题栏只有底部由边框 */
+    padding:3px 5px 2px 5px;          /* 顺时针: top、right、bottom、left */
+    font: bold 11pt sans-serif        /* 标题栏字体 */
+  }
+
+  div .content { /*指定窗口内容的尺寸、定位和滚动 */
+    position : absolute;              /* 它是个定位元素 */
+    top: 25px;                        /* 18px标题+2px边框+3px+2px内边距 */
+    height: 165px;                    /* 200px总共-25px-10px内边距 */
+    width:290px;                      /* 300px宽度-10px内边距 */
+    padding: 5px;                     /* 4条边上都有空间 */
+    overflow: auto;                   /* 如果需要显示滚动条 */
+    background-color:#fff;          /* 默认白色背景 */
+  }
+
+  div .translucent { /* 此类让窗口部分透明 */
+    opacity: 0.75;                    /* 透明度标准样式 */
+    filter:alpha(opacity=75);         /* IE的透明度 */
+  }
+  .translucent:before {
+    width : 500px;
+  }
+</style>
+<script src='js/base.js'></script>
+<script>
+// 将e转化为相对定位的元素，使之左右"震动".
+// 第一个参数可以是元素对象或者是元素的id.
+// 如果第二个参数是函数，以e为参数，它将在动画结束时调用.
+// 第三个参数指定e震动的距离，默认时5像素.
+// 第四个参数指定震动多久，默认时500毫秒.
+
+function shake(e, oncomplete ,distance ,time) {
+  // 句柄参数
+  if(typeof e === 'string' ) e = document.getElementById(e);
+  if(!time) { time = 500; }
+  if(!distance) distance = 5;
+
+  var originalStyle = e.style.cssText;    // 保存e的原始style.
+  e.style.position = 'relative';          // 使e相对定位.
+  var start = (new Date()).getTime();     // 注意，动画的开始时间.
+  animate();                              // 动画开始.
+
+  // 函数检查消耗时间，并更新e的位置.
+  // 如果动画完成，它将e还原为原始状态.
+  // 否则，它更新e的位置，安排它自身重新运行.
+  function animate() {
+    var now = (new Date()).getTime();     // 得到当前时间.
+    var elapsed = now - start;            // 从开始以来消耗了多长时间？ 
+    var fraction = elapsed / time;        // 是总时间的几分之几？
+
+    if(fraction < 1) {    // 如果动画未完成.
+      // 作为动画完成比例的函数，计算e的x位置.
+      // 使用正弦函数将完成比例乘以4pi.
+      // 所以，它来回往复两次.
+
+      // sin是用来产生正负的数字的函数.
+      // 产生正负是要用来改变left的位置，所以感觉左右移动.
+      // sin的参数越大返回的结果越小，
+      // 移动距离也就越小，所以感觉震动的频率也就越高.
+      var x = distance = Math.sin(fraction * 4 * Math.PI); 
+      
+      e.style.left = x + 'px';
+      // 在25毫秒后或在总时间的最后尝试.
+      // 目的是为了产生40帧的动画.
+      setTimeout(animate,Math.min(25,time - elapsed));
+    }
+    else {
+      e.style.cssText = originalStyle;      // 恢复原始样式.
+      if (oncomplete) oncomplete(e);        // 调用完成后的回调函数.
+    }
+  }
+}
+
+// 以毫秒级的时间将e从完全不透明淡出到完全透明.
+// 在调用函数时假设e时完全不透明的.
+// oncomplete是一个可选的函数，以e为参数，它将在动画结束时调用.
+// 如果不指定time,默认为500毫秒.
+// 该函数在IE中不能正常工作，但也可以修改得能工作，
+// 除了opacity,IE使用非标准的filter属性.
+function fadeOut(e ,oncomplete ,time) {
+  if (typeof e === 'string' ) e = document.getElementById(e);
+  if (!time) time = 500;
+
+  // 使用Math.sqrt作为一个简单的“缓动函数”来创建动画.
+  // 精巧的非线性：一开始淡出得比较快，然后缓慢了一些.
+  var ease = Math.sqrt;
+
+  var start = (new Date()).getTime();   // 注意：动画开始的时间.
+  animate();                            // 动画开始.
+
+  function animate() {
+    var elapsed = (new Date()).getTime() - start; // 消耗的时间.
+    var fraction = elapsed / time;                // 消耗时间的百分比.
+
+    if(fraction < 1) {      // 如果动画未完成.
+      var opacity = 1 - ease(fraction);   // 计算元素的不透明度.
+      e.style.opacity = String(opacity);  // 设置在e上.
+      setTimeout(animate,Math.min(25,time - elapsed));  // 调度在下一帧.
+    }
+    else {  // 否则，动画完成.
+      e.style.opacity = '0';          // 使e完全透明.
+      if (oncomplete) oncomplete(e);  // 调用完成后的回调函数.
+    }
+  }
+}
+
+</script>
+</head>
+<body>
+<!-- 定义一个窗口："window" div有一个标题栏和 -->
+<!-- 其内是一个内容div。注意，如何设置定位 -->
+<!-- 一个扩充了样式表的style属性 -->
+<div id='test' class='window' style='left: 10px;top: 10px; z-index:10'>
+<div class='titlebar'>Test Window</div>
+<div class="content">
+1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>0<br> <!-- 若干行   -->
+1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>0<br> <!-- 展示滚动 -->
+</div>
+</div>
+<!-- 定义另一个窗口：用不同的定位、颜色和字体宽度 -->
+<div id='another' id='topWin' class="window" style='left:76px;width:200px; top:110px;z-index:20;'>
+<div class='titlebar'>Another Window</div>
+<div id='cont' class='content translucent' 
+      style='background-color:#ccc;font-weight:bold;'>
+This is another window. Its <tt>z-index</tt> puts it on top of the other one.
+CSS styles make its content area translucent, in browsers that support that.
+</div>
+</div>
+</body>
+</html>
