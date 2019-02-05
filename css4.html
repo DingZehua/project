@@ -1,0 +1,1087 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>css4</title>
+</head>
+<body>
+
+<div id="app">
+  <input type='text' id='msg'/>
+</div>
+<script language="javascript" >
+
+function Set(){
+  this.values = {};
+  this.n = 0;
+
+  if(arguments.length === 1 && arguments[0] instanceof Array ){ 
+    this.add.apply(this,arguments[0]);
+  }
+  else if( arguments.length > 0) 
+    this.add.apply(this,arguments);
+}
+
+//将每个参数在添加到集合里面
+Set.prototype.add = function(){
+  for ( var i = 0; i < arguments.length ;i++){//遍历每个参数
+    var val = arguments[i];//待添加到集合中的值
+    var str = Set._v2s(val);//把它转换为字符串
+    if(!this.values.hasOwnProperty(str)){//如果不在集合中
+      this.values[str] = val;//将字符串和值对应起来
+      this.n++;//集合中的计数加一
+    }
+  }
+  return this;//支持链式方法调用
+}
+
+//从集合中删除元素，这些元素由参数指定
+
+Set.prototype.remove = function(){
+  for(var i =0; i < arguments.length ; i++){//遍历每个参数
+    var str = Set._v2s(arguments[i]);
+    if(this.values.hasOwnProperty(str)){
+      delete this.values[str];
+      this.n--;
+    }
+  }
+  return this;
+}
+//如果集包含这个值，则返回true，否则，返回false
+Set.prototype.contains = function(value){
+  return this.values.hasOwnProperty(Set._v2s(value));
+}
+
+//返回集合中的大小
+Set.prototype.size = function(){
+  return this.n;
+}
+//遍历集合中的所有元素，在指定的上下文中调用f
+Set.prototype.foreach = function(f,context){
+  for(var s in this.values){          //遍历集合中的所有字符串
+    if(this.values.hasOwnProperty(s)){//跳过继承的属性
+      f.call(context,this.values[s]);
+    }
+  }
+}
+
+//这是一个内部函数，用以将任意JavaSript值和唯一的字符串对应起来
+Set._v2s = function(val){
+  switch(val){
+    case undefined : return 'u';//特殊的原始值
+    case null : return 'n';//值只有一个字母
+    case true : return 't'; //代码
+    case false : return 'f';
+    default : switch(typeof val){
+      case 'number' : return '#' + val;//数字都带有#前缀
+      case 'string' : return '"' + val;//字符串都带有"前缀
+          default : return '@' + objectId(val);//Objs and funcs get@
+    }
+    function objectId(o){
+      var prop = "|**objectid**|";
+      if(!o.hasOwnProperty(prop)){
+        o[prop] = Set._v2s.next++;
+      }
+      return o[prop];
+    }
+  }
+  //对任意对象来说，都会返回一个字符串
+  //针对不同的对象，这个函数会返回不同的字符串
+  //对于同一个对象和多次调用，总是返回相同的字符串
+  //为了做到这一点，它给o创建了一个属性，在ES5中，这个属性是只读的
+}
+
+Set.fromArray = function(a){
+  var s = new Set();
+  s.add.apply(s,a);
+  return s;
+}
+
+Set._v2s.next = 100;
+
+function SetFromArray(a){
+  Set.apply(this,a);
+}
+
+SetFromArray.prototype = Set.prototype;
+
+
+/*
+*/
+
+//这个函数创建一个新的枚举类型，实参对象表示类的每个实例的名字和值
+//返回值是一个构造函数，它表示这个新类
+//注意，这个构造函数也会抛出异常：不能使用它来创建该类的新实例
+//返回的构造函数包含名/值对的映射表
+//包括由值组成的数组，以及一个foreach()迭代器函数
+
+var enumeration = function(namesToValues){
+  //这个虚拟的构造函数是返回值
+  var enumeration = function(){
+    throw "Cant't Instantiate Enumerations";
+  }
+  //枚举值继承这个对象
+  var proto = enumeration.prototype = {
+    constructor : enumeration,//标识类型
+    toString : function() { return this.name; },
+    valueOf  : function() { return this.value; },
+    toJSON   : function() { return this.name; }
+  };
+
+  enumeration.values = [];//用以存放枚举对象的数组
+  
+  //现在创建新类型的实例
+  for(var name in namesToValues){// 遍历每个值
+    var e = (function(o){        // 创建每一个代表它的对象 
+      var f = function(){};      
+      f.prototype = o;           
+      return new f();            
+    }(proto));                   
+    e.name = name; // 给它一个名字
+    e.value = namesToValues[name]; // 给它一个值
+    enumeration[name] = e; // 将它设置为一个构造函数的属性
+    enumeration.values.push(e); // 将它存储到值数组中
+  }
+
+  //一个类方法，用来对类的实例进行迭代
+  enumeration.foreach = function( f, c ){
+    for( var i = 0; i < this.values.length; i++ ){
+      f.call(c,this.values[i]);
+    }
+  }
+
+  //返回表示这个新类型的构造函数
+  return enumeration;
+
+}
+
+var props = {
+  toString : function(){ return this.key; },
+  valueOf  : function() { return this.value;}
+}
+
+var oen = {
+  'one' : 1,
+  'two' : 2,
+  'three' : 3,
+  'four' : 4,
+  'five' : 5,
+  'six' : 6,
+  'seven' : 7,
+  'eight' : 8,
+  'nine' : 9
+};
+
+var enum_ = function(o){
+  var res = function(){ throw "Cant not call enum object"; };
+  res.values = [];
+  var values = res.values;
+
+  for(var key in o){
+    var v = Object.create(props);
+    v.key = key;
+    v.value = o[key];
+    res[key] = v;
+    values.push(v);
+  }
+
+  res.foreach = function(f,o){
+    for(var i = 0; i < values.length ; i++){
+      f.call(o,values[i]);
+    }
+  }
+
+  return res;
+}
+
+var out = function(){
+  this.x = 1;
+  this.y = 2;
+}
+
+out.values = enum_(oen);
+
+var multiplictionTable = function(){
+  this.table = {};
+}
+
+multiplictionTable.prototype.sum = function(){
+  var table = this.table;
+  out.values.foreach(
+    function(x){
+      table[+x] = {};
+      out.values.foreach(
+        function(y){
+          if(y <= x){
+            table[+x][+y] = x +' * ' + y + ' = ' + x * y;
+          }
+        }
+      );
+    }
+  );
+  return this;
+}
+
+// 定义一个表示”玩牌“的类
+function Card(suit,rank){
+  this.suit = suit;
+  this.rank = rank;
+}
+
+
+//使用枚举类型定义花色和点数
+Card.Suit = enumeration({Clubs:1,Diamonds:2,Hearts:3,Spades:4});
+Card.Rank = enumeration({Two:2,Three:3,Four:4,Five:5,Six:6,
+                          Seven:7,Eight:8,Nine:9,Ten:10,
+                          Jack:11,Quee:12,King:13,Ace:14});
+
+//定义用以描述牌面的文本
+Card.prototype.toString = function(){
+  return this.rank.toString() + " of " + this.suit.toString();
+}
+
+//比较扑克牌中两张牌的大小
+Card.prototype.compareTo = function(that){
+  if(this.rank < that.rank) return - 1;
+  if(this.rank > that.rank) return 1;
+  return 0;
+}
+
+// 以扑克牌的玩法规则对牌进行排序的函数
+Card.orderBySuit = function(a,b){
+  if(a.suit < b.suit) return -1;
+  if(a.suit > b.suit) return 1;
+  if(a.rank < b.rank) return -1;
+  if(a.rank > b.rank) return 1;
+  return 0;
+}
+
+//定义用以表示衣服标准扑克牌的类
+function Deck(){
+  var cards = this.cards = [];
+  Card.Suit.foreach(function(s){
+    Card.Rank.foreach(function(r){
+      cards.push(new Card(s,r));
+    });
+  });
+}
+
+//洗牌的方法：重新洗牌并返回洗好的牌
+Deck.prototype.shuffle = function(){
+  //遍历数组中的每个元素，随机找出牌面最小的元素，并与之（当前遍历的元素）交换
+  var deck = this.cards,len = deck.length;
+  for(var i = len -1; i > 0 ; i--){
+    var r = Math.floor(Math.random()* (i+1)),temp;
+    temp = deck[i],deck[i] = deck[r],deck[r] = temp;
+  }
+  return this;
+};
+
+//发牌的方法：返回牌的数组
+Deck.prototype.deal = function(n){
+  if (this.cards.length < n) throw 'Out of cards';
+  return this.cards.splice(this.cards.length - n,n);
+};
+
+//创建一副新扑克牌，洗牌并发牌
+var deck = (new Deck()).shuffle();
+var hand = deck.deal(13).sort(Card.orderBySuit);
+
+
+//枚举类中foreach循环 
+//扑克牌中的标准扑克牌。
+
+var o1 = {
+  value : '2018',
+  toString : function(){
+    return 'value';
+  },
+  valueOf : function(){
+    return this.value;
+  }
+}
+
+var o2 = {
+  value : '2018',
+  toString : function(){
+    return 'value';
+  },
+  valueOf : function(){
+    return this.value;
+  }
+}
+
+
+//方法借用的泛型实现
+
+var generic = {
+  //返回一个字符串，这个字符串包含构造函数的名字（如果构造函数包含名字）
+  //以及所有非继承来的、非函数属性的名字和值
+  toString : function(){
+    var s = '[';
+    //如果这个对象包含构造函数，且构造函数包含名字
+    //这个名字会作为返回字符串的一部分
+    //需要注意的是，函数的名字属性是非标准的，并不是在所有的环境中都适用
+    if(this.constructor && this.constructor.name){
+      s += this.constructor.name + ':';
+    }
+    //枚举所有非继承且非函数的属性
+
+    var n = 0;
+    for(var name in this){
+      if(!this.hasOwnProperty(name)) continue;
+      var value = this[name];
+      if(typeof value === 'function') continue;
+      if(n++) s += ',';
+      s += name + '=' + value;
+    }
+    s += ']';
+    return s;
+  },
+  
+  //通过比较this和that的构造函数和实例属性来判断他们是否相等
+  //这种方法只适用于那些实例属性是原始值的情况，原始值可以通过"==="来比较
+  //这里还处理一种特殊情况，就是忽略由Set添加的特殊属性
+  equals : function(that){
+    if(that == null) return false;
+    if(this.constructor !== that.constructor) return false;
+    for(var name in this){
+      if (name ==='|**objectid**|') continue; // 跳过特殊属性
+      if(!this.hasOwnProperty(name)) continue;// 跳过继承来的属性
+      if(this[name] !== that[name]) return false;//比较是否相等
+    }
+    return true;//所有的属性相匹配，两个对象相等
+  }
+
+}
+
+Set.prototype.toString = generic.toString;
+Set.prototype.equals = generic.equals;
+
+
+  //对Range类的读取端点方法的简单封装
+var Range = function(from , to){
+  //不要将端点保存为对象的属性，相反
+  //定义存取其函数来返回端点的值
+  //这些值都保存在闭包中
+  this.from = function() { return from;}
+  this.to = function()   { return to;}
+}
+
+//原型上的方法无法直接操作端点
+//它们必须调用存取方法
+
+Range.prototype = {
+  constructor : Range,
+  includes : function(x){ return this.from() <= x && this.to() >= x; },
+  foreach : function(f){
+    for(var x = Math.ceil(this.from()),max = this.to(); x < max ; x++) f(x);
+  },
+  toString : function(){ return "(" + this.from() + '...' + this.to() + ')'; }
+} 
+
+var A = function(){};
+A.prototype.msg = function() { console.log('is A class'); };
+
+var B  = function(){};
+B.prototype = Object.create(A.prototype);
+B.prototype.constructor = B;
+
+//用一个简单的函数创建简单的子类
+function  defineSubclass(superclass,
+                         constructor,
+                         methods,
+                         statics)
+{
+  //建立子类的原型对象
+  constructor.prototype = function(p,constructor){
+    var f = function(){};
+    f.prototype = p;
+    return new f;
+  }(superclass.prototype,constructor);
+
+  constructor.prototype.constructor = constructor;
+
+  //像对常规类一样复制方法和类属性
+  if(methods){ 
+    !function(p,ms){ 
+      for(var name in ms){
+        if(ms.hasOwnProperty(name)){
+          p[name] = ms[name];
+        }
+      }
+    }(constructor.prototype,methods);
+  }
+
+  if(statics){ 
+    !function(p,ss){ 
+      for(var name in ss){
+        if(ss.hasOwnProperty(name)){
+          p[name] = ss[name];
+        }
+      } 
+    }(constructor,statics); 
+  }
+  return constructor;
+}
+
+//也可以通过父类构造函数的方法来做到这一点
+Function.prototype.extend = function(constructor,methods,statics){
+  return defineSubclass(this,constructor,methods,statics);
+}
+
+var methods = {
+  sum : function(x){
+    return x + 1;
+  },
+  average : function(){
+    var cnt = arguments.length;
+    var sum = 0;
+    for(var i = 0; i < cnt ; i++){
+      sum += arguments[i];
+    }
+    return (sum / cnt);
+  }
+}
+
+var statics = {
+  one : 1,
+  two : 2,
+  three : 3
+}
+var __parent = function(){};
+var extend = function(o,m){
+  if(o == null || o == null) throw('object or method not undefined');
+  for(var name in m){
+    if(m.hasOwnProperty(name)){
+      o[name] = m[name];
+    }
+  }
+}
+
+function inherit(p){
+  if(p == null) throw('object not undefined');
+  var f = function(){};
+  f.prototype = p;
+  return new f();
+}
+
+// 一个简单的子类
+// 构造函数
+function SingletonSet(member){
+  this.member = member;
+}
+
+// 创建一个原型对象，这个原型对象继承自Set的原型
+SingletonSet.prototype = inherit(Set.prototype);
+
+// 给原型添加属性
+// 如果有同名的属性就覆盖Set.prototype中的同名属性
+extend(SingletonSet.prototype,{
+          //设置合适的constructor
+          constructor : SingletonSet,
+          //这个集合是只读的：调用add()和remove()都会报错
+          add : function() { throw 'read-only set';},
+          remove : function(){ throw 'read-only set';},
+          //SingletonSet的实例中永远只有一个元素
+          size : function(){ return 1; },
+          foreach : function(f,context){ f.call(context,this.member); },
+          contains : function(x) { return x === this.member; }
+});
+
+SingletonSet.prototype.equeal = function(that){
+  return that instanceof Set  && that.size() == 1 && that.contains(this.member);
+}
+
+/*
+ * NonNullSet 是Set的子类，它的成员不能是null和undefined
+ */
+function NonNullSet(){
+  //仅连接到父类
+  //作为普通函数调用父类的构造函数初始化通过该构造函数调用创建的对象
+  Set.apply(this,arguments);
+}
+
+//将NonNullSet设置为Set的子类
+NonNullSet.prototype = inherit(Set.prototype);
+NonNullSet.prototype.constructor = NonNullSet;
+
+//为了将null和undefined排除在外，只需重写add()方法
+NonNullSet.prototype.add = function(){
+  //检查函数是不是null和undefined
+  for(var i = 0; i < arguments.length;i++){
+    if(arguments[i] == null) 
+      throw new Error("Can't add null or undefined to a NonNullSet");
+  }
+  //调用父类的add()方法以执行实际插入操作
+  return Set.prototype.add.apply(this,arguments);
+}
+/*
+var o1 = {
+  toString : function(){
+    console.log('toString');
+    return '[Object object]';
+  },
+  valueOf : function(){
+    console.log('valueOf');
+    return 1;
+  }
+}
+var o2 = {
+  toString : function(){
+    console.log('toString');
+    return '[Object object]';
+  },
+  valueOf : function(){
+    console.log('valueOf');
+    return 1;
+  }
+}
+*/
+
+/*
+ * 这个函数返回具体Set类的子类
+ * 并重写该类的add()方法用以对添加的元素做特殊的过滤
+ */
+
+function filteredSetSubclass(superclass,filter){
+  var constructor = function(){      // 子类构造函数
+    superclass.apply(this,arguments);// 调用父类构造函数
+  };
+  var proto = constructor.prototype = inherit(superclass.prototype);
+  proto.constructor = constructor;
+  proto.add = function(){
+    for (var i = 0; i < arguments.length;i++){
+      var v = arguments[i];
+      if(!filter(v)) throw ('value ' + v + " rejected by filter"); 
+    }
+    superclass.prototype.add.apply(this,arguments);
+  };
+  return constructor;
+}
+
+//定义一个只能保存字符串的"集合"类
+var StringSet = filteredSetSubclass(Set,
+                  function(x){ return typeof x === "string"; });
+//这个类集合的成员不能是null、undefined或函数
+var MySet = filteredSetSubclass(NonNullSet,
+                  function(x){ return typeof x !== 'function'; });
+
+var NonNullSET = (function(){
+  var superclass = Set;
+  var constructor = superclass.extend(
+    function(){ superclass.apply(this,arguments); },
+    {
+      add : function(){ 
+        //检查参数是否是null或undefined
+        for(var i = 0 ,len = arguments.length; i < len ; i++){
+          if(arguments[i] == null) throw ("Can't add null or undefiend");
+        }
+        superclass.prototype.add.apply(this,arguments);
+        return this;
+      }
+    }
+  );
+  return constructor;
+}());
+
+//例9-15：使用组合代替集成的集合的实现
+//实现一个FilteredSet，它包装某个指定“集合”对象
+//并对传入add()方法的值应用了某种指定的过滤器
+//“范围”类中其他所有的核心方法延续到包装后的实力中
+
+var FilteredSet = Set.extend(
+  function FilteredSet(set,filter){//构造函数
+    this.set = set;
+    this.filter = filter;
+  },
+  {//实例方法
+    add : function(){
+      //如果已有过滤器，直接使用它
+      if(this.filter){
+        for(var i = 0,len = arguments.length; i < len ; i++){
+          var v = arguments[i];
+          if(!this.filter(v)){
+            throw new Error('FilteredSet:value ' + v + 
+              ' rejected by filter');
+          }
+        }
+      }
+      //调用set中的add()方法
+      this.set.add.apply(this.set,arguments);
+      return this;
+    },
+    //剩下的方法都保持不变
+    remove : function(){
+      this.set.remove.apply(this.set,arguments);
+      return this;
+    },
+    contains : function(v){
+      return this.set.contains(v);
+    },
+    size : function(){
+      return this.set.size();
+    },
+    foreach : function(f,c){
+      this.set.foreach(f,c);
+    }
+});
+
+// 这个函数可以用做任何抽象方法，非常方便
+
+function abstractMethod() { throw new Error("abstract method"); }
+
+/* 
+ * AbstractSet类定义了一个抽象方法：contains()
+ */
+
+function AbstractSet() { throw new Error("Can't instantiate abstract classes"); }
+AbstractSet.prototype.contains = abstractMethod;
+
+/*
+ * NotSet是AbstractSet的一个非抽象子类
+ * 所有不在其他集合中的成员都在这个集合中
+ * 因为它是在其他集合是不可以写的条件定义的
+ * 同时由于它的成员是无限个，因此它是不可枚举的
+ * 我们只能用它来检测元素成员的归属情况
+ * 逐一，我们使用了Function.prototype.exten()方法来定义这个子类
+ */
+
+var NotSet = AbstractSet.extend(
+  function(set){ this.set = set; },
+  {
+    contains : function(x){ return !this.set.contains(x);},
+    toString : function(x){ return "~" + this.set.toString(); },
+    equeal : function(that) {
+      return that instanceof NotSet && this.set.equeal(that.set);
+    }
+  }
+)
+
+/*
+ * AbstractEnumerableSet 是AbstractSet的一个抽象子类
+ * 它定义了抽象方法size()和foreach()
+ * 然后实现了非抽象方法isEmpty()、toArray()、to[locale]String()和equals()方法
+ * 子类实现了contains()、size()和foreach()，这三个方法可以很轻易的调用这5个个非抽象方法
+ */
+
+var AbstractEnumerableSet = AbstractSet.extend(
+  function(){ throw new Error("Can't instantiate abstract classes"); },
+  {
+    size : abstractMethod,
+    foreach : abstractMethod,
+    isEmpty : function(){ return this.size() == 0; },
+    toString : function(){
+      var s= "{",i = 0;
+      this.foreach(function(v){
+                    if( i++ > 0) s +=", ";
+                      s += v;
+      });
+      return s + "}";
+    },
+    toLocaleString : function(){
+      var s = '{', i =0;
+      this.foreach(function(v){
+                    if(i++ > 0) s += ',';
+                    if(v == null) s += v; //null和undefined
+                  else s += v.toLocaleString(); //其他情况
+      });
+      return s + "}";
+    },
+    toArray : function(){
+      var a = [];
+      this.foreach( function(v) {a.push(v);} );
+      return a;
+    },
+    equals : function(that){
+      if(! (that instanceof AbstractEnumerableSet)) return false;
+      //如果它们的大小不同，则它们不相等
+      if( this.size() != that.size()) return false;
+      //检查每一个元素是否也在that中
+      try {
+        this.froeach(function(v){ if(!that.contains(v)) throw false; });
+      } catch(x){
+        if(x === false) return false; //集合不相等
+        throw x;//发生了其他的异常：重新抛出异常
+      }
+    }
+  });
+
+  /*
+   * SingletonSet是AbstractEnumerableSet的非抽象子类
+   * signleton集合是只读的，它只包含一个成员
+   */
+
+   var SingletonSet = AbstractEnumerableSet.extend(
+     function SingletonSet(member) { this.member = member;},
+     {
+        contains : function(x) { return x === this.member; },
+        size : function(){ return 1; },
+        foreach : function(f,ctx){ f.call(ctx,this.member); }
+     }
+   );
+  /*
+   * AbstractWritableSet是AbstractEnumerableSet的抽象子类 
+   * 它定义了抽象方法add()和remove()
+   * 然后实现了非抽象方法union()、intersection()和difference()
+   */
+
+  var AbstractWritableSet = AbstractEnumerableSet.extend(
+    function () { throw new Error("Can't instantiate abstract classes"); },
+    {
+      add : abstractMethod,
+      remove : abstractMethod,
+      union : function(that){
+        var self = this;
+        that.foreach(function(v){self.add(v);});
+        return this;
+      },
+      intersection : function(that){
+        var self = this;
+        this.foreach(function(v){ if (!that.contains(v)) self.remove(v); });
+        return this;
+      },
+      difference : function(that){
+        var self = this;
+        that.foreach(function(v) { self.remove(v); });
+        return this;
+      }
+    }
+  );
+
+  /*
+   * ArraySet是AbstractWritableSet的非抽象子类
+   * 它以数组的形式表示集合中的元素
+   * 对于它的cdontains()方法使用了数组的线性查找
+   * 因为contains()方法的算法复杂度是0(n)而不是0(1)
+   * 它非常适合于相对小型的集合，注意，这里的实现用到了ES5的数组方法indexOf和forEach()
+   */
+
+  var ArraySet = AbstractWritableSet.extend(
+    function ArraySet(){
+      this.values = [];
+      this.add.apply(this,arguments);
+    },
+    {
+      contains : function(v) { return this.values.indexOf(v) != -1; },
+      size : function(){ return this.values.length; },
+      foreach : function(f, c) { this.values.forEach(f,c); },
+      add : function(){
+        for (var i = 0,len = arguments.length ; i < len ; i++){
+          var arg = arguments[i];
+          if(!this.contains(arg)) this.values.push(arg);
+        }
+        return this;
+      },
+      remove : function(){
+        for (var i = 0,len = arguments.length ; i < len ; i++){
+          var p = this.values.indexOf(arguments[i]);
+          if(p == -1) continue;
+          this.values.splice(p,1);
+        }
+      }
+    }
+  );
+
+//例 9-17:定义不可枚举的属性
+//将代码包装在一个匿名函数中，这样定义的变量就在这个函数作用域内
+(function(){
+  //定义一个不可枚举的属性objectId，它可以被所有对象继承
+  //当读取这个属性时调用getter函数
+  //它是不可配置的，因此它是不能删除的
+  Object.defineProperty(Object.prototype,"objectId",{
+                        get : idGetter,         // 取值器
+                        enumerable : false,     // 不可枚举
+                        configurable : false    // 不可删除
+  });
+
+  //当读取objectId的时候直接调用这个getter函数
+  function idGetter(){        // getter函数返回该id
+    if(! (idprop in this)){   // 如果对象中不存在id
+      if(!Object.isExtensible(this))
+        throw new Error("Can't define id for nonextensible objects");
+      Object.defineProperty(this,idprop,{           // 给它一个值 
+                              value : nextid++,     // 就是这个值
+                              writable : false,     // 只读的
+                              enumerable : false,    // 不可枚举的
+                              configurable : false   // 不可删除的
+      });
+    }
+    return this[idprop];
+  }
+  // idGetter()用到了这些变量，这些都属于私有变量
+  var idprop = "|**objectId**|"; //假设这个属性没有用到
+  var nextid  = 1;  // 给它设置初始值
+}());// 立即执行这个包装函数
+
+//例9-18：创建一个不可变的类，它的属性和方法都是只读的
+//这个方法可以使用new调用，也可以省略new，它可以用做构造函数也可以用做工厂函数
+
+var Range = function(from,to){
+  // 这些是对from和to只读属性的描述符
+  var props = {
+    from : {value : from,enumerable:false,writable:false,configurable:false},
+    to   : {value : to,enumerable:false,writable:false,configurable:false}
+  };
+
+  if( this instanceof Range)                // 如果作为构造函数来调用
+    Object.defineProperties(this,props);    // 定义属性
+  else                                      // 否则，作为工厂方法来调用
+    return Object.create(Range.prototype,   // 创建并返回这个心Range对象，
+                         props);            // 属性由props指定
+}
+
+// 如果用同样的方法给Range.prototype对象添加属性
+// 那么我们需要给这些属性设置它们的特性
+// 因为我们无法识别出它们的可枚举性、可写性或可配置性，这些属性特性默认都是false
+
+Object.defineProperties(
+Range.prototype,{
+    includes : { value : function(x){ return this.from <= x && this.to >= x; }},
+    foreach  : { value : function(f){ 
+      for(var start = this.from,max = this.to; start <= max ; start++){
+        f(start);
+      }
+    }},
+    toString : { value: function(){
+      return '(' + this.from + '...' + this.to + ')';
+    }}
+});
+
+//例9-19:属性描述符工具函数
+
+// 将o的指定名字(或所有)的属性设置为不可写的和不可配置的
+function freezeProps(o){
+  var props = (arguments.length === 1)              // 如果只有一个参数
+      ? Object.getOwnPropertyNames(o)               // 使用所有的属性        
+      : Array.prototype.splice.call(arguments,1);   // 否则传入指定名字的属性
+  props.forEach(function(n){
+    //只修改可配置的属性
+    if(Object.getOwnPropertyDescriptor(o,n) 
+    && Object.getOwnPropertyDescriptor(o,n).configurable){
+      Object.defineProperty(o,n,{writable:false,configurable:false});
+    }
+  });
+  return o; //我们可以继续使用它
+}
+
+// 将o的指定名字（或所有）的属性设置为不可枚举和可配置的。
+function hideProps(o){
+  var props = (arguments.length === 1)          // 只有一个参数
+    ? Object.getOwnPropertyNames(o)             // 使用所有的属性
+    : Array.prototype.splice.call(arguments,1); // 否则传入了指定名字的属性
+  
+  props.forEach(function(n){  // 将它们设置为不可枚举的
+    // 只修改可配置的属性
+    if(Object.getOwnPropertyDescriptor(o,n)
+    && Object.getOwnPropertyDescriptor(o,n).configurable){
+       Object.defineProperty(o,n,{enumerable:false});
+    }
+  });
+  return o;
+}
+
+//例9-20：一个简单的不可变的类
+var Range = function(from,to){
+  this.from = from;
+  this.to   = to;
+  freezeProps(this);
+}
+
+Range.prototype = hideProps({
+  constructor : Range,
+  includes : function(x) { return this.from <= x && this.to >= x; },
+  foreach  : function(f){ for(var x = Math.ceil(this.from); x <= this.to ; x++){ f(x); }},
+  toString : function() { return "(" + this.from + "..." + this.to + ")"; } 
+});
+
+// 例9-21:将Range类的端点严格封装起来
+
+// 这个版本的Range类是可变的，但将端点变量进行了良好的封装
+// 但端点的大小顺序还是固定的：from <= to
+
+var Range = function(from,to){
+  // 如果from大于to
+  if(from > to) { throw new Error("Range: from must be <= to"); }
+
+  //定义存取器方法以维持不变
+  function getFrom(){ return from; };
+  function getTo(){ return to };
+  function setFrom(f){            // 设置from的值时，不允许from大于to
+    if(f <= to) from = f;
+    else throw new Error("Range: from must be <= to");
+  }
+  function setTo(t){
+    if (t >= from) to = t;        // 设置to的值时，不允许to小于from
+    else throw new Error("Range: to must be >= from"); 
+  }
+
+  // 将使用取值器的属性设置为可枚举的、不可配置的
+  Object.defineProperties(this,{
+    from : {get : getFrom, set : setFrom,configurable:false,enumerable:true},
+    to   : {get : getTo , set : setTo,configurable:false,enumerable:true}
+  });
+}
+
+// 和前面的例子相比，原型对象没有做任何修改
+// 实例方法可以像读取普通的属性一样读取from和to
+
+Range.prototype = hideProps({
+  constructor : Range,
+  includes : function(x) { return this.from <= x && this.to >= x; },
+  foreach : function(f) { for (var x = this.from; x < this.to ; x ++){ f(x); }; },
+  toString : function() { return "(" + this.from + "..." + this.to + ")";}
+});
+
+var original_sort_method = Array.prototype.sort;
+
+Array.prototype.sort = function(){
+  var start = new Date();
+  original_sort_method.apply(this,arguments);
+  var end   = new Date();
+  console.log('start time:'+start,'end time' + end);
+};
+
+//9-22：StringSet：利用EMCAScript5的特性定义的子类
+
+var StringSet = function(){
+  this.set = Object.create(null);
+  this.n   = 0;
+  this.add.apply(this,arguments);
+};
+
+// 注意，使用Object.create()可以继承父类的原型
+// 而且可以定义单独调用的方法，因为我们没有指定属性的可写性、可枚举性和可配置性
+// 因此这类属性的默认值都是false
+// 只读方法让这个类难于子类化（被继承）
+
+StringSet.prototype = Object.create(AbstractWritableSet.prototype,{
+  constructor : {value : StringSet},
+  contains : {value : function(x){ return x in this.set }},
+  size : {value: function(x){ return this.n; }},
+  foreach : {value : function(f,c){ Object.keys(this.set).forEach(f,c); }},
+  add : {value : function(){
+    for(var i = 0; i < arguments.length ; i++){
+      if(!(arguments in this.set)){
+        this.set[arguments[i]] = true;
+        this.n++;
+      }
+    }
+    return this;
+  }},
+  remove : {
+    value : function(){
+      for(var i = 0; i < arguments.length; i ++){
+        if(arguments[i] in this.set){
+          delete this.set[arguments[i]];
+          this.n --;
+        }
+      }
+      return this;
+    }
+  }
+});
+
+//例9-23:ECMAScript5属性操作
+
+/*
+ * 给Object.prototype定义properties()方法
+ * 给这个方法返回一个表示调用它的对象的属性名列表的对象
+ * （如果不带参数调用它，表示该对象的所有属性）
+ * 返回的对象定义了4个有用的方法:ToString()、descriptors、hide()和show()
+ */
+
+(function namespace(){ //将所有逻辑闭包一个私有函数作用域中
+
+  //这个函数成为所有对象的方法
+  function properties(){
+    var names;
+    if(arguments.length === 0)
+      names = Object.getOwnPropertyNames(this);
+    else if(arguments.length === 1)
+      names = Object.getOwnPropertyNames(arguments[0]);
+    else{
+      names = Array.prototype.slice(arguments,0);
+    }
+
+    return new Properties(this,names);
+  }
+
+  Object.defineProperty(Object.prototype,'properties',{
+    value : properties,
+    writable : true,
+    enumerable : false,
+    configurable : true
+  });
+
+  var Properties = function(o,names){
+    this.o = o;
+    this.names = names;
+  };
+
+  Properties.prototype.hide = function(){
+    var o = this.o,hidden = {enumerable:false};
+    this.names.forEach(function(n){
+                        if(o.hasOwnProperty(n)){
+                          Object.defineProperty(o,n,hidden);
+                        }
+    });
+  }
+
+  Properties.prototype.freeze = function(){
+    var o = this.o,frozen = {writable:false,configurable:false};
+    this.names.forEach(function(n){
+                        if(o.hasOwnProperty(n)){
+                          Object.defineProperty(o,n,frozen);
+                        }
+    });
+  }
+
+  Properties.prototype.descriptors = function(){
+    var o = this.o,desc = {};
+    this.names.forEach(function(n){
+                        if(o.hasOwnProperty(n)){
+                          desc[n] = Object.getOwnPropertyDescriptor(o,n);
+                        }
+    });
+    return desc;
+  }
+
+  Properties.prototype.toString = function(){
+    var o = this.o;
+    var lines = this.names.map(nameToString);
+    return "{\n" + lines.join(",\n") + "\n}";
+
+    function nameToString(n){
+      var s ="",desc = Object.getOwnPropertyDescriptor(o,n);
+      if(!desc) return "nonexiststent" + n +":undefined";
+      if(!desc.configurable) s += "permanent";
+      if((desc.get && !desc.set) || !desc.writable) s += "readonly ";
+      if(!desc.enumerable) s += "hidden ";
+      if(desc.get || desc.get) s += "accessor " +n;
+      else s += n + ':' + ((typeof desc.value === 'function')  ? "function"
+                                                               : desc.value);
+      return s;
+    }
+  }
+
+  Properties.prototype.properties().hide();
+}());
+
+var url = /(\w+):\/\/([\w.]+)\/(\S*)/;
+var text = 'Visit my blog at http://www.example.com/~david';
+var result = text.match(url);
+
+if(result !== null){
+  var fullurl = result[0];   // 包含 "http://www.example.com/~david"
+  var protocol = result[1]; // 包含 "http"
+  var host = result[2];     // 包含 "www.example.com"
+  var path = result[3];     // 包含 "~david"
+}
+
+</script>
+
+
+
+</body>
+</html>

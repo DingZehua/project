@@ -1,0 +1,67 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+<style>                           
+
+</style>
+<script>              
+</script>
+</head>
+<body bgcolor='white'>
+<span class='sparkline' data-ymin='0' data-ymax='10'>
+1 1 1 2 2 3 4 5 5 4 3 4 5 6 6 4 2 1
+</span>
+<span id='bg' style="border:1px solid black;width:20%;"> This is element content </span>
+<script type='text/javascript'>
+// 假设是ES5的Array.map()方法（或类似能工作的方法）有定义
+var sparklines = document.getElementsByClassName('sparkline');
+for(var i = 0,len = sparklines.length; i < len; i++){
+  var dataset = sparklines[i].dataset;
+  var ymin = parseFloat(dataset.ymin);
+  var ymax = parseFloat(dataset.ymax);
+  var data = sparklines[i].textContent.split(' ');
+  data.map(function(a){
+    //console.log(parseInt(a) + ymin + ymax);
+  });
+}
+
+for(var i = 0;i < sparklines.length;i++) {
+  var ele = sparklines[i];
+  var ymin = parseFloat(ele.getAttribute('data-min'));
+  var ymax = parseFloat(ele.getAttribute('data-ymax'));
+  var data = ele.textContent.split(' ');
+  data.map(function(a){
+    //console.log(parseFloat(a));
+  })
+}
+
+var arr = ['1','2','3','4'];
+var red = arr.reduce(function(a,b){return a + b});
+var red2 = arr.reduceRight(function(a,b){return a + b});
+
+var bg = document.getElementById('bg');
+bg.insertAdjacentText('beforebegin','<br/>beforebegin');
+bg.insertAdjacentText('afterbegin','<br/>afterbegin');
+bg.insertAdjacentText('beforeend','<br/>beforeend');
+bg.insertAdjacentText('afterend','<br/>afterend');
+
+/**
+ * 一个参数，返回元素的textContent或者是innerText
+ * 两个参数，用value参数设置元素的textContent或innerText
+ */
+function textContent(element,value){ 
+  var content = element.textContent;
+  if(value === undefined){
+    if(content !== undefined) return element.textContent;
+    else return element.innerText;
+  }
+  else{
+    if(content !== undefined) element.textContent = value;
+    else element.innerText = value;
+  }
+}
+
+</script>
+</body>
+</html>

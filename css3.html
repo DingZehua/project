@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>css</title>
+<script src="js/vue.js"></script>
+<script src='js/myjs1.4.js'></script>
+</head>
+<body>
+
+<div id="app">
+  <input type='text' id='msg'/>
+</div>
+<script language="javascript" >
+
+var compose = function(f,g){
+  return function(){
+    return f.call(this,g.apply(this,arguments));
+  };
+};
+var sqlt = function(x){
+  return x * x;
+}
+var increase = function(x){
+  return x + 1;
+}
+var sqltoincrease = compose(sqlt,increase);
+
+var list = function(a,n){
+  return Array.prototype.slice.call(a,n || 0);
+}
+
+var partial = function(f){
+  var args = list(arguments,1);
+  return function(){
+    for(var i = 0,j = 0,len = args.length;i < len ; i++){
+      if(args[i] === undefined) {
+        args[i] = arguments[j];
+        j++;
+      }
+    }
+    args = args.concat(list(arguments,j));
+    return f.apply(this,args);
+  }
+}
+
+var sum = function(x,y,z){
+  return x * (y - z);
+}
+
+var p = {
+  v : 'p object'
+}
+var p2 = function(){
+}
+
+var p3 = function(){}
+
+var f1 = function(){
+};
+var f2 = function(){
+};
+
+var f3 = function(){
+  try{
+    f2();
+  }
+  catch(e){
+    console.log(e);
+  }
+}
+
+f1.prototype = p2.prototype;//f1的指针指向p2的指针，p2的指针再去指向p3的指针。
+p2.prototype.__proto__ = p3.prototype;
+
+
+
+</script>
+
+
+
+</body>
+</html>

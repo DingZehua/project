@@ -1,0 +1,27 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head id='h'>                <!-- 标题、脚本和样式都放在这里 -->
+<style>                           
+  
+</style>
+<script defer src="js/async.js"></script>
+
+</head>
+<body>                      
+  <a id='Evaluator' href="javascript:
+    var e = '',r= '';/* 需要计算的表达式和结果 */
+    do{
+      /* 输出表达式和结果，并要求输入新的表达式 */
+      e = prompt('Expression:' + e + '\n' + r + '\n',e);
+      try { r = 'Result:' + eval(e); } /* 尝试计算这个表达式 */
+      catch(ex) { r = ex; }
+    } while(e);
+    void(0);
+    ">
+   JavaScript Evaluator
+  </a>
+<script>
+    console.log('is document');
+</script>
+</body>
+</html>

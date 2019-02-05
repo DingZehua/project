@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>css</title>
+</head>
+<body>
+<div id='msg'>
+</div>
+<script language="javascript" >
+
+var memorize = function(f){
+  var cache = {};
+  return function(){
+    var key = arguments.length + Array.prototype.join.call(arguments,',');
+    if(key in cache){ 
+      return cache[key]; 
+    }
+    else { 
+      cache[key] = f.apply(this,arguments);
+      return cache[key]; 
+    }
+  }
+}
+
+var gcd = function(a,b){
+  var t = null;
+  if(a < b){ t = a; a = b; b = t; }
+  while(b !== 0) {
+    t = b; b = a % b; a = t;
+  }
+  return a;
+}
+
+var gcdmemo = memorize(gcd);
+var range = function(){};
+range.prototype = {
+  v1 : 1,
+  v2 : 2
+}
+
+var  f = function(){
+  
+}
+
+
+
+</script>
+
+</body>
+</html>

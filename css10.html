@@ -1,0 +1,137 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+<script language="javascript">
+// 注册函数f,当文档载入完成时执行这个函数f
+// 如果文档已经载入完成，尽快以异步方式执行它
+function onLoad(f) {
+  if(onLoad.loaded)
+    window.setTimeout(f,0);                       // 如果文档已经载入完成
+  else if(window.addEventListener)                // 将f放入到异步队列，并尽快执行它
+    window.addEventListener('load',f,false);      // 注册事件的标准方法
+  else if(window.attachEvent)           
+    window.attachEvent('onload',f);               // IE8以及更早的IE版本浏览器注册事件方法
+}
+// 给onLoad设置一个标志，用来指示文档是否加载完成
+onLoad.loaded = false;
+// 注册一个函数，当文档载入完成时设置这个标志
+//onLoad(function(){ onLoad.loaded = true; });
+
+function fn(element,handler){
+  if(element.addEventListener){ // 在使用这个W3C方法之前首先检测它是否可用
+    element.addEventListener('keydown',handler,false);
+    element.addEventListener('keypress',handler,false);
+  }
+  else if ( element.attachEvent ){ // 在使用IE方法之前首先检测它
+    element.attachEvent('keydown',handler);
+    element.attachEvent('keypress',handler);
+  }
+  else{ // 否则，选用普遍支持的技术
+    element.onkeydown = element.onkeypress = handler;
+  }
+}
+
+/* 例14-2:提取URL的搜索字符串中的参数
+ * 这个函数用来解释来自URL的查询串中的name=value参数对
+ * 它将name=value对存储在一个对象的属性中，并返回该对象
+ * 这样来使用它
+ * 
+ * var args = urlArgs(); // URL中解析参数
+ * var q = args.q ||"";  // 如果参数定义了的话就使用参数；否则使用一个默认值
+ * var n = args.n ? parseInt(args.n) : 10;
+ * 
+ */
+function urlArgs(){
+  var args = {};                              // 定义一个空对象
+  var query = location.search.substring(1);   // 查找到查询串，并去掉用'?'
+  var pairs = query.split("&");               // 根据“&”符号将查询字符串分隔开
+  for(var i = 0; i < pairs.length ; i++){     // 对于每个片段
+    var pos = pairs[i].indexOf('=');          // 查找"name=value"
+    if(pos !== -1){                           // 如果没有找到的话，就跳过
+      var name  = pairs[i].substring(0,pos);  // 提取name
+      var value = pairs[i].substring(pos+1);  // 提取value
+      value = decodeURIComponent(value);      // 对value进行解码
+      args[name] = value;                     // 储存为属性
+    }
+  }
+  return args;
+}
+
+// 例14-3：使用navigator.userAgent来进行浏览器嗅探
+// 为客户端嗅探定义browser.name和browser.version，这里使用了JQuery1.4.1中的代码
+// name和number都是字符串，对于不同的浏览器输出的结果也是不一样，检测结果如下：
+// 
+// 'webkit':safari或Chrome;版本号是webkit的版本号
+// 'opera':Opera;版本就是软件的版本号
+// 'mozilla':FireFox或者其他基于gecko内核的浏览器；版本是Gecko的版本
+// 'msie' : IE;版本号就是软件的版本
+//
+// 比如Firefox 3.6返回：{name :'mozilla',version:'1.9.2'}
+
+var browser = (function(){
+  var s = navigator.userAgent.toLowerCase();
+  var match = /(webkit)[ \/]([\w.]+)/.exec(s) ||
+      /(opera)(?:.*version)?[\/]([\w.]+)/.exec(s) ||
+      /(msie) ([\w]+)/.exec(s) ||
+      !/compatible/.test(s) && /(mozilla)(?:.*? rv:([\w.]+))?/.exec(s) ||
+      [];
+  return { name :match[1] || "",version:match[2] || "0"};
+}());
+
+function new_window(){
+  return window.open('css6.html','jsj','width=300,height=300,status=yes');
+}
+
+/** 15-1通过ID查找多个元素
+ * 函数接受任意多的字符串参数
+ * 每个参数将当做元素的id传给document.getElementById()
+ * 返回一个对象，它把这些id映射到对应的Element对象
+ * 如任何一个id对应的元素未定义，则抛出一个Error对象
+ */
+
+function getElements(/* ids... */) {
+  var elements = {};                                  // 开始是一个空map映射对象                        
+  for(var i = 0;i < arguments.length;i++){            // 循环每个参数
+    var id = arguments[i];                            // 参数是元素的id
+    var elt = document.getElementById(id);            // 查找元素
+    if (elt === null)                                 // 如果未定义
+      throw new Error('No element with id:' + id);    // 抛出异常
+    elements[id] = elt;                               // id和元素之间映射
+  }
+  return elements;                                    // 对于元素映射返回id
+}
+
+</script>
+</head>
+<body>
+  <!---->
+  <input id = 'selectd1' type="text" name='iname'/>
+  <input id = 'selectd2' type="text" name='iname2'/>
+  <input id = 'selectd3' type="text" />
+  <input id = 'selectd4' type="text" />
+  <input name='nf' type="text"/>
+  <form name='nif'></form>
+  <form name='nf' id='idf'></form>
+  <iframe name='nf'></iframe>
+  <iframe name='nif' id='ss'></iframe>-->
+  <select>
+    <option value='1' name='_1' id='i_1'></option>
+  </select>
+
+  <div class='Block first'>
+  </div>
+  <div class='log'>
+    <div class='fatal error'>fatal error</div>
+    <div class='error' id='ierr'></div>
+    <div class='fatal warning'></div>
+    <div class='warnings'></div>
+  </div>
+  <script>
+  // 查找其class属性值中包含“warning”的所有元素
+  var warnings = document.getElementsByClassName('warning');
+  // 查找以"log"命名并且有"error"和"fatal"类的元素的所有后代
+  var log = document.getElementsByClassName('log')[0];
+  var fatal = log.getElementsByClassName('fatal error');
+  </script>
+</body>
+</html>

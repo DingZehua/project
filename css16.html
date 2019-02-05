@@ -1,0 +1,148 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<style>                           
+  #sortTable{
+    border: 1px solid black;
+    border-collapse:collapse;
+    text-align:center;
+    width: 600px;
+  }
+  #sortTable th,#sortTable td{
+    border:1px solid black;
+  }
+</style>
+<script>
+// 例15-5:使用innerHTML实现outerHTML属性
+// 假设浏览器确实支持innerHTML，并有个可拓展的Element.prototype,
+// 并且可以定义getter和setter
+!(function(){
+  // 如果outerHTML存在，则直接返回
+  if(document.createElement('div').outerHTML) return;
+
+  // 返回this所引用元素的外部HTML
+  function outerHTMLGetter()
+  {
+    var container = document.createElement('div');  // 虚拟元素
+    container.appendChild(this.cloneNode(true));    // 复制到该虚拟节点   
+    return container.innerHTML;                     // 返回虚拟节点的innerHTML
+  }
+
+  // 用指定的值设置外部的HTML
+  function outerHTMLSetter(v){
+    // 创建一个虚拟元素，设置其内容为指定的值
+    var container = document.createElement('div');
+    container.innerHTML = v;
+    // 虚拟元素中的节点但全部移动到文档中
+    while(container.firstChild) {   // 循环，直到container没有子节点为止
+      this.parentNode.insertBefore(container.firstChild,this);
+    }
+    // 删除所被取代的节点
+    this.parentNode.removeChild(this);
+  }
+
+  // 现在使用这两个函数作为所有Element对象的outerHTML属性的getter和setter
+  // 如果它存在则使用ES5的Object.defineProperty()方法
+  // 否则，退而求其次，使用__defineGeter__()和__defineSetter__()
+  if(Object.defineProperty) {
+    Object.defineProperty(Element.prototype,'outerHTML',{
+      get : outerHTMLGetter,
+      set : outerHTMLSetter,
+      enumerable : false,
+      configurable : true
+    });
+  }
+  else {
+    Element.prototype.__defineGetter__('outerHTML',outerHTMLGetter);
+    Element.prototype.__defineSetter__('outerHTML',outerHTMLSetter);
+  }
+}());              
+
+// 倒序排列节点的n的子节点
+function reverse(n) {
+  // 创建一个DocumentFragment作为临时容器
+  var f = document.createDocumentFragment();
+  // 从后至前循环子节点，将每一个子节点移动到文档片段中
+  // n的最后一个子节点变成f的第一个节点，反之亦然
+  // 注意，给f添加一个节点，该节点自动地会从n中删除
+  while(n.lastChild) f.appendChild(n.lastChild);
+  // 最后，把f的所有子节点一次性全部移回n中
+  n.appendChild(f);
+}
+
+// 例15-6:使用innerHTML实现insertAdjacentHTML
+
+// 本模块为不支持它的浏览器定义了Element.insertAdjacentHTML
+// 还定义了一些可移植的HTML插入函数，它们的名字比insertAdjacentHTML更符合逻辑：
+// insert.before()、insert.arter()、insert.atStart()、insert.atEnd();
+var Insert = (function(){
+  // 如果有原生的insertAdjacentHTML
+  // 在4个函数名更名了的HTML插入函数中使用它
+ 
+  if(document.createElement('div').insertAdjacentHTML) {
+    return {
+      before  : function(element,html) { element.insertAdjacentHTML('beforebegin',html); },
+      after   : function(element,html) { element.insertAdjacentHTML('afterend',html); },
+      atStart : function(element,html) { element.insertAdjacentHTML('afterbegin',html); },
+      atEnd   : function(element,html) { element.insertAdjacentHTML('beforeend',html); }
+    }
+  }
+  
+  // 否则，没有原生的insertAdjacentHTML
+  // 实现同样的4个插入函数，并使用它们来定义insertAdjacentHTML
+
+  // 首先，定义一个工具函数，传入HTML字符串，返回一个DocumentFragment,
+  // 它包含了解析后的HTML的表示
+  
+  // 生成一个临时的HTML存储空间
+  function fragment(html) {
+    var container = document.createElement('div');    // 创建空元素
+    container.innerHTML += html;                      // 设置元素内容
+    var frag = document.createDocumentFragment();     // 创建空文档片段
+    while(container.firstChild)                       // 从elt到frag
+      frag.appendChild(container.firstChild);         // 然后返回frag
+    return frag;
+  }
+
+  var insert = {
+    'before'   : function(element,html){ element.parentNode.insertBefore(fragment(html),element);},
+    'after'    : function(element,html){ element.parentNode.insertBefore(fragment(html),element.nextSibling); },
+    'atStart'  : function(element,html){ element.insertBefore(fragment(html),element.firstChild); },
+    'atEnd'    : function(element,html){ element.appendChild(fragment(html)); }
+  }
+
+  // 基于以上函数实现insertAdjacentHTML
+  Element.prototype.insertAdjacentHTML = function(location,html) {
+    switch(location) {
+      case 'beforebegin' : insert.before(this,html);break;
+      case 'afterbegin'  : insert.atStart(this,html);break;
+      case 'beforeend'   : insert.atEnd(this,html);break;
+      case 'afterend'    : insert.after(this,html);break;
+      default: throw new Error('param 1 must is beforebegin or arterbegin or beforeend or afterend.')
+    }
+  }
+
+  return insert;   // 最后返回4个插入函数
+}());
+</script>
+</head>
+<body>                      
+  <table id='sortTable'>
+    <thead>
+      <th> 第1列 </th>
+      <th> 第2列 </th>
+      <th> 第3列 </th>
+      <th> 第4列 </th>
+      <th> 第5列 </th>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>5</td><td>4</td><td>3</td><td>2</td></tr>
+      <tr><td>2</td><td>1</td><td>5</td><td>4</td><td>3</td></tr>
+      <tr><td>3</td><td>2</td><td>1</td><td>5</td><td>4</td></tr>
+      <tr><td>4</td><td>3</td><td>2</td><td>1</td><td>5</td></tr>
+      <tr><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td></tr>
+    </tbody>
+  </table>       
+</body>
+</html>

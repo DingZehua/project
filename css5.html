@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>css5</title> 
+</head>
+<body>
+
+<div id="app">
+  <input type='text' id='msg'/>
+</div>
+<script language="javascript" >
+
+//用一个简单的函数创建简单的子类
+function  defineSubclass(superclass,
+                         constructor,
+                         methods,
+                         statics)
+{
+  //建立子类的原型对象
+  constructor.prototype = function(p,constructor){
+    var f = function(){};
+    f.prototype = p;
+    return new f;
+  }(superclass.prototype,constructor);
+
+  constructor.prototype.constructor = constructor;
+
+  //像对常规类一样复制方法和类属性
+  if(methods){ 
+    !function(p,ms){ 
+      for(var name in ms){
+        if(ms.hasOwnProperty(name)){
+          p[name] = ms[name];
+        }
+      }
+    }(constructor.prototype,methods);
+  }
+
+  if(statics){ 
+    !function(p,ss){ 
+      for(var name in ss){
+        if(ss.hasOwnProperty(name)){
+          p[name] = ss[name];
+        }
+      } 
+    }(constructor,statics); 
+  }
+  return constructor;
+}
+
+//也可以通过父类构造函数的方法来做到这一点
+Function.prototype.extend = function(constructor,methods,statics){
+  return defineSubclass(this,constructor,methods,statics);
+}
+
+
+var extend = function(o,m){
+  if(o == null || o == null) throw('object or method not undefined');
+  for(var name in m){
+    if(m.hasOwnProperty(name)){
+      o[name] = m[name];
+    }
+  }
+}
+
+function inherit(p){
+  if(p == null) throw('object not undefined');
+  var f = function(){};
+  f.prototype = p;
+  return new f();
+}
+
+var compute = function(){ 
+  this.values = {};
+  this.add.apply(this,arguments);
+}
+
+compute.prototype.add = function(){
+  var values = this.values;
+  for(var i = 0,len = arguments.length; i < len ; i++){
+    var name = '#' + arguments[i];
+    if(!values.hasOwnProperty(name)){
+      values[name] = arguments[i];
+    }
+  }
+  return this;
+};
+
+compute.prototype.sum = function(){
+  var total = 0;
+  for(var key in this.values){
+    var number = this.values[key];
+    total += number;
+  }
+  return total;
+};
+
+compute.prototype.average = function(){
+  var count = 0;
+  var sum = 0;
+  for(var name in this.values){
+    var number = this.values[name];
+    sum += number;
+    count++;
+  }
+  return sum / count;
+};
+/*
+var filterNonNumber = function(){
+  compute.apply(this,arguments);
+}
+
+filterNonNumber.prototype = inherit(compute);
+filterNonNumber.prototype.constructor = filterNonNumber;
+filterNonNumber.prototype.add = function(){
+  for(var i = 0,len = arguments.length;i < len ; i++){
+    if(typeof arguments[i] !== 'number'){ throw new Error("values Not number") }
+  }
+  compute.prototype.add.apply(this,arguments);
+  return this;
+}
+*/
+
+var list = function(a,n){
+  return Array.prototype.slice.call(a, n || 0);
+}
+
+var filterNonNumber = function(){
+  for(var i = 0,len = arguments.length;i < len ; i++){
+    if(typeof arguments[i] !== 'number'){ return [false]; }
+  }
+  return [].concat(true,Array.prototype.slice.call(arguments));
+}
+
+var even = function(res){
+
+  if(!res){ return false; }
+  for(var i = 1,len = arguments.length;i < len ; i++){
+    var number = arguments[i];
+    if(number % 2 !== 0){ return false; }
+  }
+  return true;
+}
+
+var compose = function(f,g){
+  return function(){
+    return f.apply(this,g.apply(this,arguments));
+  }
+}
+
+var partial = function(f){
+  var args = list(arguments,1);
+  return function(){
+    var i = 0,j = 0;
+    while(i < args.length){
+      if(args[i] == null) { args[i] = arguments[j]; j++; }
+      i++;
+    }
+    var a = [].concat(args,list(arguments,j));
+    return f.apply(this,a);
+  }
+}
+
+/*
+var not = function(f){
+  var result = 
+}
+*/
+var filterSubclass = function(superclass,f){
+  var constructor = function(){
+    superclass.apply(this,arguments);
+  };
+  constructor.prototype = inherit(superclass.prototype);
+  constructor.prototype.constructor = constructor;
+  constructor.prototype.add = function(){
+    if(!f.apply(this,arguments)){ throw new Error('arguments on exists filter elements.'); }
+    superclass.prototype.add.apply(this,arguments);
+  };
+  return constructor;
+}
+
+var evenNumberFilter = compose(even,filterNonNumber);
+
+var sum = function(){
+  var total = 0;
+  for(var i = 0;i < arguments.length; i++){
+    total += arguments[i];
+  }
+  return total;
+};
+
+//将partial投入到filterSubclass函数中使用
+//var evenNumber = filterSubclass(compute,partial(compose)(even,filterNonNumber));
+//var evenNumber = filterSubclass(compute,compose(even,filterNonNumber));
+
+var FilteredCompute = compute.extend(
+  function(compute,filter){ 
+    this.compute = compute;
+    this.filter  = filter; 
+  },{
+    add : function(){
+      if(this.filter){
+        for(var i = 0,len = arguments.length; i < len ; i++){
+          var v = arguments[i];
+          if(!this.filter(v)){ throw new Error("Can't value is filter"); }
+        }
+        this.compute.add.apply(this.compute,arguments);
+      }
+    },
+    sum : function(){
+      return this.compute.sum();
+    },
+    average : function(){
+      return this.compute.average();
+    }
+  }
+);
+
+var AbstractMethod = function() { throw new Error("本函数是抽象函数"); }
+var AbstractCompute = function(){ throw new Error("本构造函数是抽象类"); }
+
+AbstractCompute.prototype.sqlt = AbstractMethod;
+
+var AbstractUpgradeCompute = AbstractCompute.extend(
+  function() { throw new Error("本构造函数是抽象类"); },
+  {
+    abs : AbstractMethod,  
+    intersection : function(that){ //求同
+      var self = this;
+      this.foreach(function(v){
+          if(!that.contains(v)){ 
+              self.remove(v); 
+            }
+        },null,'DESC');
+    },
+    difference : function(that){ //存异
+      var self = this;
+      that.foreach(function(v){ self.remove(v); })
+    }
+  }
+);
+
+var UpgradeCompute = AbstractUpgradeCompute.extend(
+  function(){
+    this.values = [];
+    this.add.apply(this,arguments); 
+  },
+  {
+    add : function(){
+      for(var i = 0,len = arguments.length; i < len ; i++){
+        var v = arguments[i];
+        if(!this.contains(v)){
+          this.values.push(v);
+        }
+      }
+    },
+    foreach : function(f,c,order){
+      if(order.toUpperCase() == 'ASC' || order == null){
+        this.values.forEach(f,c);
+        return;
+      }
+      else if(order.toUpperCase() === 'DESC'){
+        for(var max = this.values.length - 1; max > -1; max --){
+          f.call(c,this.values[max]);
+        }
+      }
+    },
+    contains : function(v){
+      return this.values.indexOf(v) != -1;
+    },
+    remove : function(){
+      for(var i = 0,len = arguments.length; i < len ; i++){
+        var v = arguments[i];
+        var p = this.values.indexOf(v);
+        if(p !== -1){  
+          this.values.splice(p,1);
+        }
+      }
+    },
+    sqlt : function(){
+      var sum = this.sum.apply(this,this.values);
+      return sum * sum;
+    },
+    sum : function(){
+      var total = 0;
+      for(var i = 0,len = arguments.length; i < len ;i++){
+        total += arguments[i];
+      }
+      return total === total ? total : 0;
+    },
+    abs : function(v){
+      if(v >= 0) return v;
+      else  return v * -1;
+    },
+    average : function(){
+      var total = 0;
+      var len = arguments.length;
+
+      if(len === 0){ return 0; }
+
+      for(var i = 0; i < len ;i++){
+        total += arguments[i];
+      }
+
+      return total === total ? (total / len) : 0;
+    },
+    size : function(){
+      return this.values.length;
+    },
+    equeal : function(that){
+      if(that.size() !== this.size() || !(that instanceof UpgradeCompute)) return false;
+      for(var i = 0,len = that.values.length; i < len ; i++){
+        if(this.values[i] !== that.values[i]){
+          return false;
+        }
+      }
+      return true;
+    }
+  }
+);
+
+(function(){
+  Object.defineProperty(Object.prototype,'objectId',{
+                          get : getObjectId,
+                          configurable : false,
+                          enumerable : false
+  });
+  function getObjectId(){
+    if(!(idprop in this)){
+      if(!Object.isExtensible(this)){
+        throw new Error("this object non extensible");
+      }
+      Object.defineProperty(this,idprop,{
+                            value : nextid++,
+                            writable : false,
+                            enumerable : false,
+                            configurable : false
+      });
+    }
+    return this[idprop];
+  }
+  var idprop = "|**objectId**|";
+  var nextid = 1;
+}());
+
+var Range = function(from,to){
+  var props = {
+    from : { value : from,enumerable:true,writable:false,configurable:false},
+    to   : { value : to, enumerable:true,writable:false,configurable:false }
+  }
+
+  if(this instanceof Range){
+    Object.defineProperties(this,props);
+  }
+  else{
+    return Object.create(Range.prototype,props);
+  }
+}
+
+Object.defineProperties(Range.prototype,{
+  includes :{ value: function(v){
+    return this.from <= v && this.to >= v;
+  }},
+  foreach :{ value: function(f,c){
+    for(var start = this.from,max = this.to ; start <= max ; start++){
+      f.call(c,start);
+    }
+  }},
+  toString :{ value: function(){
+    return "(" + this.from + "..." + this.to + ")";
+  }}
+});
+
+var f = function(){
+  var s = Array.prototype.splice.call(arguments,1);
+  console.log(arguments);
+  console.log(s);
+}
+
+</script>
+
+
+
+</body>
+</html>

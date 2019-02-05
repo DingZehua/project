@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>css</title>
+<!--<script src="js/vue.js"></script>-->
+</head>
+<body>
+<div id='msg'>
+</div>
+<script language="javascript" >
+var log = function(v){
+  cm.getIdEle('msg').innerHTML += v;
+}
+
+var o = {a:11};
+
+/*
+var descriptor = Object.getOwnPropertyDescriptor(o);//获取属性4个特性
+
+Object.prototype.extend = function(panter){
+  var propertyKeys = Object.keys(panter);
+  for(var i = 0,len = propertyKeys.length; i < len ; i++){
+    if(propertyKeys[i] in this) continue;
+    Object.defineProperty(this,propertyKeys[i]
+        ,Object.getOwnPropertyDescriptor(panter,propertyKeys[i]));
+  }
+};
+
+
+var p = {a : 1,b : 2};
+o.extend(p);
+
+var o = {};
+
+Object.defineProperty(o,'x',{
+              value : 50,
+              writable : false,
+              configurable : true,
+              enumerable : false
+            });
+
+Object.defineProperty(o,'x',{
+              set : function(v){this.value = v;},
+              get : function(){return this.value;},
+              configurable : true,
+              enumerable : false
+            });
+
+var g = {
+  x : 50
+  
+}
+
+var c1 = {
+  x : 1,
+  y : 2
+}
+
+var o1 = Object.create(c1);//  prototype c1 | constructor Object
+var o2 = {};// prototype c1 | constructor Object
+var o3 = Object.create(c1);
+var o4 = Object.create(c1);
+
+o4.v = {
+  r : 20
+}
+
+o3.v = {};
+*/
+//Object.prototype.isPrototypeOf
+//Object.getPrototypeOf
+//Object.constructor.prototype
+//Object.isExtensible()
+//Ojbect.freeze
+//Object.seal
+
+var classOf = function(o){
+  return Object.prototype.toString.call(o).slice(8,-1);
+}
+var a = [1,2,3,4,5];
+var desc = function(a,b){return (a - b) * -1;}
+var asc = function(a,b){ return a - b; }
+
+var foreach = function(v,k,arr){
+  console.log("forEach" in arr);
+  arr.forEach(arr);
+}
+
+
+var duc = function(a,b){
+  console.log(a,b);
+  return a;
+}
+
+var o = [{x:'x',a:'1'},{y:'y',a:'2'},{z:'z',a:'3'}];
+
+function extend(a,b){
+  for(var key in b){
+    if(!b.hasOwnProperty(key)) {continue;}
+    a[key] = b[key];
+  }
+  return a;
+}
+
+function union(a,b){
+  return extend(extend({},a),b);
+}
+
+function map(a){
+  return a + 1;
+}
+
+function filter(a){
+  return (a % 2) === 1 ? true :false;
+}
+
+function every(a){
+  console.log(a);
+  return a < 0;
+}
+
+function some(a){
+  console.log(a);
+  return a < 4;
+}
+
+function findall(a,x){
+  var res = [];
+  var pos = 0;
+  var len = a.length;
+  while(pos < len){
+    pos = a.indexOf(x,pos);
+    if(pos === -1){ break; }
+    res.push(pos);
+    pos++;
+  }
+  return res;
+}
+
+var cls = function(){
+  this.v = 20;
+  return '123';
+}
+
+var param = function(x){
+  //'use strict';
+  console.log(arguments.callee);
+}
+
+//函数存放每次阶乘结果
+
+var fact = function(o){
+  if(o > 0){
+    if(!(o in fact)) fact[o] = o + fact(o - 1);
+    return fact[o];
+  }
+  else{
+    return (fact[o])||(fact[o] = o);
+  }
+}
+
+function out_fact(o){
+  var begin = new Date();
+  console.log(+begin);
+  fact(o);
+  var end = new Date();
+  console.log(+end);
+}
+
+var test_ie_bug = function(){
+  for(var p in {'toString' : null}){
+    console.log(p);
+  }
+  console.log(protoprops);
+}
+
+var private = function(n){
+  return {
+    set r(v)  { if( v > n) n = v;
+                else throw new Error('只能递增'); },
+    get r() { return n;},
+    reset : function() { n = 0; }
+  }
+}
+
+var addPrivateProperty = function(o,name,f){
+  var value = null;
+  o['get' + name] = function() { return value };
+  o['set' + name] = function(v) { 
+    if(f && !f(v)) { 
+      throw new Error('value invalid ' + v );
+    }
+    value = v; 
+  }
+  return o;
+}
+
+var valueFilter = function(v){return typeof v === 'string';}
+
+var batchVal = function(){
+  var arr = [];
+  for(var i = 0; i < 10 ; i ++){
+    arr[i] = function(){ return i; }
+  }
+  return arr;
+}
+
+function check(args){
+  var actual = args.length;
+  var expected = args.callee.length;
+  if(actual !== expected){
+    throw new Error('参数个数不正确');
+  }
+}
+
+function f(o,m){
+  var oldF = o[m];
+  o[m] = function(){
+    console.log('new function begin');
+    var res = oldF.apply(this,arguments);
+    console.log('new function begin');
+    return res;
+  }
+}
+
+var o = {
+  oldF : function(msg){
+    console.log(msg);
+    return arguments;
+  },
+  value : 20
+}
+/*
+Function.prototype.bind = function(o){
+  var original = arguments;
+  var self = this;//函数本身
+  return function(){
+    var allParams = [];
+    for(var i = 1;i < original.length; i++){
+      allParams.push(original[i]);
+    }
+    for(var i = 0;i < arguments.length; i++){
+      allParams.push(arguments[i]);
+    }
+    return self.apply(o,allParams);
+  }
+}
+*/
+/*来源 https://www.jianshu.com/p/a55617de4a6a */
+Function.prototype.bind = function(oThis) {
+    if (typeof this !== 'function') {
+      // closest thing possible to the ECMAScript 5
+      // internal IsCallable function
+      throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+    }
+
+    var aArgs = Array.prototype.slice.call(arguments, 1),
+      self = this,
+      fNOP    = function() {},
+      fBound  = function() {
+        // this instanceof fNOP === true时,说明返回的fBound被当做new的构造函数调用
+        return self.apply(this instanceof self
+          ? this
+          : oThis,
+          // 获取调用时(fBound)的传参.bind 返回的函数入参往往是这么传递的
+          aArgs.concat(Array.prototype.slice.call(arguments)));
+    };
+    if(self.prototype){
+      fBound.prototype = new self();
+    }
+    return fBound;
+};
+
+var trace = function(o,m){
+  var original = o[m];
+  o[m] = function(){
+    return original.apply(o,arguments);
+  }
+}
+// object apply arguments
+// function on this
+
+var point = function(x,y){
+  this.x = x;
+  this.y = y;
+}
+
+var o = {
+  x : null,
+  y : null
+}
+
+Function.prototype.bind = function(o){
+  if(typeof this !== 'function') {throw new Error('对象必须为函数');}
+
+  var self = this;
+  var preset = Array.prototype.slice.call(arguments,1);
+  var bindF = function(){
+    return self.apply(this instanceof self ? this : o,preset.concat(Array.prototype.slice.call(arguments)));
+  }
+  if(self.prototype){
+    bindF.prototype = self.prototype;
+  }
+  return bindF;
+}
+
+var par = function(x,y,z){
+  this.value = '456';
+  this.outMsg = function(){ console.log(this.value); }
+  this.x = x;
+  this.y = y;
+  this.z = z;
+}
+
+par.prototype.outSelf = function(){
+  console.log(this);
+}
+
+var y = par.bind(o,20,50);
+var x = new y(30);
+
+
+var not = function(f){
+  return function(){
+    return !(f.apply(this,arguments));
+  }
+}
+
+var even = function(x){
+  return x % 2 === 0;
+}
+
+var odd = not(even);
+
+function mapper(f){
+  return function(a){ return Array.prototype.map.call(a,f) };
+}
+
+function increment(x){
+  return x + 1;
+}
+
+var incrementer = mapper(increment);
+
+var compose = function(f,g){
+  return function(a){
+    return f.call(this,g.apply(this,a));
+  }
+}
+
+var reduce = function(){
+  var result = 0;
+    for(var i = 0,len = arguments.length; i < len ; i++){ 
+      result += arguments[i];
+    }
+  return result;
+}
+
+var sqlt = function(x){
+  return x * x;
+}
+
+var sqltoreduce = compose(sqlt,reduce);
+
+var list = function(o,n){ return Array.prototype.slice.call(o,n || 0); }
+
+var paritalLeft = function(f){
+  var args = arguments;
+  return function(){
+    var a = list(args,1);
+    a = a.concat(list(arguments));
+    return f.apply(null,a);
+  }
+}
+var paritalRight = function(f){
+  var args = arguments;
+  return function(){
+    var a = list(arguments);
+    a = a.concat(list(args,1));
+    return f.apply(null,a);
+  }
+}
+
+var parital = function(f){
+  var args = arguments;
+  return function(){
+    var a = list(args,1);
+    for(var i = 0,len = a.length,j = 0; i < len ; i++){
+      if(a[i] === undefined){ a[i] = arguments[j]; j++;}
+    }
+    a = a.concat(list(arguments,j));
+    return f.apply(null,a);
+  }
+}
+
+var sum = function(x,y,z){
+  return x * (y - z);
+}
+
+</script>
+</body>
+</html>

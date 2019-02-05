@@ -1,0 +1,177 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+<style>                           
+
+</style>
+
+</head>
+<body>
+  <a href='#submit'>go submit</a>
+  <div style='width:200px;height:auto;height:200px;'>
+    <span id='line' >123456798789789789789
+      789789789789789789798789789789789789
+      7897987897987987987987987987987</span>
+  </div>
+  <div style="width:120%;height:400px;"></div>
+  <div id='coordinate' style='width:400px;height:20px;margin-left:200px;padding:20px;margin-top:20px;border:1px solid red;overflow-y:hidden;'>
+    <span>
+      789789789789789789798789789789789789
+      789789789789789789798789789789789789
+      789789789789789789798789789789789789
+    </span>
+  </div>
+  <form id='submit'>
+    <input type='submit' value='提交' />
+  </form>
+  <div id = 'd'>
+    <!---->
+    <p id='title'>标题栏</p>
+    文本行c
+    <div id='content' width='50px;'>
+      <div style='float:left' id='one'>这是第一行a</div>
+      <div style='float:left' id='two'>这是第二行b</div>
+    </div>
+    <div id='empty'></div>
+
+  </div>
+  <img id='myimage' width='220px'/>
+
+<a name='go'>394 - 405页</a>                       
+
+
+
+
+
+
+<script>
+  window.addEventListener('DOMContentLoaded',function(){
+    var submit = document.forms[0];
+    submit.action = 'www.baidu.com';
+    submit.method = 'POST';
+    var image = document.images[0];
+    var width = parseFloat(image.getAttribute('width'));
+    image.setAttribute('class','add');
+    var script = document.createElement('script');
+    script.src = 'js/myjs1.4.js';
+    document.documentElement.firstElementChild.appendChild(script);
+    script.addEventListener('load',function(e){console.log(cm)},false);
+  },false);
+</script>
+<script type='text/javascript'>
+  // 15-2:可移植的文档遍历函数
+  /*
+   * 返回元素e的第n层祖先，如果不存在此类祖先或祖先不是Element.
+   * (例如Document或者DocumentFragment) 则返回null
+   * 如果n为0，则返回e本身。如果n为1（或省略），则返回其父元素
+   * 如果n为2，则返回其祖父元素，依次类推
+   */
+  
+  function parent(e,n){
+    if(n === undefined) n = 1;
+    while(n-- && e) e = e.parentNode;
+    if(!e || e.nodeType !== 1) return null;
+    return e;
+  }
+  
+  /*
+   * 返回元素e的第n个兄弟元素
+   * 如果n为正，返回后续的第n个兄弟元素
+   * 如果n为负，返回前面的第n个兄弟元素
+   * 如果n为0，返回e本身
+   */
+  
+  function sibling(e , n){
+    while (e && n !== 0){ // 如果e未定义，即刻返回它
+      if(n > 0){  // 查找后续的兄弟元素
+        if(e.nextElementSibling) e = e.nextElementSibling;
+        else{
+          // 处理IE不兼容nextElementSibling属性
+          // 跳过ELement元素之外的节点
+          for(e = e.nextSibling ; e && e.nodeType !== 1; e = e.nextSibling)
+            ; // 空循环
+        }
+        n--;
+      }
+      else{ //查找前面的兄弟节点
+        if(e.previousElementSibling) e = e.previousElementSibling;
+        else{
+          for(e = e.previousSibling; e && e.nodeType !== 1; e = e.previousSibling)
+            ; //空循环
+        }
+        n++;
+      }
+    }
+    return e;
+  }
+  /**
+   * 返回元素e的第n带子元素，如果不存在则返回null
+   * 负值n代表从后往前计数。0表示第一个子元素，而-1代表最后一个，-2代表倒数第二，依次类推
+   */
+  function child(e,n){
+    if(e.children){ // 如果children数组存在话,那么表示不是comment元素或者是text元素,或者该浏览器是支持此属性
+      if (n < 0) n += e.children.length; // 转换负的n为数组索引
+      if( n < 0) return null;            // 如果它仍然为负数，说明没有子元素
+      return e.children[n];              // 返回指定的子元素
+    }
+    
+    // 如果e没有children数组，找到第一个子元素并向前数，或者找到最后一个子元素往回数
+    if( n >= 0){  // n非负：从第一个子元素向前数
+      // 找到元素的第一个子元素
+      if (e.firstElementChild) e = e.firstElementChild; 
+      else {
+        for(e = e.firstChild; e && e.nodeType !== 1; e = e.nextSibling)
+        ; //空循环
+      }
+      return sibling(e,n);
+    }
+    else{ // n为负：从最后一个元素往回数
+      if(e.lastElementChild) e = e.lastElementChild;
+      else{
+        for(e = e.lastChild ; e && e.nodeType !== 1; e = e.nextSibling)
+        ; // 空循环
+      }
+      return sibling(e,n + 1);
+    }
+  }
+  
+  var image = document.getElementById('myimage');
+  image.src = 'images/flower.jpg'; //src属性是图片的URL
+  
+  // 例15-3:查找元素的后代中节点的所有Text节点
+  
+  // 返回元素e的纯文本内容，递归进入妻子元素
+  // 该方法的效果类似于textContent属性
+  function textContent(e) {
+    var child ,type,s = ""; // s保存所有子节点的文本
+    for(child = e.firstChild; child !== null; child = child.nextSibling) {
+      type = child.nodeType;
+      if(type === 3 || type === 4) {
+        s += child.nodeValue;
+      }
+      else if (type === 1){
+        s += textContent(child);
+      }
+    }
+    return s;
+  }
+  
+  // 递归地把n的后代子节点中的所有Text节点内容转换为大写形式
+  function upcase(n){
+    if(n.nodeType === 3 || n.nodeType === 4){
+      n.data = n.data.toUpperCase();
+    }
+    else {
+      for (var i = 0;i < n.childNodes.length; i++){
+        upcase(n.childNodes[i]);
+      }
+    }
+  }
+  
+  var coordinate = document.getElementById('coordinate');
+  
+  
+</script>
+</body>
+</html>
