@@ -1,0 +1,308 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<style>                           
+
+</style>
+<script src='js/base.js'></script>
+<script src='js/dom.js'></script>
+<script src='js/dom/size.js'></script>
+<script type='text/javascript'>
+var dom = collections.dom;
+var size = dom.size;
+
+var domMs = dom.method;
+var sizeMs = size.method;
+
+var getScrollOffsets = sizeMs.getScrollOffsets;
+var whenReady = domMs.whenReady;
+//例17-2：拖动文档元素
+/**
+ * Drag.js:拖动绝对定位的HTML元素
+ * 
+ * 这个模块定义了一个drag()函数，它用于mousedown事件处理程序的调用
+ * 随后的mousemove事件将移动指定元素，mouseup事件将终止拖动.
+ * 这些实现能同标准和IE两种事件模型一起工作
+ * 它需要用到getScrollOffsets()方法
+ * 
+ * 参数：
+ * 
+ * elementToDrag: 接收mousedown事件的元素或某些被包含元素
+ * 它必须是绝对定位的元素
+ * 它的style.left和style.top值将随着用户的拖动而改变
+ *  
+ * event: mousedown事件对象
+ **/ 
+function drag(elementToDrag ,event) {
+  // 初始鼠标的位置，转换为文档坐标
+  var scroll = getScrollOffsets();
+  var startX = event.clientX + scroll.x;
+  var startY = event.clientY + scroll.y;
+
+  // 在文档坐标下，待拖动的元素的初始位置。
+  // 因为elementToDrag是绝对定位的，
+  // 所以我们可以假设它的offsetParent就是文档的body元素
+  var origX = elementToDrag.offsetLeft;
+  var origY = elementToDrag.offsetTop;
+
+  // 计算mousedown事件和元素左上角之间的距离
+  // 取消掉鼠标坐标与元素左上角之间的距离，并以此计算鼠标移动的距离.
+  var deltaX = startX - origX;
+  var deltaY = startY - origY; 
+
+  // 注册用于响应接着mousedown事件之后发生的mousemove和mouseup事件的事件处理程序
+  if (document.addEventListener) { // 标准事件模型
+    // 在document对象上注册捕获事件处理程序
+    document.addEventListener('mousemove',moveHandler,true);
+    document.addEventListener('mouseup',upHandler,true);
+  }
+  else if (document.attchEvent) { // 用于IE5~8的事件模型
+    // 在IE事件模型中，
+    // 捕获事件是通过调用元素上的setCapture（）捕获他们
+    elementToDrag.setCapture();
+    elementToDrag.attchEvent('onmousemove',moveHandler);
+    elementToDrag.attchEvent('onmouseup',upHandler);
+    // 作为mouseup事件看待鼠标捕获的丢失
+    elementToDrag.attchEvent('onlosecapture',upHandler);
+  }
+
+  // 我们处理了这个事件，不让任何其他元素考到它
+  if (event.stopPropagation) event.stopPropagation(); // 标准模型
+  else event.cancelBubble = true;                     // IE
+
+  // 现在阻止任何默认操作
+  if (event.preventDefault) event.preventDefault();   // 标准模型
+  else event.returnValue = false;                     // IE
+
+  /**
+   * 当元素正在被拖动时，这就是捕获mousemove事件的处理程序
+   * 它用于移动这个元素
+   **/
+  function moveHandler(e) { 
+    if(!e) e = window.event; // IE事件模型
+
+    // 移动这个元素到当前鼠标位置,
+    // 通过滚动条的位置和初始单击的偏移量来调整
+    var scroll = getScrollOffsets();
+    elementToDrag.style.left = (e.clientX + scroll.x - deltaX) + 'px';
+    elementToDrag.style.top  = (e.clientY + scroll.y - deltaY) + 'px';
+    // 同时不让任何其他元素看到这个事件
+    if (e.stopPropagation) e.stopPropagation();    // 标准模型
+    else e.cancelBubble = false;                   // IE
+  }
+
+  /**
+   * 这是捕获在拖动结束时发生的最终mouseup事件的处理程序
+   **/
+  function upHandler(e) {
+    if (!e) e = window.event; // IE事件模型
+
+    // 注销捕获事件处理程序
+    if(document.removeEventListener) { // DOM事件模型
+      document.removeEventListener('mouseup',upHandler,true);
+      document.removeEventListener('mousemove',moveHandler,true);
+    }
+    else if(document.detachEvent) {  // IE 5+事件模型
+      elementToDrag.detachEvent('onlosecapture',upHandler);
+      elementToDrag.detachEvent('onmouseup',upHandler);
+      elementToDrag.detachEvent('onmousemove',moveHandler);
+      elementToDrag.releaseCapture();
+    }
+
+    // 并且不让事件进一步传播
+    if (e.stopPropagation) e.stopPropagation(); // 标准模型
+    else e.cancelBubble = true;                // IE
+  }
+}
+</script>
+</head>
+<body>                      
+<style id='st'>
+#box { background-color:#E0EEEE;float:left;width:484px;padding:5px;}
+.wrap { display:block;float:left; }
+#display { 
+  float:left;
+  width:470px;
+  height:46px;
+  padding:4px;
+  border-radius:2px;
+  border:1px solid #AAAAAA;
+  margin-left:2px;
+  background: -webkit-linear-gradient(rgb(233, 233, 252), #F8F8FF);
+  position: relative;
+  overflow: hidden;
+  }
+#show {
+  font-size:25px;
+  position: absolute;
+  bottom:-2px;
+  right:8px;
+  text-align:right;
+  padding-bottom:0px;
+  display: block;
+  max-width: 80%;
+  overflow: hidden;
+}
+#detail-process {
+  position: absolute;
+  top:2px;
+  right:9px;
+  text-align:right;
+  font-size:18px;
+  color:#222;
+  display: block;
+  max-width: 100%;
+}
+#memory {
+  position: absolute;
+  bottom:0px;
+  left:0px;
+  text-align:right;
+  padding-left:10px;
+  font-size:22px;
+  color:#333;
+}
+#normal,#mathFun { border:0px; }
+#normal td,#mathFun td{ 
+  width:40px;
+  height:30px;
+  text-align:center;
+  padding:2px;
+  margin:2px;
+  font-size:12px;
+  border-radius:2px;
+  -webkit-user-select:none;
+}
+
+#measure{
+  -webkit-user-select:none;
+  border-radius:2px;
+  border:1px solid #AAAAAA;
+  margin:2px 2px 0px 2px;
+  width:238px;
+}
+#measure td{
+  width: 76px;
+  height: 26px;
+  font-size:12px;
+  padding:2px;
+  text-align:left;
+}
+
+
+.white,.blue,.indentation{ border:1px solid #AAAAAA; }
+.indentation {
+  -webkit-user-select:none;
+  background-color: inherit;
+}
+.white {
+  background-color:white;
+  background: -webkit-linear-gradient(white, #F8F8FF);
+  
+}
+.blue {
+  background: -webkit-linear-gradient(white, #E0EEEE);
+}
+.white:hover,.blue:hover{
+  border:1px solid #FFB90F;
+  background: -webkit-linear-gradient(white, #FFEC8B);
+  box-shadow: #ffff99 0px 0px 2px;
+}
+.indentation:hover{
+  border:1px solid #FFB90F;
+  background: -webkit-linear-gradient(#e9c377, #FAFAD2);
+}
+.white:active,.blue:active {
+  border:1px solid #FFB90F;
+  background: -webkit-linear-gradient(#FFEC8B,white);
+  box-shadow: #ffff99 0px 0px 2px;
+}
+.indentation:active {
+  border:1px solid #FFB90F;
+  background: -webkit-linear-gradient(rgb(255, 179, 0), white);
+}
+.empty{
+  border:1px solid #AAAAAA;
+}
+.disable{
+  background-color:#AAA;
+  color:#555;
+  border: 1px solid #BBB;
+}
+#memory,#detail-process{
+  -webkit-user-select:none;
+}
+
+.c555{                                                       
+  color:#555;
+}
+
+h1 {
+  color:red;
+}
+
+.de {
+  text-decoration:#222;
+  text-decoration-line: line-through;
+}
+
+</style>
+<div id='box' style='position:absolute'>
+  <div style='width:100%;height:25px;background-color:#CCC;float:left' onmousedown="drag(this.parentNode,event);"></div>
+  <div class='wrap'>
+    <div id='display' >
+      <span id='detail-process'>0</span>
+      <span id='memory'></span>
+      <span id='show'>0</span>
+    </div>
+  </div>
+  <div class='wrap'>
+    <table id='measure'>
+      <tr class='c555'>
+        <td  __disable='1'><input disabled="disabled" __disable='1' type='radio' name='degree' checked='checked'/>度</td><td  __disable='1'><input disabled="disabled" __disable='1' type='radio' name='degree'/>弧度</td><td  __disable='1'><input disabled="disabled" __disable='1' type='radio' name='degree'/>梯度</td>
+      </tr>
+    </table>
+    <table id='mathFun'>
+      <tr>
+        <td __disable='1' class='empty' id='level'></td><td class='disable' __disable='1'>inv</td><td class='disable' __disable='1'>in</td><td id='left_parenthese' class='blue'>(</td><td id='right_parenthese' class='blue'>)</td>
+      </tr>
+      <tr>
+        <td id='convertToInt' class='blue'>Int</td><td id='sinh' class='blue'>sinh</td><td id='sin' class='blue'>sin</td><td id='xPow2' class='blue'>x²</td><td class='disable' __disable='1'>n!</td>
+      </tr>
+      <tr>
+        <td class='disable' __disable='1'>dms</td><td id='cosh' class='blue'>cosh</td><td id='cos' class='blue'>cos</td><td id='xPowY' class='blue'>x^y</td><td class='disable' __disable='1'>y√x</td>
+      </tr>
+      <tr>
+        <td id='pi' class='blue'>π</td><td id='tanh' class='blue'>tanh</td><td id='tan' class='blue'>tan</td><td id='xPow3' class='blue'>x^3</td><td class='disable' __disable='1'>3√x</td>
+      </tr>
+      <tr>
+        <td class='disable' __disable='1'>F-E</td><td class='disable' __disable='1'>Exp</td><td id='mod' class='blue'>Mod</td><td id='log10' class='blue'>log10</td><td id='tenPowN' class='blue'>10^x</td>
+      </tr>
+    </table>
+  </div>
+  <div class='wrap'>
+    <table id='normal'>
+      <tr>
+        <td id='memory_clear' class='indentation'>MC</td><td id='memory_read' class='indentation'>MR</td><td id='memory_save' class='indentation'>MS</td><td id='memory_add' class='indentation'>M+</td><td id='memory_subtract' class='indentation'>M-</td>
+      </tr>
+      <tr>
+        <td id='backspace' class='blue'>←</td><td id='allClear' class='blue'>AC</td><td id='clear' class='blue'>C</td><td id='negative' class='blue'>±</td><td id='sqrt' class='blue'>√</td>
+      </tr>
+      <tr>
+        <td id='seven' class='white'>7</td><td id='eight' class='white'>8</td><td id='nine' class='white'>9</td><td id='divide' class='blue'>/</td><td id='percent' class='disable' __disable='1'>%</td>
+      </tr>
+      <tr>
+        <td id='four' class='white'>4</td><td id='five' class='white'>5</td><td id='six' class='white'>6</td><td id='muliply' class='blue'>*</td><td id='reciproc' class='blue'>1/x</td>
+      </tr>
+      <tr>
+        <td id='one' class='white'>1</td><td id='two' class='white'>2</td><td id='three' class='white'>3</td><td id='subtract' class='blue'>-</td><td id='enter' class='blue' rowspan="2">=</td>
+      </tr>
+      <tr>
+        <td id='zero' colspan='2' class='white'>0</td><td id='point' class='white'>.</td><td id='add' class='blue'>+</td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

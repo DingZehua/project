@@ -93,18 +93,12 @@ function getViewportSize(w) {
   return {w: d.body.clientWidth,h: d.body.clientWidth};
 }
 
-function getDocumentCoordinate(){   
-  var box = document.getElementsByClassName(
-          '_foot')[0].getBoundingClientRect();  // 获得在视口坐标的位置。
+function getDocumentCoordinate(elt){   
+  var box = elt.getBoundingClientRect();  // 获得在视口坐标的位置。
   var offsets = getScrollOffsets();             // 上面定义的工具函数。
   return {x : box.left + offsets.x,             // 转换为文档坐标值。
           y : box.top  + offsets.y};
 }
-var box = document.getElementsByClassName(
-          '_foot')[0];
-var line = document.getElementById('line');
-
-var contain = document.getElementById('contain');
 
 function toFoot(){
   // 获得文档的和视口的高度，offsetHeight会在下面解释
