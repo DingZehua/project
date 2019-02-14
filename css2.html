@@ -46,6 +46,23 @@ var  f = function(){
 
 
 </script>
-
+<div style='position:absolute;left:500px;width:500px;height:300px;border:1px solid black;' id='a'>
+  <div style='width:200px;height:100px;border:1px solid black;' id='b'>
+    
+  </div>
+</div>
+<script type='text/javascript'>
+  var a = document.getElementById('a');
+  a.setCapture(true);
+  a.attachEvent('onmousedown',function(){
+    //b.releaseCapture();
+    console.log('parent');
+  });
+  var b = document.getElementById('b');
+  b.attachEvent('onmousedown',function(e){
+    console.log('child123');
+    window.event.cancelBubble = true;
+  });
+</script>
 </body>
 </html>

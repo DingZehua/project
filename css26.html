@@ -5,7 +5,9 @@
 <style>                           
 
 </style>
+<!--[if !IE]><-->
 <script src='js/base.js'></script>
+<!--><![endif]-->
 <script src='js/dom.js'></script>
 <script src='js/dom/size.js'></script>
 <script type='text/javascript'>
@@ -57,14 +59,14 @@ function drag(elementToDrag ,event) {
     document.addEventListener('mousemove',moveHandler,true);
     document.addEventListener('mouseup',upHandler,true);
   }
-  else if (document.attchEvent) { // 用于IE5~8的事件模型
+  else if (document.attachEvent) { // 用于IE5~8的事件模型
     // 在IE事件模型中，
-    // 捕获事件是通过调用元素上的setCapture（）捕获他们
+    // 捕获事件是通过调用元素上的setCapture()捕获他们
     elementToDrag.setCapture();
-    elementToDrag.attchEvent('onmousemove',moveHandler);
-    elementToDrag.attchEvent('onmouseup',upHandler);
+    elementToDrag.attachEvent('onmousemove',moveHandler);
+    elementToDrag.attachEvent('onmouseup',upHandler);
     // 作为mouseup事件看待鼠标捕获的丢失
-    elementToDrag.attchEvent('onlosecapture',upHandler);
+    elementToDrag.attachEvent('onlosecapture',upHandler);
   }
 
   // 我们处理了这个事件，不让任何其他元素考到它
@@ -74,7 +76,6 @@ function drag(elementToDrag ,event) {
   // 现在阻止任何默认操作
   if (event.preventDefault) event.preventDefault();   // 标准模型
   else event.returnValue = false;                     // IE
-
   /**
    * 当元素正在被拖动时，这就是捕获mousemove事件的处理程序
    * 它用于移动这个元素
@@ -89,7 +90,7 @@ function drag(elementToDrag ,event) {
     elementToDrag.style.top  = (e.clientY + scroll.y - deltaY) + 'px';
     // 同时不让任何其他元素看到这个事件
     if (e.stopPropagation) e.stopPropagation();    // 标准模型
-    else e.cancelBubble = false;                   // IE
+    else e.cancelBubble = true;                    // IE
   }
 
   /**
@@ -112,7 +113,7 @@ function drag(elementToDrag ,event) {
 
     // 并且不让事件进一步传播
     if (e.stopPropagation) e.stopPropagation(); // 标准模型
-    else e.cancelBubble = true;                // IE
+    else e.cancelBubble = true;                 // IE
   }
 }
 </script>

@@ -1,3 +1,4 @@
+if(!collections) var collections = {};
 collections.dom = {};
 collections.dom = (function() {
   var dom = {};
