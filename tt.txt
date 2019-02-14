@@ -6,4 +6,3 @@ add exp line.
 add exp 2 line.
 add exp 3 line.
 add exp 4 line.
-³¢ÊÔÒÔÏÂsetCaptureº¯Êı.
