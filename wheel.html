@@ -1,0 +1,151 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<style>                           
+
+</style>
+<script src='js/base.js'></script>
+<script src='js/dom.js'></script>
+<script src='js/dom/size.js'></script>
+<script type='text/javascript'>
+var dom = collections.dom;
+var size = dom.size;
+
+var domMs = dom.method;
+var sizeMs = size.method;
+
+var getScrollOffsets = sizeMs.getScrollOffsets;
+var whenReady = domMs.whenReady;
+
+// 例17-3:处理鼠标滚轮事件
+// 把内容元素撞到一个指定大小（最小是50*50）的窗体或视口内
+// 可选参数contentX和contentY指定内容相对于窗体的初始偏移量
+// （如果指定，他们必须 <= 0）
+// 这个窗体有mousewheel事件处理程序
+// 它允许用户平移元素和缩放窗体
+function enclose(content ,framewidth, frameheight ,contentX ,contentY) {
+  // 这些参数不仅仅是初始值
+  // 他们保存当前状态，能被mousewheel处理程序使用和修改
+  framewidth = Math.max(framewidth,50);
+  frameheight = Math.max(frameheight,50);
+  contentX = Math.min(contentX,0) || 0;
+  contentY = Math.min(contentY,0) || 0;
+
+  // 创建frame元素，并且设置CSS类名和样式
+  var frame = document.createElement('div');
+  frame.className = 'enclosure';              // 这样我们就能在样式表中定义样式
+  frame.style.width = framewidth + 'px';      // 设置frame的尺寸
+  frame.style.height = frameheight + 'px';    
+  frame.style.overflow = 'hidden';            // 没有滚动条，不能溢出
+  frame.style.boxSizing = 'border-box';       // border-box简化了调整frame大小的计算
+  frame.style.webkitBoxSizing = 'border-box';
+  frame.style.MozBoxSizing = 'border-box';
+  frame.style.border = '1px solid black';
+
+  // 把frame放入文档中，并把内容移入frame中
+  content.parentNode.insertBefore(frame,content);
+  frame.appendChild(content);
+
+  // 确定元素相对于frame的位置
+  content.style.position = 'relative';
+  content.style.left = contentX + 'px';
+  content.style.top = contentY + 'px';
+
+  // 我们将需要针对下面一些特定浏览器怪癖进行处理
+  var isMacWebkit = (navigator.userAgent.indexOf('Macintosh') !== -1 &&
+                    navigator.userAgent.indexOf('WebKit') !== -1);
+  var isFirefox = (navigator.userAgent.indexOf('Gecko') !== -1);
+
+  // 注册mousewheel事件处理程序
+  frame.onwheel = wheelHandler; // 未来浏览器
+  frame.onmousewheel = wheelHandler; // 大多数当前浏览器
+  if (isFirefox) // 仅FiREFOX
+    frame.addEventListener('DOMMouseScroll',wheelHandler,false);
+  function wheelHandler(event) {
+    var e = event || window.event;  // 标准或IE事件对象
+
+    // 查找wheel事件对象、mousewheel事件对象（包括2D和1D形式）
+    // 和Firefox的DOMMouseScroll事件对象的属性
+    // 从事件对象中提取旋转量
+    // 绽放delta一边一次鼠标滚轮‘单击’相对于屏幕的缩放量是30像素
+    // 这里最终会重复计算，
+    // 所以希望取消wheel事件将阻止mousewheel事件的产生
+    var deltaX = e.deltaX * -30 || // wheel事件
+              e.wheelDeltaX / 4 || // mousewheel
+                              0;   // 属性未定义
+    var deltaY = e.deltaY * -30 || // wheel事件
+              e.wheelDeltaY / 4 || // Webkit中的mousewheel事件
+    (e.wheelDeltaY === undefined &&  // 如果没有2D属性
+            e.wheelDelta  / 4)  || // 那么则用1D的滚轮属性
+                 e.deltaY * -10 || // Firefox的DOMMouseScroll事件
+                              0;
+    // 在大多数浏览器中，每次鼠标滚轮单击对应的delta是120
+    // 但是，在Mac中，鼠标滚轮似乎对速度更敏感，
+    // 其delta值通常要大120倍，使用Apple鼠标至少如此
+    // 使用浏览器测试解决这个问题
+    if (isMacWebkit) {
+      deltaX /= 30;
+      deltaY /= 30;
+    }
+
+    // 如果在Firefox（未来版本）中得到mousewheel或wheel事件，
+    // 那么就不需要DOMMouseScroll
+    if (isFirefox && e.type !== 'DOMMouseScroll') 
+      frame.removeEventListener('DOMMouseScroll',wheelHandler,false);
+    
+    var contentbox = content.getBoundingClientRect();
+    var contentwidth = contentbox.right - contentbox.left;
+    var contentheight = contentbox.bottom - contentbox.top;
+
+    if (e.altKey) { // 如果按下alt键，就可以调整frame大小
+      if (deltaX) {
+        framewidth -= deltaX; // 新宽度，但不能比内容大
+        framewidth = Math.min(framwidth ,contentwidth);
+        framewidth = Math.max(framewidth ,50);      // 且也不能比50小
+        frame.style.width = framewidth + 'px';      // 在frame上设置它
+      }
+      if (deltaY) {
+        frameheight -= deltaY;  // 同样的操作对frame的高度做一遍
+        frameheight = Math.min(frameheight ,contentheight);
+        frameheight = Math.min(frameheight - deltaY ,50);
+        frame.style.height = frameheight + 'px';
+      }
+    }
+    else { // 没有按下Alt辅助键，就可以评议frame中的内容
+      if(deltaX) {
+        var minoffset = Math.min(framewidth - contentwidth,0);
+        // 把deltaX添加到contentX中，但不能小于minoffset
+        contentX = Math.max(contentX + deltaX,minoffset);
+        contentX = Math.min(contentX ,0);   // 或者0大
+        content.style.left = contentX + 'px' // 设置新的偏移量
+      }
+      if(deltaY) {
+        var minoffset = Math.min(framewidth - contentwidth,0);
+        // 把deltaY添加到contentY中，但不能小于minoffset
+        contentY = Math.max(contentY + deltaY,minoffset);
+        contentY = Math.min(contentY ,0);   // 或者0大
+        content.style.top = contentY + 'px' // 设置新的偏移量
+      }
+    }
+
+    // 不让这个事件冒泡，阻止任何默认操作
+    // 这会阻止浏览器使用mousewheel事件滚动文档
+    // 希望对于相同的鼠标滚动，
+    // 调用wheel事件上的preventDefault()也能阻止mousewheel事件的产生
+    if (e.preventDefault) e.preventDefault();
+    if (e.stopPropagation) e.stopPropagation();
+    e.cancelBubble = true; // IE事件
+    e.returnValue = false; // IE事件
+    return false;
+  }
+}
+whenReady(function(){
+  enclose(document.getElementById('content'),200,200,0,0);
+});
+</script>
+</head>
+<body>
+<img id='content' src='calv2.1.png'/>
+</body>
+</html>

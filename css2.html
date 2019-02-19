@@ -46,23 +46,18 @@ var  f = function(){
 
 
 </script>
-<div style='position:absolute;left:500px;width:500px;height:300px;border:1px solid black;' id='a'>
-  <div style='width:200px;height:100px;border:1px solid black;' id='b'>
+<div style='margin-left:200px;;width:500px;height:300px;border:1px solid black;overflow: scroll' id='a' >
+  <div style='width:200px;height:100px;border:1px solid black;position:relative;left:20px;' id='b'>
     
   </div>
 </div>
 <script type='text/javascript'>
-  var a = document.getElementById('a');
-  a.setCapture(true);
-  a.attachEvent('onmousedown',function(){
-    //b.releaseCapture();
-    console.log('parent');
-  });
-  var b = document.getElementById('b');
-  b.attachEvent('onmousedown',function(e){
-    console.log('child123');
-    window.event.cancelBubble = true;
-  });
+  var a = document.getElementById('b');
+  a.addEventListener('mousewheel',wheel,false);
+  a.addEventListener('wheel',wheel,false);
+  function wheel(event) {
+    console.log(event.wheelDelta || event.deltaY);
+  }
 </script>
 </body>
 </html>
