@@ -71,10 +71,11 @@ function enclose(content ,framewidth, frameheight ,contentX ,contentY) {
     // 绽放delta一边一次鼠标滚轮‘单击’相对于屏幕的缩放量是30像素
     // 这里最终会重复计算，
     // 所以希望取消wheel事件将阻止mousewheel事件的产生
-    var deltaX = e.deltaX * -30 || // wheel事件
+    // wheel 中的delta[X|Y|Z]等于正负100，上100，下-100.
+    var deltaX = e.deltaX   / -3   || // wheel事件
               e.wheelDeltaX / 4 || // mousewheel
                               0;   // 属性未定义
-    var deltaY = e.deltaY * -30 || // wheel事件
+    var deltaY = e.deltaY   / -3   || // wheel事件
               e.wheelDeltaY / 4 || // Webkit中的mousewheel事件
     (e.wheelDeltaY === undefined &&  // 如果没有2D属性
             e.wheelDelta  / 4)  || // 那么则用1D的滚轮属性
@@ -101,14 +102,14 @@ function enclose(content ,framewidth, frameheight ,contentX ,contentY) {
     if (e.altKey) { // 如果按下alt键，就可以调整frame大小
       if (deltaX) {
         framewidth -= deltaX; // 新宽度，但不能比内容大
-        framewidth = Math.min(framwidth ,contentwidth);
+        framewidth = Math.min(framewidth ,contentwidth);
         framewidth = Math.max(framewidth ,50);      // 且也不能比50小
         frame.style.width = framewidth + 'px';      // 在frame上设置它
       }
       if (deltaY) {
         frameheight -= deltaY;  // 同样的操作对frame的高度做一遍
         frameheight = Math.min(frameheight ,contentheight);
-        frameheight = Math.min(frameheight - deltaY ,50);
+        frameheight = Math.max(frameheight ,50);
         frame.style.height = frameheight + 'px';
       }
     }
@@ -122,8 +123,8 @@ function enclose(content ,framewidth, frameheight ,contentX ,contentY) {
       }
       if(deltaY) {
         var minoffset = Math.min(framewidth - contentwidth,0);
-        // 把deltaY添加到contentY中，但不能小于minoffset
-        contentY = Math.max(contentY + deltaY,minoffset);
+        // 把deltaY添加到contentY中，但不能小于minoffset（最大向上偏移值）。
+        contentY = Math.max(contentY + deltaY,minoffset);  // 正数向上显示，负数向下显示。
         contentY = Math.min(contentY ,0);   // 或者0大
         content.style.top = contentY + 'px' // 设置新的偏移量
       }
@@ -143,9 +144,10 @@ function enclose(content ,framewidth, frameheight ,contentX ,contentY) {
 whenReady(function(){
   enclose(document.getElementById('content'),200,200,0,0);
 });
+
 </script>
 </head>
 <body>
-<img id='content' src='calv2.1.png'/>
+<img id='content' src='images/calv2.1.png'/>
 </body>
 </html>
