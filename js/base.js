@@ -696,8 +696,8 @@ collections.base = (function(){
       o.__defineSetter__(proName,set);
     }
     else{
-      // o['get' + proName] = get;
-      // o['set' + proName] = set;
+      o['get' + proName] = get;
+      o['set' + proName] = set;
       o[proName] = value;
     }
 

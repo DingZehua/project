@@ -1,0 +1,107 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<style>                           
+  #clock {
+    font:bcld 24pt sans;background: #ddf; padding:10px;
+    border:solid black 2px;border-radius:10px;
+  }
+</style>
+<!--[if !IE]><-->
+<script src='js/base.js'></script>
+<!--><![endif]-->
+<script src='js/dom.js'></script>
+<script src='js/myjs1.4.js'></script>
+
+</head>
+<body>
+<style>
+  .box { width: 256px; height: 171px; border: 1px solid #ccc; background-color: #f5f5f5; }
+</style>
+<a href="#" id="link">拖拽我到下面框框试试</a>
+<p id="box" class="box"></p>
+<script type='text/javascript'>
+  var dom = collections.dom;
+  var size = dom.size;
+  
+  var domMs = dom.method;
+  
+  var whenReady = domMs.whenReady;
+  
+  
+  var $ = function(s) { return document.getElementById(s) }
+  
+  window.onload = function(e){
+    var d = $('d');
+    var word = $('word');
+    var msg = $('msg');
+    var image = $('image');
+    cm.bind_event(d,'dragenter',function(e){
+      let dt = e.dataTransfer;
+      console.log('enter');
+      e.preventDefault();
+      dt.dropEffect = 'none';
+      console.log(dt.dropEffect);
+    });
+    let over = function(e){
+      let dt = e.dataTransfer;
+      console.log(dt.dropEffect);
+      dt.dropEffect = 'copy';
+      e.preventDefault();
+    };
+    cm.bind_event(d,'dragover',over);
+    cm.bind_event(d,'drop',function(e){
+      let dt = e.dataTransfer;
+      e.preventDefault();
+    });
+    cm.bind_event(d,'dragleave',function(e){
+      let dt = e.dataTransfer;
+      console.log('leave');
+      e.preventDefault();
+    });
+    cm.bind_event(word,'dragstart',function(e){
+      let dt = e.dataTransfer;
+      dt.effectAllowed = 'none';
+      console.log('dragstart',dt.types);
+    });
+    cm.bind_event(word,'dragend',function(e){
+      let dt = e.dataTransfer;
+      console.log('end');
+    });
+  };
+  
+  var link = $('link');
+  var box = $('box');
+  var isOpenLink = null;
+  link.addEventListener('dragstart', function (event) {
+      event.dataTransfer.effectAllowed = 'link';    
+  });
+  // 检测是需要新窗口打开链接的浏览器
+  box.addEventListener('dragenter', function (event) {
+      if (isOpenLink === null) {
+          isOpenLink = (event.dataTransfer.dropEffect !== 'link');    
+      }
+  });
+  box.addEventListener('dragover', function (event) {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'link';
+  });
+  // 打开链接
+  box.addEventListener('drop', function (event) {
+      event.preventDefault();
+      if (isOpenLink) {
+          window.open(link.href);
+      }
+  });
+  
+</script>
+<span id='word'>word</span><img id='image' src='images/clock-icon25.png'/><img src='images/clock-icon25.png'/><span id='word2'>word2</span>
+<div id='d' style='width:200px;height:100px;border:1px solid black;'>
+  <div id='d2' style='margin-left:20px;margin-top:20px;width:100px;height:50px;border:1px solid black;'>
+
+  </div>
+</div>
+<div id='msg'></div>
+</body>
+</html>
