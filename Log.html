@@ -1,0 +1,120 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<style>                           
+  #log{
+    border:2px solid #a1a1a1;
+    padding:10px;
+    background-color: #BCB;
+    border-radius:5px;
+    width: 80%;
+    height: 300px;
+    font-size:12px;
+    overflow-y:auto;
+  }
+  ul,li {
+    list-style-type:none;
+    margin:0px;
+    padding:0px;
+  }
+  .index {
+    color:Green;
+    font-size:13px;
+  }
+  .word {
+    font-size:13px;
+  }
+  .line {
+    line-height: 20px;
+    border-bottom:1px solid #EEE;
+  }
+</style>
+<!--[if !IE]><-->
+<script src='js/base.js'></script>
+<!--><![endif]-->
+<script src='js/dom.js'></script>
+<script src='js/myjs1.4.js'></script>
+<script type='text/javascript'>
+var dom = collections.dom;
+
+var domMs = dom.method;
+
+var whenReady = domMs.whenReady;
+
+whenReady(function(){
+  let msgList = cm.g('#msgList');
+  function LogMsg(frame,msgList) {
+    this.frame = frame || null; 
+    this.msgList = msgList || null;
+    this.data = [];
+    this.size = 0;
+  }
+  
+  LogMsg.prototype.add = function(word){
+
+    if(this.msgList == null || !(this.msgList instanceof HTMLElement)){
+      throw new TypeError('msgList is null or not HTML node');
+    }
+
+    let li =  document.createElement('li');
+    let indexNode = document.createElement('span');
+    let wordNode = document.createElement('span');
+
+    li.className = 'line';
+    indexNode.className = 'index';
+    wordNode.className = 'word';
+
+    let indexTextNode = document.createTextNode((++this.size) + '：');
+    let wordTextNode = document.createTextNode(word + '');
+    
+    indexNode.appendChild(indexTextNode);
+    li.appendChild(indexNode);
+
+    wordNode.appendChild(wordTextNode);
+    li.appendChild(wordNode);
+
+    this.msgList.appendChild(li);
+    
+    this.data.push(
+      {
+        'node' : li,
+        'msg'  : word + ''
+      }
+    );
+
+    return li;
+  }
+  LogMsg.prototype.remove = function(index) {
+    if(this.msgList == null || !(this.msgList instanceof HTMLElement)){
+      throw new TypeError('msgList is null or not HTML node');
+    }
+    if(this.size && this.size > index) {
+      this.msgList.removeChild(this.data[index].node);
+      this.size--;
+      return this.data.splice(index,1)[0];
+    }
+    return null;
+  };
+  LogMsg.prototype.removeAll = function(){
+    this.msgList.innerHTML = '';
+    this.size = 0;
+    this.data.splice(0);
+  }
+
+  log = new LogMsg(cm.g('log'),cm.g('msgList'));
+});
+
+let log = null;
+
+</script>
+</head>
+<body>
+<div id='log'>
+  <ul id='msgList'>
+  </ul>
+</div>
+<textarea id='code' rows='8' cols='60'></textarea></br>
+<input type='button' id='run' value='运行代码' onclick="eval(cm.g('code').value)"/>
+</body>
+</html>

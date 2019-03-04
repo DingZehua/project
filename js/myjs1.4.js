@@ -247,6 +247,18 @@ var	namespace = function()
       'get_text' : function(el){
         return  el.innerText || el.textContent;
       },
+      'g' : function(str){
+        if(!/[#.>:]|\s/.test(str)) {
+          return document.getElementById(str);
+        }
+        else if(/^[#][a-zA-Z0-9_\-]+$/.test(str)){
+          return document.querySelector(str);
+        }
+        else {
+          return document.querySelectorAll(str);
+        }
+      },
+      '$' : function(str) { return this.g(str); },
 			'RemoveArrDuplicate'	: function(arr)
 			{
 				for(var i=0;i<arr.length;i++)
