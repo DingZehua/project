@@ -1,0 +1,262 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<style>                           
+
+</style>
+<!--[if !IE]><-->
+<script src='js/base.js'></script>
+<!--><![endif]-->
+<script src='js/dom.js'></script>
+<script src='js/myjs1.4.js'></script>
+<script src='js/jquery-3.3.1.js'></script>
+<script type='text/javascript'>
+var dom = collections.dom;
+var domMs = dom.method;
+
+//let str = 'hello World Jack';
+/*
+for(let i = 0,len = str.length; i < len;i++) {
+  console.log(str[i]);
+}
+
+for(let chars of str) {
+  console.log(chars);
+}
+console.log(str.includes('hello'));
+console.log(str.startsWith('he'),str.startsWith('xx'));
+console.log(str.endsWith('Jack'),str.endsWith('hello_'));
+console.log(str.includes('h',1),str.includes('h',0));// 从开头一个个对比，全错才返回false，第二参数是指前面截掉的多少位。
+console.log(str.startsWith('o',2),str.startsWith('o',4));//startsWith是从开头对比，如果开头不正确，那么就返回false.第二个参数是指，截去后面几位。
+console.log(str.endsWith('o',2),str.endsWith('o',5));// endesWith是从结尾开始对比，如果开头不正确，那么返回false,第二位是，从开头保留多少位数。
+console.log(str.repeat(5),str.repeat(-0.9));
+
+
+console.log(str.padStart(20,'_-'));
+console.log(str.padEnd(20,'_-'));
+console.log('abc'.padStart(4,'#@!'));
+console.log('abc'.padEnd(4,'#@!'));
+console.log('abc'.padStart(6));
+console.log('2017-'.split('').reverse().join('').padStart(10,'dd-mm-yyyy').split('').reverse().join(''));
+//用在日期填空比较好，还有就是数字补位比较好。
+*/
+//console.log(str.match(/l/g));
+</script>
+</head>
+<body>
+<div id='result'></div>
+<div id='list'></div>
+<div id='data-list'></div>
+<div id='template-list'></div>
+<script type='text/javascript'>
+/*
+let basket = { count : 10,onSale:'xiezi' };
+
+$('#result').append('Ther are <b>' + basket.count + '</b> '+
+  'items in your basket, ' + 
+  '<em>' + basket.onSale + 
+  '</em> are on sale'
+  )
+$('#result').append(`Ther are <b> ${basket.count} </b>
+  items in your basket, <em> ${basket.onSale} 
+  </em> are on sale`);
+*/
+/*
+`In JavaScript '\n is line-feed.`;
+
+`In JavaScript this is 
+not legal.`;
+
+console.log(`string text line 1
+  string text line 2`);
+
+// 字符串中嵌入变量
+
+let name = 'Bob', time = 'today';
+
+`Hello ${name}, how are you ${time}?`;
+
+let greeting = `\`Yo\` World!`;
+
+let htmlText = `
+<ul>
+  <li>first</li>
+  <li>second</li>
+</ul>
+`;
+$('#list').html(htmlText.trim());
+function authorize(user,action) {
+  if(!user.hasPrivilege(action)) {
+    throw new Error(
+      `User ${user.name} is not authorized to do ${action}.`
+    );
+  }
+}
+
+let x = 1;
+let y = 2;
+
+`${x} + ${y * 2} = ${x + y}`;
+
+`${x} + ${y * 2} = ${x + y * 2}`;
+
+let obj = {x : 1, y : 2};
+
+`${obj.x + obj.y}`;
+
+function fn() {
+  return `Hello World`;
+}
+
+`foo ${fn()} bar`;
+
+//let msg = `Hello, ${place}`;
+
+`Hello ${`World`}`;
+
+const tmpl = addrs => `
+  <table>
+  ${addrs.map(addr => `
+    <tr><td>${addr.first}</td></tr>
+    <tr><td>${addr.last}</td></tr>
+    `).join('')}
+  </table>
+`;
+
+const data = [
+  { first:'Jane' , last:'Bond'},
+  { first:'Lars', last : 'Croft'}
+];
+
+$('#data-list').html(tmpl(data));
+
+let str = 'return ' + '`Hello ${name}`';
+let fuc = new Function('name',str);
+
+let str = '(name) => { return ' + '`Hello ${name}`;}';
+let func = eval.call(null,str);
+*/
+/*
+let template = `
+  <ul>
+    <% for(let i = 0;i < data.supplies.length; i++) { %>
+      <li><%= data.supplies[i] %> </li>
+    <% } %>
+  </ul>
+`;
+
+function compile(template) {
+
+  let evalExpr = /<%=([\s\S]+?)%>/g;
+  let expr = /<%([\s\S]+?)%>/g;
+
+  template = template.replace(evalExpr,'`); \n echo($1); \n echo(`').replace(
+                              expr,'`); \n $1 \n echo(`');
+  template = 'echo(`' + template + '`);';
+
+  let script = 
+  `(function parse(data) {
+    let output = '';
+    function echo(html) {
+      output += html;
+    }
+
+    ${template}
+
+    return output;
+  })`;
+
+ return script; 
+}
+
+let parse = eval(compile(template));
+cm.g('template-list').innerHTML = parse({supplies : ['zhangSan','liSi','wangWu']})
+
+*/
+/*
+let a = 5;
+let b = 10;
+/*
+tag`Hello ${a + b} world ${a * b}`;
+tag(['Hello ',' world ',''],15,50);
+tag`Hello`;
+
+function tag(stringArr,value) {
+  console.log(stringArr.raw && stringArr.raw[0] || stringArr);
+}
+*/
+/*
+function tag(s,v1,v2) {
+  console.log(s[0],s.raw[0]);
+  console.log(s[1]);
+  console.log(s[2]);
+  console.log(v1);
+  console.log(v2);
+}
+
+tag`Hello ${a + b} world ${a * b}`;
+
+let total = 30;
+let msg = passthru`The total is ${total} (${total * 1.02} with tax)`;
+
+function passthru(listerls) {
+  let result = '';
+  let i = 0;
+  while( i < listerls.length) {
+    result += listerls[i++];
+    if (i < arguments.length) {
+      result += arguments[i];
+    }
+  }
+  return result;
+}
+function passthru(literals,...values) {
+  let result = '';
+  for(var i = 0,len = values.length;i < len; i++) {
+    result += literals[i] + values[i];
+  }
+  result += literals[i];
+
+  return result;
+}
+
+let sender = '<script>alert("abc")<\/script>';
+let message = 
+ saferHTML`<p>${sender} has sent you a message.</p>`;
+
+function saferHTML(templateData) {
+  let s = templateData[0];
+  for(let i = 1; i < arguments.length; i++) {
+    s += arguments[i].replace(/&/g,'&amp')
+        .replace(/</g,'&lt')
+        .replace(/>/g,'&gt');
+    s += templateData[i];
+  }
+  return s;
+}
+*/
+
+tag`First line\nSecond line`;
+function tag(strings) {
+  console.log(strings.raw[0]);
+}
+
+console.log(String.raw`Hi\n${2+3}`);
+
+console.log(String.raw({raw:'test'},1,2,3,4));
+
+String.raw2 = function(strings,...values) {
+  let out = '';
+  let index;
+  for (index = 0; index < values.length; index++) {
+    out += strings.raw[index] + values[index];
+  }
+  out += strings.raw[index];
+
+  return out;
+}
+
+</script>
+</body>
+</html>

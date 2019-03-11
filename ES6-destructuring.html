@@ -1,0 +1,197 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<style>                           
+
+</style>
+<!--[if !IE]><-->
+<script src='js/base.js'></script>
+<!--><![endif]-->
+<script src='js/dom.js'></script>
+<script src='js/myjs1.4.js'></script>
+<script type='text/javascript'>
+var dom = collections.dom;
+
+var domMs = dom.method;
+/*
+let [a,b,c] = [1,2,3];
+let [d,[e,[f]]] = [4,[5,[6]]]
+let [,,third] = [1,2,3];
+let [x,,y] = [1,2,3];
+let [head,...tail] = [1,2,3,4,5];
+let [x1,y1,...z1] = [1];
+let [foo] = [];
+let [bar,foo1] = [1];
+let [foo = true] = [];
+let [x,y = 'b'] = ['a'];
+let [x1,y1 = 'b'] = ['a',undefined]
+*/
+//function c(){ return 10; };
+//let [x = 1, y = x] = [];
+//let [x = 1,y = x] = [2];
+//let [x = 1 , y = x ] = [1,2];
+//let [x = y, y =1] = [];
+//let {bar,foo} = {foo : 'aaa' , bar : 'bbb'};
+//let {bar,foo} = {foo:'aaa',bar:'bbb'};
+//let {baz} = {foo:'aaa',bar:'bbb'};
+//let {foo : baz} = {foo:'aaa',bar:'bbb'};
+//let obj = {first:'hello',last:'world'};
+//let {first:f,last: l} = obj
+//let {foo : foo , bar : bar} = {foo:'aaa',bar:'bbb'};
+//let {foo:baz} = {foo : 'aaa', bar : 'bbb'};
+/*
+let obj = {
+  p : [
+    'Hello',
+    { y: 'Word'}
+  ]
+};
+let {p , p : [h,{y}]} = obj;
+const node = {
+  loc : {
+    start : {
+      line : 1,
+      column : 5
+    }
+  }
+}
+let {loc, loc : {start} , loc : { start : { line } }} = node;
+*/
+/*
+let obj = {};
+let arr = [];
+({ foo : obj.pro , bar : arr[0] } = {foo : 123 , bar : true});
+*/
+//let {x = 3} = {};
+//let {x,y = 5} = {x : 1 };
+//let {x : y = 3} = {};
+//let {x : y = 3} = {x : 5};
+//let {message : msg = 'Something went wrong'} = {}; 
+//let {x = 3} = {x : undefined};
+//let {x = 3} = { x : null };
+//let {foo} = {bar : 'baz'};
+
+//let {foo : {bar}} = {baz : 'baz'};
+
+//let _tmp = {baz : 'baz'};
+//_tmp.foo.bar;
+//let x;
+//({x} = {x : 1});
+/*
+({'0': x} = [true,true] );
+({'0' : y} = 'abc');
+({} = []);
+*/
+
+//let {log ,sin ,cos} = Math;
+
+//let arr = [1,2,3];
+//let {0 : first,[arr.length - 1] : last} = arr;
+
+//const [a,b,c,d,e] = 'hello';
+
+//let {length : len} = 'hello';
+/*
+let {toString : s} = 123;
+console.log(s === Number.prototype.toString);
+let {toString : s1} = true;
+console.log(s1 === Boolean.prototype.toString);
+
+let {prop : x} = undefined;
+let {prop : y} = null;
+
+
+function add([x,y]) {
+  return x + y;
+}
+
+[[1,2],[3,4]].map(([a,b]) => a + b);
+*/
+/*
+function move({x = 0, y = 0} = {}){
+  return [x,y];
+}
+
+function move({x,y} = {x : 0 , y : 0}) {
+  return [x,y];
+}
+console.log(
+  move({x : 3, y : 8}),
+  move({x:3}),
+  move({}),
+  move());
+*/
+/*
+[x] = [0];
+[y] = [undefined];
+[z] = [3];
+//[1,undefined,3].map((x = 'yes') => x);
+let [(a)] = [1];
+let {x :(c)} = {};
+let {(x : c)} = {};
+let {(x) : c} = {};
+let {o :(p : p)} = {o : {p : 2}};
+function f(([z)])) { return z; };
+function f([z,(x)]) { return x; };
+({p : a}) = {p : 42};
+([a]) = [5];
+[({ p : a}), {x : c}] = [{},{}];
+[(b)] = [5];
+({p : d} = {});
+[(parseInt.prop)] = [3];
+
+let x = 1;
+let y = 2;
+[x,y] = [y,x];
+function example() {
+  return [1,2,3];
+}
+let [a,b,c] = example();
+function example() {
+  return {
+    foo:1,
+    bar:2
+  }
+}
+let {foo,bar} = example();
+function f([x,y,z]) {
+  console.log(x + y +z);
+}
+
+function f({x,y,z}) {
+  return [x,y,z];
+}
+
+let jsonData = {
+  id : 42,
+  status : 'ok',
+  data : [867,5309]
+}
+let {id,status,data : number} = jsonData;
+var $ = {ajax : function(url,{
+  async = true,
+  beforeSend = function() {},
+  cache = true,
+  complete = function(){},
+  crossDomain = false,
+  global = true
+}){
+}}
+const map = new Map();
+map.set('first','hello');
+map.set('second','world');
+for(let [key,value] of map) {
+  console.log(key + ':' + value);
+}
+for(let [key] of map) {
+}
+for(let [,value] of map) {
+}
+const {SourceMapConsumer,SourceNode} = require('source-map');
+*/
+</script>
+</head>
+<body>                      
+</body>
+</html>

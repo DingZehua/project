@@ -797,3 +797,5 @@ collections.base = (function(){
   base.CONST.ERR_ = ERR_;
   return base;
 }());
+try{(module && (module.exports = collections));}
+catch(e){}

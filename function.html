@@ -1,0 +1,401 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<style>                           
+
+</style>
+<!--[if !IE]><-->
+<script src='js/base.js'></script>
+<!--><![endif]-->
+<script src='js/dom.js'></script>
+<script src='js/myjs1.4.js'></script>
+<script type='text/javascript'>
+var dom = collections.dom;
+
+var domMs = dom.method;
+
+let log = console.log.bind(console);
+/*
+var pipeline = function(){
+  var args = arguments;
+  return  function(val){
+    return Array.prototype.reduce.call(args,function(a,b){
+            return b(a);
+          },val);
+  }
+}
+
+function Point (x = 0,y = 0) {
+  this.x = x;
+  this.y = y;
+}
+
+function foo(x = 5) {
+  let x = 1;
+  const x = 2;
+}
+
+function foo2(x,x,y) {
+
+}
+
+function foo3 (x,x,y = 0) {
+
+}
+function foo4(p = x + 1) {
+  console.log(p);
+}
+
+let x = 50;
+
+function foo5({x,y = 5}) {
+  console.log(x,y);
+}
+
+function foo6({x,y = 5} = {}) {
+  log(x,y);
+}
+
+function fetch(url , {body = '', method = 'GET', headers = {}} = {}) {
+  log(method);
+}
+
+//fetch('http://example.com',{});
+
+function m1({x = 0, y = 0} = {}) {
+  return [x,y];
+}
+
+function m2({x,y} = {x : 0,y : 0}) {
+  return [x,y];
+}
+
+function f(x = 1, y) {
+  return [x,y];
+}
+
+function f2(a,b = 's',c) {
+
+}
+
+function f3(...args) {
+
+}
+
+function f4(x, y = x ) {
+  log(y);
+}
+
+let x__ = 5;
+
+function f5(y = x__) {
+  let x = 2;
+  log(y);
+}
+
+function f6(x = x) {
+  log();
+}
+
+
+//let foo = 'outer';
+
+function bar(func = () => foo) {
+  let foo = 'inner';
+
+  log(func());
+}
+
+let x = 1;
+
+function foo(x, y = function() { x = 2; }) {
+  var x = 3;
+  y();
+  log(x);
+}
+
+
+let x = 1;
+function foo(x, y = function() { x = 2; }) {
+  x = 3;
+  y();
+  log(x);
+}
+
+function throwIfMissing() {
+  throw new Error('Missing parameter');
+}
+
+function foo(x = throwIfMissing(), y = undefined) {
+  return x;
+}
+
+
+function add(...values) {
+  let sum = 0;
+
+  for (var val of values) {
+    sum += val;
+  }
+
+  return sum;
+}
+
+function sortNumbers() {
+  return Array.prototype.slice.call(arguments).sort((a,b) => a - b);
+}
+
+const sortNumbers2 = (...numbers) => numbers.sort((a,b) => a - b);
+
+function push(array,...items) {
+  items.forEach(function(item) {
+    array.push(item);
+    log(item);
+  });
+  return array;
+}
+
+'use strict';
+
+function doSomething(a,b = a) {
+
+}
+
+const doSomething2 = (function (){
+  'use strict';
+  return function(value = 42) {
+    return value;
+  }
+}());
+
+var f = v => v;
+var f2 = function(v) {
+  return v;
+}
+
+var f = () => 5;
+
+var f2 = function() {return 5;}
+
+var sum = (num1,num2) => num1 + num2;
+
+var sum2 = function(num1,num2) {
+  return num1 + num2;
+}
+
+var sum = (num1,num2) => { return num1 + num2; }
+
+let getTempItem = id => { id: id,name:'Temp' };
+
+let getTempItem2 = id =>( { id:id, name:'Temp' });
+
+
+let foo = () => {a : 1};
+
+let fn = () => void doesNotReturn();
+
+const full = ({first,last}) => first + ' ' + last;
+
+function full2(person) {
+  return person.first + ' ' + person.last;
+}
+
+const isEven = n => n % 2 === 0;
+const square = n => n * n;
+
+[1,2,3].map(function(x) {
+  return x * x;
+});
+
+[1,2,3].map(x => x * x);
+
+var result = values.sort(function(a,b) {
+  return a - b;
+});
+
+var result = values.sort((a,b) => a - b);
+
+const numbers = (...nums) => nums;
+
+const headAndTail = (head,...tail) => [head,tail];
+
+const cat = {
+  lives : 9,
+  jumps : () => {
+    this.lives --;
+  }
+}
+
+var buttom = document.getElementById('perss');
+
+button.addEventListener('click',() => {
+  this.classList.toggle('on');
+},false);
+
+
+function insert(value) {
+  return {into:function(array) {
+    return {after : function(afterValue) {
+      array.splice(array.indexOf(afterValue) + 1, 0 ,value);
+      return array;
+    }}
+  }}
+}
+
+const insert2 = (value) => ({into : (array) => ({after: (afterValue) => {
+  array.splice(array.indexOf(afterValue) + 1,0 ,value);
+  return array;
+} })})
+
+const pipeline = (...funcs) => val => 
+        funcs.reduce((a,func) => func(a),val);
+
+const plus1 = a => a + 1;
+const mult2 = a => a * 2;
+
+const addThenMult = pipeline(plus1,mult2);
+
+
+var foo = { x : 1 };
+
+let bar = function(){
+  return this.x;
+}
+
+foo::bar;
+
+
+function f(x) {
+  return g(x);
+}
+
+function f(x) {
+  let y = g(x);
+  return y;
+}
+
+function f(x) {
+  return g(x) + 1;
+}
+
+function f(x) {
+  g(x);
+}
+
+function f(x) {
+  g(x);
+  return undefined;
+}
+
+function f(x) {
+  if( x > 0) {
+    return m(x);
+  }
+  return n(x);
+}
+
+function f() {
+  let m = 1;
+  let n = 2;
+  return g(m + n);
+}
+
+function f() {
+  return g(3);
+}
+
+g(3);
+
+
+function addOne(a) {
+  var one = 1;
+  function inner(b) {
+    return b + one;
+  }
+  return inner(a);
+}
+
+
+
+function finbonacci (n) {
+  if (n <= 1) { return 1; }
+  else return finbonacci(n - 1) + finbonacci(n - 2);
+}
+
+'use strict';
+function finbonacci(n,total1 = 1,total2 = 1) {
+  if(n <= 1) return total2;
+  else return finbonacci(n - 1,total2,total1 + total2);
+}
+
+'use strict';
+function factorial(n,total = 1) {
+  if (n === 1) { return total; }
+  return factorial(n - 1,total * n);
+}
+
+
+function curring(fn,m) {
+  return function(n) {
+     return fn.call(this,n,m);
+  }
+}
+
+function tailFactorial(n ,total) {
+  'use strict';
+  if(n <= 1) return total;
+  else return tailFactorial(n - 1,n * total);
+}
+
+const factorial = curring(tailFactorial,1);
+
+function sum(x,y) {
+  if(y > 0) { return sum(x + 1,y - 1); }
+  return x;
+}
+
+function trampoline(f) {
+  while(f instanceof Function) {
+    f = f();
+  }
+  return f;
+}
+
+function sum(x,y) {
+  if(y > 0) { return sum.bind(this,x + 1,y - 1) }
+  return x;
+}
+
+
+function tco(f) {
+  let active = false;
+  let accumulated = [];
+  let value = 0;
+  return function accumulator(...values){
+    accumulated.push(values);
+    if(!active) {
+      active = true;
+      while(accumulated.length) {
+        value = f.apply(this,accumulated.shift());
+      }
+      active = false;
+      return value;
+    }
+  }
+}
+
+let sum = tco(function(x,y){
+  if(y > 0) return sum(x + 1,y - 1);
+  return x;
+});
+
+let f = function(x,y,) {
+
+}
+*/
+</script>
+</head>
+<body>                      
+</body>
+</html>
