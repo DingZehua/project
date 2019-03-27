@@ -1,0 +1,439 @@
+/*
+let pro1 = new Promise(function(success,faild) {
+  //faild(1);
+  success(1);
+});
+pro1.then(function(){
+  log('pro1:success1');
+},function(){
+  log('pro1:faild1');
+}).then(function(){
+  log('pro1.1:success1.1');
+},function(){
+  log('pro1.1:faild1.1');
+});
+pro1.then(function(){
+  log('pro1:success2');
+},function(){
+  log('pro1:faild2');
+})
+
+let pro2A = new Promise(function(success,faild){
+  success(pro1);
+  //faild(pro1);
+});
+pro2A.then(function(){
+  log('pro2A:success1A');
+},function(){
+  log('pro2A:faild1A');
+}).then(
+  function(){
+  log('pro2.1A:success2.1A');
+},function(){
+  log('pro2.1A:faild2.1A');
+});
+
+pro2A.then(function(){
+  log('pro2A:success2A');
+},function(){
+  log('pro2A:faild2A');
+});
+
+let pro2B = new Promise(function(success,faild){
+  //success(pro1);
+  faild(pro1);
+});
+pro2B.then(function(){
+  log('proB2:success1B');
+},function(){
+  log('proB2:faild1B');
+}).then(function(){
+  log('proB2.1:success2.1B');
+},function(){
+  log('proB2.1:faild2.1B');
+}).then(function(){
+  log('proB2.1:success2.2B');
+},function(){
+  log('proB2.1:faild2.2B');
+}).then(function(){
+  log('proB2.1:success2.3B');
+},function(){
+  log('proB2.1:faild2.3B');
+});
+
+pro2B.then(function(){
+  log('proB2:success2B');
+},function(){
+  log('proB2:faild2B');
+})
+
+let pro2C = new Promise(function(success,faild){
+  success(pro1);
+  //faild(pro1);
+});
+pro2C.then(function(){
+  log('pro2C:success1C');
+},function(){
+  log('pro2C:faild1C');
+}).then(function(){
+  log('pro2.1C:success2.1C');
+},function(){
+  log('pro2.1C:faild2.1C');
+});
+pro2C.then(function(){
+  log('proC2:success2C');
+},function(){
+  log('proC2:faild2C');
+});
+
+let pro2D = new Promise(function(success,faild){
+  //success(pro1);
+  faild(pro1);
+});
+pro2D.then(function(){
+  log('pro2D:success1D');
+}).then(function(){
+  log('pro2.1D:success2.1D');
+}).then(function(){
+  log('pro2.1D:success2.2D');
+},function(){
+  log('pro2.1D:faild2.2D');
+}).then(function(){
+  log('pro2.1D:success2.3D');
+},function(){
+  log('pro2.1D:faild2.3D');
+});
+pro2D.then(function(){
+  log('proD2:success2D');
+});
+
+let pro2E = new Promise(function(success,faild){
+  //success(pro1);
+  faild(pro1);
+});
+pro2E.then(function(){
+  log('pro2E:success1E');
+},function(){
+  log('pro2E:faild1E');
+}).then(function(){
+  log('pro2.1E:success2.1E');
+},function(){
+  log('pro2.1E:faild2.1E');
+}).then(function(){
+  log('pro2.1E:success2.2E');
+},function(){
+  log('pro2.1E:faild2.2E');
+}).then(function(){
+  log('pro2.1E:success2.3E');
+},function(){
+  log('pro2.1E:faild2.3E');
+});
+pro2E.then(function(){
+  log('proE2:success2E');
+},function(){
+  log('proE2:faild2E');
+});
+
+let pro3 = new Promise(function(success,faild){
+  success(pro2A);
+  //faild(pro2A);
+});
+pro3.then(function(){
+  log('pro3:success1');
+},function(){
+  log('pro3:faild1');
+}).then(function(){
+  log('pro3.1:success3.1');
+},function(){
+  log('pro3.1:faild3.1');
+});
+pro3.then(function(){
+  log('pro3:success2');
+},function(){
+  log('pro3:faild2');
+});
+
+let proB3 = new Promise(function(success,faild){
+  success(pro2B);
+  //faild(pro2B);
+});
+proB3.then(function(){
+  log('pro3B:success1');
+},function(){
+  log('pro3B:faild1');
+}).then(function(){
+  log('pro3.1B:success3.1');
+},function(){
+  log('pro3.1B:faild3.1');
+});
+proB3.then(function(){
+  log('pro3B:success2');
+},function(){
+  log('pro3B:faild2');
+});
+
+
+let pro4 = new Promise(function(success,faild){
+  //success(pro3);
+  faild(pro3);
+});
+
+pro4.then(function(){
+  log('pro4:success1');
+},function(){
+  log('pro4:faild1');
+}).then(function(){
+  log('pro4.1:success4.1');
+},function(){
+  log('pro4.1:faild4.1');
+});
+pro4.then(function(){
+  log('pro4:success2');
+},function(){
+  log('pro4:faild2');
+});
+
+
+let pro5 = new Promise(function(success,faild){
+  //success(pro4);
+  faild(pro3);
+});
+pro5.then(function(){
+  log('pro5:success1');
+},function(){
+  log('pro5:faild1');
+}).then(function(){
+  log('pro5.1:success5.1');
+},function(){
+  log('pro5.1:faild5.1');
+});
+pro5.then(function(){
+  log('pro5:success2');
+},function(){
+  log('pro5:faild2');
+});
+let pro6 = new Promise(function(success,faild){
+  //success(pro5);
+  faild(pro5);
+});
+pro6.then(function(){
+  log('pro6:success1');
+},function(){
+  log('pro6:faild1');
+}).then(function(){
+  log('pro6.1:success6.1');
+},function(){
+  log('pro6.1:faild6.1');
+});
+pro6.then(function(){
+  log('pro6:success2');
+},function(){
+  log('pro6:faild2');
+});
+
+let pro2 = new Promise(function(resolve,reject){
+  //resolve(pro1);
+  reject(pro1);
+});
+/*
+pro2.then(function(){
+  log('pro2:success');
+});
+
+let pro3 = new Promise(function(resolve,reject){
+  resolve(pro2);
+  reject(pro2);
+});
+pro3.then(function(){
+  log('pro3:success');
+},function(){
+  log('pro3:error');
+});
+*/
+/*
+let p = new Promise(function(success,faild){
+  setTimeout(() => faild(new Error('p head')),200);
+});
+
+p.then(function(){
+  //
+},function(){
+  log('p arr 1');
+}).then(function(){
+  log('p arr 1.1');
+}).then(function(){
+  log('p arr 1.2');
+}).then(function(){
+  log('p arr 1.3');
+});
+
+p.then(function(){
+  //
+},function(){
+  log('p arr 2');
+}).then(function(){
+  log('p arr 2.1');
+}).then(function(){
+  log('p arr 2.2');
+}).then(function(){
+  log('p arr 2.3');
+});
+
+let p1 = new Promise(function(success,faild){
+  success(p);
+});
+
+p1.then(function(){},
+function(){
+  log('p1 arr 1');
+}).then(
+function(){
+  log('p1 arr 1.1');
+});
+
+p1.then(function(){},
+function(){
+  log('p1 arr 2');
+}).then(
+function(){
+  log('p1 arr 2.1');
+});
+
+let p2 = new Promise(function(success,faild){
+  success(p);
+});
+
+p2.then(function(){},
+function(){
+  log('p2 arr 1');
+}).then(
+function(){
+  log('p2 arr 1.1');
+});
+
+p2.then(function(){},
+function(){
+  log('p2 arr 2');
+}).then(
+function(){
+  log('p2 arr 2.1');
+});
+
+let p1A = new Promise(function(success,faild){
+  success(p1);
+});
+
+p1A.then(function(){},
+function(){
+  log('p1A arr 1');
+}).then(
+function(){
+  log('p1A arr 1.1');
+});
+
+p1A.then(function(){},
+function(){
+  log('p1A arr 2');
+}).then(
+function(){
+  log('p1A arr 2.1');
+});
+
+let p1B = new Promise(function(success,faild){
+  success(p1);
+});
+
+p1B.then(function(){},
+function(){
+  log('p1B arr 1');
+}).then(
+function(){
+  log('p1B arr 1.1');
+});
+
+p1B.then(function(){},
+function(){
+  log('p1B arr 2');
+}).then(
+function(){
+  log('p1B arr 2.1');
+});
+
+let p2A = new Promise(function(success,faild){
+  success(p2);
+});
+
+p2A.then(function(){},
+function(){
+  log('p2A arr 1');
+}).then(
+function(){
+  log('p2A arr 1.1');
+});
+
+p2A.then(function(){},
+function(){
+  log('p2A arr 2');
+}).then(
+function(){
+  log('p2A arr 2.1');
+});
+
+let p2B = new Promise(function(success,faild){
+  success(p2);
+});
+
+p2B.then(function(){},
+function(){
+  log('p2B arr 1');
+}).then(
+function(){
+  log('p2B arr 1.1');
+});
+
+p2B.then(function(){},
+function(){
+  log('p2B arr 2');
+}).then(
+function(){
+  log('p2B arr 2.1');
+});
+
+*/
+
+
+/*
+  log('Hi');
+  */
+  /*
+  let imgP = loadImage('images/penguin.jpg');
+  imgP.then(function(image) {
+    d.body.append(image);
+  },function(error){
+    d.body.innerHTML += error;
+    log('error');
+  });
+  
+
+  let getJSON = function(url) {
+    return new Promise(function(resolve,reject){
+      let client = new XMLHttpRequest();
+      client.open('POST',url);
+      client.onreadystatechange = handler;
+      client.responseType = 'json';
+      client.setRequestHeader('Accept','application/json');
+      client.send();
+
+      function handler() {
+        if(this.readyState !== 4) {
+          return;
+        }
+
+        if(this.status === 200) {
+          resolve(this.response);
+        } else {
+          reject(new Error(this.statusText));
+        }
+      }
+    });
+  }

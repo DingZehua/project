@@ -1,4 +1,5 @@
 /nodeWeb/*
+!/nodeWeb/WebSite/
 /.vscode/*
 /js/react-master/*
 /phpWeb/*
