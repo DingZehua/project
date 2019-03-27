@@ -1,0 +1,140 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<style>                           
+
+</style>
+<!--[if !IE]><-->
+<script src='js/base.js'></script>
+<!--><![endif]-->
+<script src='js/dom.js'></script>
+<script src='js/myjs1.4.js'></script>
+<script type='text/javascript'>
+var dom = collections.dom;
+
+var domMs = dom.method;
+let whenReady = dom.method.whenReady;
+let log = console.log.bind(console);
+
+/*
+const s = new Set();
+[2,3,4,5,6,2,2].forEach((v) => { s.add(v); });
+
+const s1 = new Set([1,2,3,4,5,6,1]);
+
+function divs(){
+  return [...document.querySelectorAll('div')];
+}
+let arr = [2,3,4,5,6,2,2];
+let arr2 = [...new Set(arr)];
+
+let a = new Set([1,2,3]);
+let b = new Set([2,3,4]);
+
+let union = new Set([...a,...b]);
+let intersect = new Set([...a].filter(v => b.has(v)));
+let difference = new Set([...a].filter(v => !b.has(v)));
+let set = new Set([1,2,3,4]);
+set = new Set(Array.from(set,v => v * 2));
+let arr = [1,2],arr2 = [1,2];
+
+whenReady(() => {
+  const listener = new WeakMap();
+  const eles = [...document.querySelectorAll('div')];
+
+  listener.set(eles[0],(e) => {log('div 1')});
+  listener.set(eles[1],(e) => {log('div 2')});
+
+  cm.bind(eles[0],'click',listener.get(eles[0]));
+  cm.bind(eles[1],'click',listener.get(eles[1]));
+});
+
+class Count {
+  constructor(value,action){
+    _value.set(this,value);
+    _action.set(this,action);
+  }
+  dec() {
+    let value = _value.get(this);
+    if(value > 0){
+      log(value);
+      _value.set(this,--value);
+    }
+    else {
+      _action.get(this)();
+    }
+  }
+}
+
+const _value = new WeakMap();
+const _action = new WeakMap();
+
+let obj = new Count(2,() => log('done'));
+function push(array,...items) {
+  array.push(...items);
+}
+function add(x,y) {
+  return x + y;
+}
+
+const arr = [
+  ...( 0 ? [1,2,3,4,5] : [1,2]),
+  'b'
+]
+var arr1 = [0,1,2];
+var arr2 = [3,4,5];
+//Array.prototype.push.apply(arr1,arr2);
+arr1.push(...arr2);
+let d = new (Date.bind.apply(Date,[null,2018,1,1]));
+
+let go = function* (){
+  yield 1;
+  yield 2;
+  yield 3;
+}
+
+let obj = go();
+
+let arrayLike = {
+  0 : 'a',
+  1 : 'b',
+  2 : 'c',
+  length: 3
+}
+
+let arr = [].slice.call(arrayLike);
+let arr2 = Array.from(arrayLike);
+let divs;
+whenReady(()=>{
+  divs = cm.g('@div');
+});
+
+let obj = {
+  0 : 'a',
+  1 : 'b',
+  2 : 'c',
+  length : 3
+};
+
+for(let item of Array.from(obj)) {
+  log(item);
+}
+
+let arr = [];
+let obj = {
+  0 : 'a',
+  1 : 'b',
+  2 : 'c',
+  length : 3
+};
+let arr2 = Array.from(obj,function(v,i){ return (this[i] = v); },arr);
+
+let empty = {length : 4};
+*/
+</script>
+</head>
+<body>                      
+  <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div>
+</body>
+</html>

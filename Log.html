@@ -39,8 +39,8 @@
 var dom = collections.dom;
 
 var domMs = dom.method;
-
-var whenReady = domMs.whenReady;
+let whenReady = dom.method.whenReady;
+let log = console.log.bind(console);
 
 whenReady(function(){
   let msgList = cm.g('#msgList');
@@ -51,39 +51,42 @@ whenReady(function(){
     this.size = 0;
   }
   
-  LogMsg.prototype.add = function(word){
+  LogMsg.prototype.add = function(...words){
 
     if(this.msgList == null || !(this.msgList instanceof HTMLElement)){
       throw new TypeError('msgList is null or not HTML node');
     }
 
-    let li =  document.createElement('li');
-    let indexNode = document.createElement('span');
-    let wordNode = document.createElement('span');
+    for(let i = 0,len = words.length; i < len ;i++) {
+      let word = words[i];
+      let li =  document.createElement('li');
+      let indexNode = document.createElement('span');
+      let wordNode = document.createElement('span');
 
-    li.className = 'line';
-    indexNode.className = 'index';
-    wordNode.className = 'word';
+      li.className = 'line';
+      indexNode.className = 'index';
+      wordNode.className = 'word';
 
-    let indexTextNode = document.createTextNode((++this.size) + '：');
-    let wordTextNode = document.createTextNode(word + '');
+      let indexTextNode = document.createTextNode((++this.size) + '：');
+      let wordTextNode = document.createTextNode(word + '');
+      
+      indexNode.appendChild(indexTextNode);
+      li.appendChild(indexNode);
+
+      wordNode.appendChild(wordTextNode);
+      li.appendChild(wordNode);
+
+      this.msgList.appendChild(li);
+      
+      this.data.push(
+        {
+          'node' : li,
+          'msg'  : word + ''
+        }
+      );
+    }
     
-    indexNode.appendChild(indexTextNode);
-    li.appendChild(indexNode);
-
-    wordNode.appendChild(wordTextNode);
-    li.appendChild(wordNode);
-
-    this.msgList.appendChild(li);
-    
-    this.data.push(
-      {
-        'node' : li,
-        'msg'  : word + ''
-      }
-    );
-
-    return li;
+    return this;
   }
   LogMsg.prototype.remove = function(index) {
     if(this.msgList == null || !(this.msgList instanceof HTMLElement)){
@@ -102,10 +105,11 @@ whenReady(function(){
     this.data.splice(0);
   }
 
-  log = new LogMsg(cm.g('log'),cm.g('msgList'));
+  elementLog = new LogMsg(cm.g('log'),cm.g('msgList'));
+  show = elementLog.add.bind(elementLog);
 });
-
-let log = null;
+let elementLog = null;
+let show = null;
 
 </script>
 </head>

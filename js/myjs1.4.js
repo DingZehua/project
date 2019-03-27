@@ -248,13 +248,14 @@ var	namespace = function()
         return  el.innerText || el.textContent;
       },
       'g' : function(str){
-        if(!/[#.>:]|\s/.test(str)) {
+        if(!/[#.>:@]|\s/.test(str)) {
           return document.getElementById(str);
         }
         else if(/^[#][a-zA-Z0-9_\-]+$/.test(str)){
           return document.querySelector(str);
         }
         else {
+          str = str.replace(/@/g,'');
           return document.querySelectorAll(str);
         }
       },
@@ -513,6 +514,9 @@ var	namespace = function()
         {
           obj.attachEvent('on'+event_name,F_Object);
         }
+      },
+      bind : function(obj ,event_name ,F_Object,capture_bool) {
+        this.bind_event.apply(this,Array.prototype.slice.call(arguments,0));
       },
       'freed_event'             : function(obj ,event_name,F_Object,capture_bool)
       {

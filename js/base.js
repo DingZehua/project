@@ -173,6 +173,9 @@ collections.base = (function(){
         } 
       }(constructor,statics); 
     }
+
+    Object.setPrototypeOf(constructor,superclass);
+
     return constructor;
   }
 

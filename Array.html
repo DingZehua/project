@@ -14,8 +14,876 @@
 var dom = collections.dom;
 
 var domMs = dom.method;
+let whenReady = dom.method.whenReady;
+let log = console.log.bind(console);
+/*
+function myArray(...args) {
+  let arr = new Array(...args);
+  arr.__proto__ = myArray.prototype;
+  this._constructor.call(arr);
+  return arr;
+}
+
+myArray.prototype = {
+  constructor:myArray,
+  _constructor(){
+    this.x = 50;
+    this.y = 50;
+  },
+  hello(){
+    console.log('Hello World.');
+  }
+};
+
+myArray.prototype.__proto__ = Array.prototype;
+let target = {};
+let handler = {};
+
+let proxy3 = new Proxy(function(){},{
+  get(target,key,receiver) {
+    log('get');
+    return Reflect.get(target,key,receiver);
+  },
+  set(target,key,value,receiver) {
+    log('set');
+    Reflect.set(target,key,++value,receiver);
+    return value;
+  },
+  apply(target,thisBind,args) {
+    return args;
+  },
+  construct(target,args) {
+    return {value:args[0]}
+  }
+});
+
+let obj = Object.create(proxy3);
+/*
+var proxy = new Proxy({},{
+  get() {
+    return 35;
+  }
+})
+
+
+let proxy = new Proxy(function(){},{
+  get(target,key) {
+    if(key === 'prototype') {
+      return Object.prototype;
+    }
+    else {
+      return `hello ${key}`;
+    }
+  },
+  apply(target,thisBind,args) {
+    return args;
+  },
+  construct(target,args) {
+    return {value:args[0]};
+  }
+})
+
+let person = {
+  'name' : '张三'
+}
+
+let proxy2 = new Proxy(person,{
+  get(target,key) {
+    if(key in target) {
+      return target[key];
+    }
+    else {
+      throw new ReferenceError('prototype:' + key + ' does not exists');
+    }
+  }
+})
+
+let proxy = new Proxy({},{
+  get(target,key) {
+    console.log('Prototype:' + `${key}`);
+    return target[key];
+  },
+  set(target,key,value,receiver) {
+    Reflect.set(target,key,value,receiver)
+    return false;
+  }
+})
+
+function createArray(...elements) {
+  let handler = {
+    get(target, propKey , receiver) {
+      let index = Number(propKey);
+      if (index < 0) {
+        propKey = String(target.length + index);
+      }
+      return Reflect.get(target,propKey,receiver);
+    }
+  };
+
+  let target = [];
+  target.push(...elements);
+  return new Proxy(target,handler);
+}
+
+
+let pipe = (function(){
+  return function(value) {
+    let funcStack = [];
+    let oproxy = new Proxy({},{
+      get(target,fnName) {
+        if(fnName === 'get') {
+          return funcStack.reduce((a,b) => {
+            return b(a);
+          },value);
+        }
+        funcStack.push(window[fnName]);
+        return oproxy;
+      }
+    });
+    return oproxy;
+  }
+}());
+
+var pow = a => a * a;
+var double = n => n * 2;
+var reverseInt = n => n.toString().split('').reverse().join('') | 0; // 0 is parseInt.
+
+
+const createDom = new Proxy({},{
+  get(target,propertyKey) {
+    return function(attrs = {}, ...childs) {
+      let el = document.createElement(propertyKey);
+      for(let attr of Object.keys(attrs)) {
+        el.setAttribute(attr,attrs[attr]);
+      }
+      for(let node of childs) {
+        if(typeof node === 'string') {
+          node = document.createTextNode(node);
+        }
+        el.appendChild(node);
+      }
+      return el;
+    }
+  }
+});
+
+const el = createDom.div({},
+  'Hellor, my name is ',
+  createDom.a({'href':'example.com'},'Mark'),
+  '. I like:',
+  createDom.ul({},
+    createDom.li({},'The web'),
+    createDom.li({},'Food'),
+    createDom.li({},'..actually that \'s it')
+  )
+);
+
+whenReady(function(){document.body.append(el)});
+
+
+const target = Object.defineProperties({},{
+  foo : {
+    value : 20,
+    wirtable : false,
+    configurable : false
+  }
+});
+
+const handler = {
+  set (target,propKey,value,r) {
+    log(Reflect.set(target,propKey,20,r));
+    return 30;
+  }
+}
+
+const proxy = new Proxy(target,handler);
+
+
+let validator = {
+  set(obj,propKey,value)  {
+    if(propKey === 'age') {
+      if(!Number.isInteger(value)){
+        throw new TypeError('The age is not an integer');
+      }
+      if(value > 200) {
+        throw new RangeError('The age seems invalid');
+      }
+    }
+
+    // 对于age以外的属性值，直接保存。
+    obj[propKey] = value;
+  }
+}
+
+let person = new Proxy({},validator);
+
+var handler = {
+  get (target,key) {
+    invariant(key,'get');
+    return target[key];
+  },
+  set (target,key,value) {
+    invariant(key,'set');
+    target[key] = value;
+    return true;
+  }
+}
+
+function invariant(key,action) {
+  if(key[0] === '_') {
+    throw new Error(`Invalid attempt to ${action} private "${key} property.`);
+  }
+}
+var target = {};
+var proxy = new Proxy(target,handler);
+
+
+var handler2 = {
+  apply (target,ctx,args) {
+    return Reflect.apply(...args);
+  }
+}
+
+var target = function() { return 'I am the target'; }
+var handler = {
+  apply : function (target,ctx,args) {
+    return 'I am the proxy';
+  }
+}
+
+var p = new Proxy(target,handler);
+
+var twice = {
+  apply (target,ctx,args) {
+    return Reflect.apply(...arguments) * 2;
+  }
+}
+
+let sum = function(left,right) {return left + right;};
+
+var proxy = new Proxy(sum,twice);
+
+
+var handler = {
+  has (target,key) {
+    if(key[0] === '_') {
+      return false;
+    }
+    return key in target;
+  }
+};
+
+var target = { _pro:'foo',pro:'foo' }
+
+var proxy = new Proxy(target,handler);
+
+var obj = {a:10};
+
+Object.preventExtensions(obj);
+
+var p = new Proxy(obj,{
+  has : function(target,prop) {
+    return false;
+  }
+})
+
+
+let stu1 = { name:'zhangSan', score:59 }
+//let stu2 = { name:'liSi', score: 80 };
+
+let handler = {
+  has(target,key) {
+    if(key === 'score' && target[key] < 60) {
+      console.log(`${target['name']}不及格`);
+      return false;
+    }
+    return key in target;
+  }
+}
+let oproxy1 = new Proxy(stu1,handler);
+//let oproxy2 = new Proxy(stu2,handler);
+
+
+let f = function(){};
+
+let handler = {
+  construct(target,args,newTarget) {
+    log(newTarget === f);
+    return new target(...args);
+  }
+}
+
+let proxy = new Proxy(f,handler);
+
+let p = new Proxy(function(){},{
+  construct(target,args) {
+    log('called:' + args.join(', '));
+    return {value : args[0] * 10};
+  }
+});
+
+'use strict';
+
+let handler = {
+  deleteProperty (target, key) {
+    invariant(key,'delete');
+    log('delete action');
+    delete target[key];
+    return false;
+  }
+};
+
+function invariant (key,action) {
+  if(key[0] === '_') {
+    throw new Error('Invalid attempt to ' + action  + ' private "' + key +'" property');
+  }
+}
+
+var target = {_prop : 'foo'};
+
+Object.defineProperty(target,'str',{
+  value : 'non configurable',
+  configurable : false
+})
+
+var proxy = new Proxy(target,handler);
+
+
+let handler = {
+  defineProperty(target,key,descriptor) {
+    log(`key : ${key} , descriptor:`,descriptor);
+    Object.defineProperty(target,key,descriptor);
+    return false;
+  }
+}
+
+let target = {};
+
+//Object.preventExtensions(target);
+Object.defineProperty(target,'foo',{
+  value : 'valueFoo',
+  writable : false
+});
+
+let proxy = new Proxy(target,handler);
+
+
+var handler = {
+  getOwnPropertyDescriptor(target,key) {
+    if(key[0] === '_') {
+      return {};
+    }
+    return Object.getOwnPropertyDescriptor(target,key);
+  }
+}
+
+var target = { _pro:'foo',pro:'foo' };
+
+var proxy = new Proxy(target,handler);
+
+
+var proto = {};
+var obj = {};
+Object.preventExtensions(obj);
+var p = new Proxy(obj,{
+  getPrototypeOf(target) {
+    return target.__proto__;
+  }
+});
+
+
+
+var obj = {};
+Object.preventExtensions(obj);
+
+let proxy = new Proxy(obj,{
+  defineProperty(target,key,descriptor) {
+    //log(`key : ${key} , descriptor:`,descriptor);
+    //Object.defineProperty(target,key,descriptor);
+    return true;
+  }
+});
+
+
+let t = {};
+let p = new Proxy(t,{
+  isExtensible(target) {
+    return false;
+  }
+});
+
+//Object.preventExtensions(t);
+
+
+let target = {
+  a : 1,
+  b : 2,
+  c : 3
+};
+
+let handler = {
+  ownKeys (target) {
+    return ['a'];
+  }
+}
+
+let proxy = new Proxy(target,handler);
+
+let target = {
+  _bar : 'foo',
+  _prop : 'bar',
+  prop : 'baz'
+}
+
+let handler = {
+  ownKeys(target) {
+    return Reflect.ownKeys(target).filter( (key) => key[0] !== '_');
+  }
+};
+
+let proxy = new Proxy(target,handler);
+
+
+let target = {
+  a : 1,
+  b : 2,
+  c : 3,
+  [Symbol.for('food')] : 4
+}
+
+Object.defineProperty(target,'key', {
+  enumerable : false,
+  configurable : true,
+  writable : true,
+  value : 'static'
+});
+
+let handler = {
+  ownKeys(target) {
+    return ['a','d',Symbol.for('food'),'key'];
+  }
+}
+
+let proxy = new Proxy(target,handler);
+
+var proxy = new Proxy({},{
+  ownKeys(target) {
+    return ['a','b','c','d'];
+  }
+})
+
+let proxy = new Proxy({a : '1' , 'b' : '2'},{
+  ownKeys(target) {
+    return ['a'];
+  }
+})
+
+let person = {
+  'name' : 'zhangSan',
+  'age'  : 30
+}
+
+Object.preventExtensions(person);
+
+let handler = {
+  ownKeys(target) {
+    return ['age','name','sex'];
+  }
+}
+
+let proxy = new Proxy({},{
+  preventExtensions (target) {
+    Object.preventExtensions(target);
+    return true;
+  }
+})
+
+let target = {};
+
+Object.preventExtensions(target);
+
+let handler = {
+  setPrototypeOf(target,proto) {
+    //Object.setPrototypeOf(target,proto);
+  }
+}
+
+let proxy = new Proxy(target,handler);
+
+
+let target = {};
+let handler = {};
+let { proxy,revoke } = Proxy.revocable(target,handler);
+
+
+let target = {
+  m(){
+    log(target.name);
+  },
+  name : 'zhangSan'
+}
+
+let proxy = new Proxy(target,{
+  get(target,prop){ 
+    target.name += '~!';
+    return target[prop]; 
+  }
+});
+
+
+let _name = new WeakMap();
+
+class Preson {
+  constructor(){
+    _name.set(this,'ZhangSan');
+  }
+  get name(){
+    return _name.get(this);
+  }
+}
+
+let zs  = new Preson();
+
+let proxy = new Proxy(zs,{});
+
+
+let date = new Date();
+
+let proxy = new Proxy(date,{
+  get(target,prop) {
+    if(prop === 'getDate'){
+      return target[prop].bind(date);
+    }
+    return target[prop];
+  }
+})
+
+let obj = {};
+
+let proxy = new Proxy(obj,{
+  defineProperty(target,key,descriptor) {
+    //Object.defineProperty(target,key,descriptor);
+    return true;
+  }
+})
+
+Object.preventExtensions(obj);
+
+
+apply(..args) {
+  bind.apply(null,1,2,3);
+  bind(){
+    return function(){
+      return Date.apply(null,1,2,3)
+    }
+  }
+}
+let target = {};
+let proxy = new Proxy(target,{
+  set(target,prop,value) {
+    log('set');
+    //Reflect.defineProperty(target,prop,{value:123});
+    //proxy[prop] = value;
+    return false;
+  },
+  defineProperty(t,k,a) {
+    log('defineProperty');
+    Reflect.defineProperty(t,k,a);
+    return true;
+  }
+});
+
+
+try {
+  Object.defineProperty(trage,property,attributes);
+}
+catch(e) {
+
+}
+
+if(Reflect.defineProperty(target,property,attributes)){
+
+}
+
+
+let target = {name : 'zhangSan'};
+let proxy = new Proxy(target,{
+  set : function(target,name,value,receiver) {
+    log('get',target,name);
+    return Reflect.get(target,name);
+  },
+  deleteProperty(target, name) {
+    log('delete' + name);
+    return Reflect.deleteProperty(target,name);
+  },
+  has(target,name) {
+    log('has' + name);
+    return Reflect.has(target, name);
+  }
+});
+
+Function.prototype.apply.call(Math.floor,[1,2,3]);
+
+Reflect.apply(Math.floor,null,[1.75]);
+
+let myObject = {
+  foo:1,
+  bar:2,
+  get baz() {
+    return this.foo + this.bar;
+  }
+}
+
+let myObject = {
+  foo : 1,
+  bar: 2,
+  get baz()  {
+    return this.foo + this.bar;
+  }
+}
+
+var myReceiverObject = {
+  foo : 4,
+  bar : 4,
+};
+
+let myObject = {
+  foo : 1,
+  set bar(value) {
+    return this.foo = value;
+  }
+};
+
+var myObject = {
+  foo : 4,
+  set bar(value) {
+    return this.foo = value;
+  }
+};
+
+var myReceiverObject = {
+  foo : 0
+};
+
+let target = {
+  foo : 1
+}
+
+let proxy = new Proxy(target,{
+  get (target,prop,receiver) {
+    log(receiver === proxy);
+    return Reflect.get(target,prop,receiver);
+  }
+})
+
+
+let p = {
+  a : 'a'
+};
+
+let handler = {
+  set(target,key,value,r){
+    log('set');
+    return Reflect.set(target,key,value,r);
+  },
+  defineProperty(target,key,attr) {
+    log('attribute');
+    return Reflect.defineProperty(target,key,attr);
+  }
+};
+
+let proxy = new Proxy(p,handler);
+
+
+var myObject = {
+  foo : 1
+};
+
+
+const myObj = {foo:'bar'};
+
+function Greeting(name) {
+  this.name = name;
+}
+
+const  instance = new Greeting('zhangSan');
+
+const instance2 = Reflect.construct(Greeting,['zhangSan']);
+
+
+const ages = [11,33,12,54,18,96];
+
+const youngest = Math.min.apply(Math,ages);
+const oldest = Math.max.apply(Math,ages);
+const type = Object.prototype.toString.call(youngest);
+
+const nyoungest = Reflect.apply(Math.min,Math,ages);
+const noldest = Reflect.apply(Math.max, Math, ages);
+const ntype = Reflect.apply(Object.prototype.toString,youngest,[])
+
+
+var myObject = {
+  foo : 1,
+  [Symbol.for('baz')] : 123
+};
+
+const queuedObservers = new Set();
+
+const observe = fn => queuedObservers.add(fn);
+const observable = obj => new Proxy(obj,{set});
+
+function set(target,key,value,receiver) {
+  const result = Reflect.set(target, key, value);
+  queuedObservers.forEach(observer => observer());
+  return result;
+}
+
+let person = observable({name : 'zhangSan',age : 20});
+function hello(){
+  log(`${person.name}, ${person.age}`);
+}
+
+observe(hello);
+
+person.name = 'liSi';
+
+//NodeList.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
+//NodeList.prototype[Symbol.iterator] = [][Symbol.iterator];
+
+
+
+for(let i of iterable) {
+  log(i);
+}
+
+let obj = {
+  a : 1,
+  b : 2,
+  c : 3,
+  length : 3,
+  [Symbol.iterator] : [][Symbol.iterator]
+}
+
+for(let i of obj) {
+  log(i);
+}
+
+let obj = {};
+obj[Symbol.iterator] = () => 1;
+
+
+let obj = {
+  0 : 'a',
+  1 : 'b',
+  2 : 'c',
+  length : 3
+}
+
+obj[Symbol.iterator] = [][Symbol.iterator];
+
+let iterable = obj[Symbol.iterator]();
+let $result = iterable.next();
+
+while(!$result.done) {
+  log($result.value);
+  $result = iterable.next();
+}
+
+let obj = {
+  1 : 11,
+  2 : 22,
+  0 : 33,
+  length : 3,
+  [Symbol.iterator] : [][Symbol.iterator]
+}
+
+let iterableObj = obj[Symbol.iterator]();
+
+let result = iterableObj.next();
+
+while(!result.done) {
+  log(result.value);
+  result = iterableObj.next();
+}
+
+
+let gener = function*(){
+  for(let i = 0; i < 10;i++) {
+    yield i;
+  }
+}
+
+let obj = {
+  [Symbol.iterator] : gener
+}
+
+let iterator = gener();
+
+log(iterator.next());
+
+let obj = {
+  0 : 'a',
+  1 : 'b',
+  2 : 'c',
+  length : 3,
+  [Symbol.iterator](){
+    return this;
+  },
+  next(){
+    if(this.index < this.length) {
+      return {
+        value : this[this.index++],
+        done : false
+      }
+    } else {
+      return {
+        value : undefined,
+        done : true
+      }
+    }
+  },
+  index : 0,
+  return(){
+    log('break');
+    return {
+      value : undefined,
+      done : true
+    }
+  },
+  throw() {
+    log('throw');
+    return {
+      value : undefined,
+      done : true
+    }
+  }
+}
+
+for(let i of obj) {
+  if(i === 'b') {
+    throw Error('break');
+  }
+  log(i);
+}
+
+
+let arr = ['red','green','blue'];
+
+arr.foo = 'foo';
+
+let obj = {
+  [Symbol.iterator] : arr[Symbol.iterator].bind(arr)
+};
+let es6 = new Map([['editon',6]]);
+es6.set('committee','TC39');
+
+*/
+
+
+
 </script>
 </head>
 <body>                      
+<div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div>
 </body>
 </html>

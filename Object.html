@@ -1,0 +1,93 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<style>                           
+
+</style>
+<!--[if !IE]><-->
+<script src='js/base.js'></script>
+<!--><![endif]-->
+<script src='js/dom.js'></script>
+<script src='js/myjs1.4.js'></script>
+<script type='text/javascript'>
+var dom = collections.dom;
+
+var domMs = dom.method;
+let whenReady = dom.method.whenReady;
+let log = console.log.bind(console);
+/*
+let foo = 'bar';
+let baz = {foo};
+
+let f = function(x,y) {
+  return {x,y};
+}
+let birth = '2000/01/01';
+let person = {
+  name : 'zhangSan',
+  birth,
+  hello() {
+    log(`hello ${this.name}, ${this.birth}`);
+  }
+}
+let m = {};
+function getItem(key) {
+  return key in m ? m[key] : null;
+}
+
+function setItem(key,value) {
+  m[key] = value;
+}
+
+function clear(){
+  m = {};
+}
+
+let module = {getItem,setItem,clear};
+
+
+let cart = {
+  _wheels : 4,
+  get wheels(){
+    return this._wheels;
+  },
+  set wheels(value) {
+    if(value < this._wheels){
+      throw Error('数值太小');
+    }
+    this._wheels = value;
+  }
+}*/
+
+let obj1 ={
+  a : 1,
+  c : 3
+}
+
+let obj2 = {
+  b : 2,
+  d : 4
+}
+
+let obj5 = {
+  a : 1.1,
+  b : 2.2
+}
+
+let obj3 = {...obj1,...obj2}
+
+let obj4 = {
+  ...obj3
+}
+
+
+let obj6 = {
+  ...obj5,
+  ...obj3,
+}
+</script>
+</head>
+<body>                      
+</body>
+</html>
