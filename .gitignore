@@ -1,5 +1,7 @@
 /nodeWeb/*
 !/nodeWeb/WebSite/
 /.vscode/*
-/js/react-master/*
+js/react-mast/er/*
+/nodeWeb/WebSite/data/*
 /phpWeb/*
+/js/react-master/*

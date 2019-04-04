@@ -3,25 +3,51 @@ var
     url = require('url'),
     path = require('path'),
     http = require('http');
+let mysql = require('mysql');
+let {path:configPath,access} = require('./config');
+
+let allow = new RegExp([...new Set(access.allow
+                        .filter(function(x){return x;}))]   // 排除掉空元素和重复元素
+                            .join('|')   
+                            .replace(/\\/g,''.padStart(2,'\\'))
+                            .replace(/\//g,''.padStart(2,'\\//'))
+                            .replace(/[.]/g,'[.]')
+                            .replace(/[\[]([\\\.])[\]]/g,'.')
+                        );
+let deny = new RegExp([...new Set(access.deny
+                    .filter(function(x){return x;}))]       // 排除掉空元素和重复元素
+                        .join('|')   
+                        .replace(/\\/g,''.padStart(2,'\\'))
+                        .replace(/\//g,''.padStart(2,'\\//'))
+                        .replace(/[.]/g,'[.]')
+                        .replace(/[\[]([\\\.])[\]]/g,'.')
+                    );
 
 // 从命令行参数获取root目录，默认是当前目录:
-//var root = 'i:/pro/nodeWeb/WebSite';
 var root = '.';
-console.log('Static root dir: ' + root);
-
 // 创建服务器:
 var server = http.createServer(function (request, response) {
     // 获得URL的path，类似 '/css/bootstrap.css':
     var pathname = url.parse(request.url).pathname;
+
+    if(deny.test(pathname)
+      ||!allow.test(pathname)) {
+        pathname = configPath.pc + pathname;
+    }
+
     // 获得对应的本地文件路径，类似 '/srv/www/css/bootstrap.css':
     var filepath = path.join(root, pathname);
+    if(filepath === path.join(configPath.pc) + '\\') {
+        filepath += 'index.html';
+    }
+
     // 获取文件状态:
     fs.stat(filepath, function (err, stats) {
         if (!err && stats.isFile()) {
             // 没有出错并且文件存在:
             console.log('200 ' + request.url);
             // 发送200响应:
-            response.writeHead(200);
+            response.writeHead(200,{'Content-Type': 'text/html'});
             // 将文件流导向response:
             fs.createReadStream(filepath).pipe(response);
         } else {

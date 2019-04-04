@@ -1,169 +1,119 @@
-let log = console.log.bind(console);
-/*let fs = require('fs');
+let colls = require('./js/base');
+let MyPromise = colls.base.Promise;
+let fs = require('fs');
+let {log,co} = colls.base.method;
+const UTF8 = 'utf-8';
+const {mysql : config,configPath,access} = require('./config');
+const mysql = require('mysql');
 
-var text = fs.createReadStream('HTML.txt','utf-8');
-
-text.on('data',function(chunk){
-  console.log(chunk);
-});
-text.on('end',function(){
-  console.log('end');
-});
-text.on('error',function(error){
-  console.log('error:' + error)
-})
-
-
-var ws3 = fs.createWriteStream('HTML.txt','utf-8');
-ws3.write('asdf');
-ws3.end();
-console.log('reading...');
-try{
- 
-}
-catch(e){
-
-}
-/*
-var ws = fs.createWriteStream('addText.txt');
-var ws2 = fs.createWriteStream('readme.txt');
-text.pipe(ws);
-text.pipe(ws2);
-
-var assert = require('assert');
-assert.doesNotThrow(function(){
-  //throw Error('wrong message');
-},
-'',
-'符合预期');
-let x = `
-`;
-console.log(x.length)
-define()
-
-let it = makeIterator(['a','b']);
-for(let item of it) {
-  log(item);
-}
-
-function makeIterator(array) {
-  return {
-    [Symbol.iterator] (){
-      let nextIndex = 0;
-      return {
-      next : function(){
-        return nextIndex < array.length ?
-              { value : array[nextIndex++] , done : false } :
-              { value : undefined , done : true};
-        }
-      }
-    } 
-  }
-}
-const obj = {
-  [Symbol.iterator] (){
-    return {
-      next(){
-        return {
-          value : 1,
-          done : true
-        }
+let thunkify = function(fn) {
+  return function() {
+    let args = [];
+    for(let i = 0; i < arguments.length; i++) {
+      args.push(arguments[i]);
+    }
+    let cxt = this;
+    return function(callback) {
+      let called;
+      args.push(function() {
+        if(called) return;
+        called = true;
+        callback.apply(null,arguments);  
+      });
+      try {
+        fn.apply(cxt,args);
+      } catch (e) {
+        callback(e);
       }
     }
   }
-}
+};
 
-class RangeIterator {
-  constructor (from ,to) {
-    this.from = from;
-    this.to = to;
-  }
-  [Symbol.iterator]() {
-    return this;
-  }
-  next(){
-    let value = this.from;
-    if(this.from < this.to) {
-      this.from++;
-      return {value : value,done:false};
-    }
-    else {
-      return {value : undefined,done:true};
-    }
+function next(err,data) {
+  // 获取下一步命令，注入数据。
+  let result = g.next(data);
+  if(!result.done) {
+    result.value(next);
   }
 }
-for(let item of new RangeIterator(0,40)) {
-  log(item);
-}
-class Link {
-  constructor (value) {
-    this.value = value;
-    this.next = null;
-  }
-  [Symbol.iterator] () {
-    let currect = this;
-    return {
-      next(){
-        if(currect) {
-          let value = currect.value;
-          currect = currect.next;
-          return {
-            value : value,
-            done : false
-          }
-        }
-        else {
-          return {
-            value : undefined,
-            done  : true
-          }
-        } 
-      }
-    }
-  }
-}
+//let queryThunkify = thunkify(con.query);
 
-let one = new Link(50);
-one.next = new Link(20);
-one.next.next = new Link(30);
-for(let item of one) {
-  log(item);
-}
-
-
-let obj = {
-  data : ['hello','world'],
-  [Symbol.iterator] (){
+class mysqlDB  {
+  constructor (config,next) {
+    let sql = mysql;
+    this.con = sql.createConnection(config);
+    this.next = next;
+    this.con.connect(function(){log('start mysql');});
+    this._queryThunk = thunkify(this.con.query);
+    this._end = thunkify(this.con.end);
+  }
+  queryThunk (str) {
+    return this._queryThunk.call(this.con,str);
+  }
+  endThunk () {
+    return this._end.call(this.con);
+  }
+  queryProm(str) {
     let self = this;
-    let index = 0;
-    return {
-      next() {
-        if(index < self.data.length) {
-          return {
-            value : self.data[index++],
-            done : false
-          }
-        } else {
-          return {
-            value : undefined,
-            done : true
-          }
-        }
-      }
-    }
+    return new MyPromise(function(resolve,reject) {
+      self.con.query(str,function(err,data) {
+        if(err) { reject(err); }
+        else { resolve(data); }
+      });
+    });
   }
 }
 
-for (let item of obj) {
-  log(item);
-}
-*/
+let path = require('path');
 
-let arr1 = ['a','b','c'];
-let arr2 = ['d','e','f'];
-let arr3 = ['h','i','j'];
+(() => {
+  
+  function next(err,data) {
+    if(err) throw err;
+    let result = start.next(data);
+    if(!result.done) {
+      result.value(next);
+    }
+  }
 
-//let arr4 = arr1.concat(arr2,arr3);
-let arr4 = [...arr1,...arr2,...arr3];
-//log(arr4);
-let [a,b,c,d,e,f] = [...arr1,...arr2];
+  function thunkToPromise(err,data) {
+    if(err) start.throw(err);
+    else { nextProm(data); }
+  }
+
+  function nextProm(data) {
+    let result = start.next(data);
+    if(result.done) return result.value; // 结束时传给最后一个Promise对象的then方法的返回值
+    else {
+      result.value.then(function(data) {
+        nextProm(data);
+      });
+    }
+  }
+
+  //let start = main();
+  let sql = new mysqlDB(config);
+  function * main() {
+    let user = yield sql.queryProm('select user_name,email from ecs_users where user_id = 79');
+    let sets =  yield new Set([1,2,3,4,5,6]);
+    
+    let file = fs.createReadStream('data/list(201309).txt');
+    let result = null;
+    while(1) {
+      let y = MyPromise.race([
+        new MyPromise((resolve) => { log(file.once('data',function(data){resolve(data);})); }),
+        new MyPromise((resolve) => {file.once('end',resolve)}),
+        new MyPromise((resolve,reject) => file.once('error',reject))
+      ]);
+      result = yield y;
+      
+      file.removeAllListeners('data');
+      file.removeAllListeners('end');
+      file.removeAllListeners('error');
+      if(!file.eventsCount) {break;}
+    }
+    log('end Generator');
+    yield sql.endThunk();
+  }
+  co(main()).catch(function(e){log(e)});
+})();

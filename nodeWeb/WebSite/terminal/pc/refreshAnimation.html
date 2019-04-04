@@ -1,0 +1,60 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<style>                           
+  .animation {
+    width:0px;
+    height:200px;
+    border:1px solid black;
+    background-color:orange;
+  }
+</style>
+<!--[if !IE]><-->
+<script src='js/base.js'></script>
+<!--><![endif]-->
+<script src='js/dom.js'></script>
+<script src='js/myjs1.4.js'></script>
+<script type='text/javascript'>
+const dom = collections.dom;
+const base = collections.base;
+const baseMethods = base.method;
+
+const domMs = dom.method;
+const whenReady = dom.method.whenReady;
+const log = console.log.bind(console);
+const isFun = baseMethods.isFunction;
+const isObj = baseMethods.isObject;
+let MyPromise = collections.base.Promise;
+
+whenReady(function(){
+  let an = cm.g('an');
+  let width = 0;
+  let lastTime = new Date().getTime();
+  let animation = function(callback){
+    let curTime = new Date().getTime();
+    let callTime = Math.max(0,16.7 - (curTime - lastTime));
+    setTimeout(function(){
+      callback(curTime + callTime);
+    },callTime);
+    lastTime = curTime + callTime;
+  };
+  /*
+  animation(function(prevTime){
+    an.style.width = width + 'px';
+    width += 20;
+    if(width < 600) {
+      animation(arguments.callee);
+    }
+  });
+  */
+});
+
+</script>
+</head>
+<body>                      
+  <div id='an' class='animation'>
+
+  </div>
+</body>
+</html>

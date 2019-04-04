@@ -3,6 +3,8 @@ collections.base = (function(){
   var base = {};
   base.method = {};
 
+  let log = console.log.bind(console);
+
   if(Object.assign === undefined) {
     Object.assign = function(target) {
       if(target === undefined) {
@@ -758,6 +760,434 @@ collections.base = (function(){
   //抽象方法
   var AbstractMethod = function(){ throw new Error("This is abstract method"); };
 
+
+  var Prom = (function(){
+    const PENDING = Symbol('PENDING');
+    const FULFILLED = Symbol('FULFILLED');
+    const REJECTED = Symbol('REJECTED');
+    const isFun = isFunction;
+    let exception = function(){
+      if(exception.list.length) {
+        log('Please check the stack message before the first setTimeout.');
+      }
+      while(exception.list.length) {
+        let except = exception.list.shift();
+        setTimeout(function(){
+          throw except;
+        },0);
+      }
+      exceptionOut = null;
+    }
+    exception.list = [];
+    let exceptionOut = null;
+    class Prom {
+      constructor (func){
+        this.status = PENDING;
+        this.queue = {[FULFILLED] : [],[REJECTED] : []};
+        // indirect 为指向这个对象的Prom对象，inherit为使用then继承的子Prom对象
+        this.childs = {inherit : [],indirect:[]}
+        if(!isFun(func)) {
+          throw new TypeError('1 param Invalid value. must is function');
+        }
+        let out = null;
+        try {
+          func(
+            // success
+            (function(value){
+              if(this.status !== PENDING) return;
+              this.status = FULFILLED;
+              out = setTimeout(this.pcall.bind(this,value),0);
+            }).bind(this),
+            // failed
+            (function(err) {
+              if(this.status !== PENDING) return;
+              this.status = REJECTED;
+              out = setTimeout(this.pcall.bind(this,err),0,
+                              err !== undefined ? err : new Error('Prom No corresponding handler')
+                );
+            }).bind(this)
+          );
+        }
+        catch(e) {
+          this.status = REJECTED;
+          clearTimeout(out);
+          setTimeout((function(err){
+            this.pcall(err);
+          }).bind(this),0,e);
+        }
+      }
+      then(resolve,reject,parent,index) {
+        this.queue[REJECTED].push(!isFun(reject) ? null : reject);
+        this.queue[FULFILLED].push(!isFun(resolve) ? null : resolve);
+        //保留本层的参数，给child使用。
+        let last = this.queue[REJECTED].length - 1;
+        this.childs.inherit.push(null);
+        // 如果有父对象，那么更新状态，如果有子对象，那么也会更新到本对象的子对象。
+        if(parent && parent.childs.inherit[index] === null) {
+          // 如果继承对象没有执行这个方法，那么则不加进队列
+          parent.childs.inherit[index] = this;
+          this.status = parent.status;
+        }
+        let child = new Prom(function(){});
+        let self = this;
+        child.then = (function(){
+          return (function(resolve,reject) {
+            return Prom.prototype.then.apply(this,[resolve,reject,self,last]);
+          }).bind(child)
+        }());
+        return child;
+      }
+      catch(reject) {
+        return this.then(null,reject);
+      }
+      finally (callback){
+        return this.then(function(val){
+          callback();
+          return val;
+        },function(err){
+          callback();
+          throw err;
+        });
+      }
+      done(onResolve,onReject){
+        this.then(onResolve,onReject).catch(function(err){
+          setTimeout(() => {throw err},0);
+        });
+      }
+      pcall (param) {
+        if(this.status === REJECTED) {
+          this.onAll(param);
+        }
+        else if(param instanceof Prom) {
+          if(param.status !== PENDING) {
+            this.status = param.status;
+            this.onAll(param);
+          }
+          else {
+            this.status = PENDING;
+            param.childs.indirect.push(this);
+          }
+        }
+        else {
+          this.onAll(param);
+        }
+      }
+      onAll(param) {
+        // 暂时将异常队列清除出去
+        if(exceptionOut !== null) {
+          clearTimeout(exceptionOut);
+        }
+        let originExceptionOut = exceptionOut;
+        // 执行使用then函数生成的对象。
+        this.queue[this.status].forEach(function(method,i,arr) {
+          let child = this.childs.inherit[i];
+          // 加入执行队列
+          let value = null;
+          try {
+            if(this.status === REJECTED){
+              if(!isFun(method)){
+                throw(param);
+              }
+            }
+            value = (isFun(method) && method(param)) || undefined;
+            if(child){
+              child.status = FULFILLED;
+              child.pcall.call(child,value);
+            }
+            if(exceptionOut !== null) {
+              exceptionOut = setTimeout(exception,0);
+            }
+          } catch(e) {
+            if(child){
+              child.status = REJECTED;
+              child.pcall.call(child,e);
+            }
+            else {
+              // 没有继承的子对象处理，那么加入异常队列。
+              exception.list.push(e);
+              exceptionOut = setTimeout(exception,0);
+            }
+          }
+        },this);
+
+        if(!this.queue[this.status].length && this.status === REJECTED) {
+          exception.list.push(param);
+          exceptionOut = setTimeout(exception,0);
+        }
+        // 执行指向这个指针的对象。
+        this.childs.indirect.forEach(function(child,i){
+          child.status = this.status;
+          child.pcall.call(child,param);
+        },this);
+        // 将异常队列放在最后运行。
+        if(exceptionOut !== null && exceptionOut === originExceptionOut) {
+          exceptionOut = setTimeout(exception,0);
+        }
+      }
+      static all(proms){
+        return new Prom(function(s,f){
+          let list = [];
+          let err = {};
+          let unInitErr = err;
+          let count = 0;
+
+          if(!Array.from(proms).length) {
+            s([]);
+            return;
+          }
+          for(let [i,p] of proms.entries()) {
+            Prom.resolve(p).then(function(result){
+              list.push(result);
+              count++;
+              if(count === proms.length) {
+                s(list);
+              }
+            },function(e) {
+              if(unInitErr === err) {
+                err = e;
+                f(e);
+              }
+            });
+          }
+        });
+      }
+      static resolve(val) {
+        if (val instanceof Prom) {
+          return val;
+        } else if(val instanceof Object
+               && isFun(val.then)) {
+          return new Prom(val.then);
+        } else if(val !== undefined) {
+          return new Prom(function(resolve) {
+            resolve(val);
+          });
+        } else {
+          return new Prom(function(resolve) {
+            resolve();
+          });
+        }
+      }
+      static reject(val) {
+        return new Prom(function(resolve,reject) {
+          reject(val);
+        });
+      }
+      static race(ps) {
+        return new Prom(function(resolve,reject) {
+          let xxx = {v : null,time : Math.random()};
+          let unInitVal = null;
+          if(!Array.from(ps).length) {
+            s([]);
+            return;
+          }
+          Object.defineProperty(xxx,'value',{
+            get : function() { log('get'); return this.v; },
+            set : function(v) { log('set'); this.v = v; }
+          })
+          /*
+          let valProxy = new Proxy(val,{
+            set(target,prop,value) {
+              log('set');
+               Reflect.set(target,prop,value);
+            }
+          });
+          */
+          for(let [i,p] of ps.entries()) {
+            Prom.resolve(p).then(function(result) { 
+              if(xxx.value === null) {
+                xxx.value = result;
+                resolve(result);
+              }
+            },function(err) {
+              log('error');
+              if(xxx.value === unInitVal) {
+                xxx.value = err;
+                reject(err);
+              }
+            });
+          }
+        });
+      }
+    }
+    return Prom;
+  }());
+    function co(gen) {
+      let MyPromise = Prom;
+      let cxt = this;
+      let args = Array.prototype.slice(arguments,1);
+    
+      return new MyPromise(function(resolve,reject) {
+        if(typeof gen === 'function') gen = gen.apply(cxt,args);
+        if(!gen || typeof gen.next !== 'function') resolve(gen);
+        success();
+        function success(res) {
+          let ret;
+          try {
+            ret = gen.next(res);
+          } catch (e) {
+            // 如果函数体内发出的错误，那么则直接退出。
+            return reject(e);
+          }
+          next(ret);
+        }
+        function failed(err) {
+          // 异步函数发出的错误。
+          let ret;
+          try {     // 如果是yield参数错误，或者是回调函数返回错误，那么抛出一个错误给Generato函数去处理。
+            ret = gen.throw(err);// 如果给Generator捕获到，Generator继续执行下一条 yield语句.  
+          } catch(e) {
+            // 如果没有捕获到，那么则直接退出函数.
+            return reject(e);
+          }
+          next(ret);
+        }
+    
+        function next(ret) {
+          // gen正常或异常运行结束时才执行父类节点的回调函数.
+          if(ret.done) resolve(ret.value);
+          let value = toPromise.call(cxt,ret.value); // 过滤原始值.
+          if(value && isPromise(value)) value.then(success,failed); // 处理异步函数处理的结果
+          else {
+            failed(new TypeError(`
+            传递给co函数的值不能是原始值,value : ${ret.value}
+          `));
+        }
+        }
+      });
+    
+      function toPromise(obj) {
+        if(!obj) return obj;
+        if(isPromise(obj)) { return obj; }
+        if(isGenerator(obj) || isGeneratorObj(obj)) { return co.call(this,obj); }
+        if(isThunkFunction(obj)) { return thunkFunction.call(this,obj); }
+        if(Array.isArray(obj)) { return toArrayPromise.call(this,obj); };
+        if(isSet(obj)) { return toSetPromise.call(this,obj); }
+        if(isMap(obj)) { return toMapPromise.call(this,obj); }
+        if(isObject(obj)) { return objectList.call(this,obj); }
+        return obj;
+      }
+      
+      function isSet(obj) {
+        return 'object' === typeof obj && 
+                typeof obj.has === 'function' && 
+                typeof obj.delete === 'function' && 
+                typeof obj.add === 'function' && 
+                typeof obj.keys === 'function';
+      }
+  
+      function isMap(obj) {
+        return 'object' === typeof obj && 
+                typeof obj.has === 'function' && 
+                typeof obj.delete === 'function' && 
+                typeof obj.set === 'function' && 
+                typeof obj.keys === 'function';
+      }
+  
+  
+      function isPromise(obj) {
+        return typeof obj.then === 'function' && typeof obj.catch === 'function';
+      }
+    
+      function isGenerator(obj) {
+        let constructor = obj.constructor;
+        if('function' !== typeof constructor) return false;
+        if(constructor.name === 'GeneratorFunction') return true;
+        return isGeneratorObj(constructor.prototype);
+      }
+    
+      function isGeneratorObj(obj) {
+        return typeof obj.next === 'function' && typeof obj.throw === 'function';
+      }
+    
+      function isObject(obj) {
+        let prototype = Object.getPrototypeOf(obj);
+        return prototype.constructor === Object;
+      }
+    
+      function isThunkFunction(obj) {
+        return typeof obj === 'function';
+      }
+  
+      /**
+       * 返回`MyPromise`对象.
+       * @param Function
+       * @return MyPromise
+       * @api private
+       */
+      function thunkFunction(obj) {
+        return new MyPromise(function(resolve,reject){
+          obj.call(this,function(err,data) {
+            if(err) { reject(err); }
+            else { 
+              data = arguments.length > 2 ? Array.prototype.slice.call(arguments,1) : data;
+              resolve(data);
+             }
+          });
+        });
+      };
+  
+      function toArrayPromise(obj) {
+        return MyPromise.all(obj.map(toPromise,this));
+      }
+  
+      function objectList(obj) {
+        let keys = Object.keys(obj);
+        let results = {};
+        let promises = [];
+        for(let i = 0,len = keys.length; i < len ; i++) {
+          let value = toPromise.call(this,keys[i]);
+          if(value && isPromise(value)) promises.push(defer.call(this,results,value,keys[i]));
+          else { results[keys[i]] = obj[keys[i]]; }
+        }
+        return MyPromise.all(promises.then(function() {
+          return results;
+        }));
+      }
+      /**
+       * 
+       * @param {Set} Set 
+       * @api private
+       * @return MyPromise.all
+       */
+      function toSetPromise(obj) {
+        let resultSets = [];
+        let arrSet = [...obj];
+        let promises = [];
+        for(let i = 0,len = arrSet.length; i < len;i++) {
+          if(isPromise(arrSet[i])) { promises.push(defer.call(this,arrSet,arrSet[i],i)) }
+          else { resultSets[i] = arrSet[i]; }
+        }
+        return MyPromise.all(promises).then(function() {
+          return new Set([resultSets]);
+        });
+      }
+  
+      function toMapPromise(obj) {
+        let resultMaps = [];
+        let i = 0;
+        let promises = [];
+        obj.forEach(function(v,key){
+          if(isPromise(v)) { promises.push(defer.call(this,resultMaps,v,i)) }
+          else { resultMaps[i] = v; }
+          i++;
+        });
+        return MyPromise.all().then(function() {
+          let m = new Map();
+          let i = 0;
+          obj.forEach(function(v,key){
+            m.set(key,resultMaps[i]);
+            i++;
+          });
+          return m;
+        })
+      }
+      function defer(obj,promise,key) {
+        return promise.then(function(data){
+          return obj[key] = data;
+        });
+      }
+    }
+
   base.enumerable = enumerable;
   base.enumerableTree = enumerableTree;
   base.Range = Range;
@@ -765,6 +1195,7 @@ collections.base = (function(){
   base.exceptionHandler = exceptionHandler;
   base.exceptionClass = exceptionClass;
   base.errorInfo = errorInfo;
+  base.Promise = Prom;
 
   base.method.isBoolean = isBoolean;
   base.method.isFunction = isFunction;
@@ -798,6 +1229,8 @@ collections.base = (function(){
   base.method.hideAttr = hideAttr;
   base.method.showAttr = showAttr;
   base.method.heapSort = heapSort;
+  base.method.log = log;
+  base.method.co = co;
 
   base.CONST = {};
   base.CONST.ERR_ = ERR_;

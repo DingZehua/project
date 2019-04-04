@@ -7,12 +7,6 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "React",
-      "program": "${workspaceFolder}/React.js"
-    },
-    {
-      "type": "node",
-      "request": "launch",
       "name": "webSite",
       "program": "${workspaceFolder}/server.js"
     },
