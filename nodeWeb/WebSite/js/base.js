@@ -785,7 +785,8 @@ collections.base = (function(){
         this.status = PENDING;
         this.queue = {[FULFILLED] : [],[REJECTED] : []};
         // indirect 为指向这个对象的Prom对象，inherit为使用then继承的子Prom对象
-        this.childs = {inherit : [],indirect:[]}
+        this.childs = {inherit : [],indirect:[]};
+        this.value = null;
         if(!isFun(func)) {
           throw new TypeError('1 param Invalid value. must is function');
         }
@@ -796,12 +797,14 @@ collections.base = (function(){
             (function(value){
               if(this.status !== PENDING) return;
               this.status = FULFILLED;
+              this.value = value;
               out = setTimeout(this.pcall.bind(this,value),0);
             }).bind(this),
             // failed
             (function(err) {
               if(this.status !== PENDING) return;
               this.status = REJECTED;
+              this.value = err;
               out = setTimeout(this.pcall.bind(this,err),0,
                               err !== undefined ? err : new Error('Prom No corresponding handler')
                 );
@@ -855,24 +858,35 @@ collections.base = (function(){
         });
       }
       pcall (param) {
-        if(this.status === REJECTED) {
-          this.onAll(param);
+        if(this.status === REJECTED) {  
+          this.value = param;
+          this.onAll();
         }
         else if(param instanceof Prom) {
           if(param.status !== PENDING) {
             this.status = param.status;
-            this.onAll(param);
+            this.value = param.value;
+            this.onAll(param.value);
           }
           else {
             this.status = PENDING;
             param.childs.indirect.push(this);
           }
-        }
-        else {
-          this.onAll(param);
+        } else if(param && typeof param.then === 'function') {
+          param.then((res)=> {
+            this.status = FULFILLED;
+            this.value = res;
+            this.onAll();
+          },(err) => {
+            this.status = REJECTED;
+            this.value = err;
+            this.onAll();
+          });
+        } else {
+          this.onAll();
         }
       }
-      onAll(param) {
+      onAll() {
         // 暂时将异常队列清除出去
         if(exceptionOut !== null) {
           clearTimeout(exceptionOut);
@@ -886,11 +900,12 @@ collections.base = (function(){
           try {
             if(this.status === REJECTED){
               if(!isFun(method)){
-                throw(param);
+                throw(this.value);
               }
             }
-            value = (isFun(method) && method(param)) || undefined;
+            value = (isFun(method) && method(this.value)) || this.value;
             if(child){
+              child.value = value;
               child.status = FULFILLED;
               child.pcall.call(child,value);
             }
@@ -900,6 +915,7 @@ collections.base = (function(){
           } catch(e) {
             if(child){
               child.status = REJECTED;
+              child.value = e;
               child.pcall.call(child,e);
             }
             else {
@@ -911,13 +927,14 @@ collections.base = (function(){
         },this);
 
         if(!this.queue[this.status].length && this.status === REJECTED) {
-          exception.list.push(param);
+          exception.list.push(this.value);
           exceptionOut = setTimeout(exception,0);
         }
         // 执行指向这个指针的对象。
-        this.childs.indirect.forEach(function(child,i){
+        this.childs.indirect.forEach(function(child){
           child.status = this.status;
-          child.pcall.call(child,param);
+          child.value = this.value;
+          child.pcall.call(child,this.value);
         },this);
         // 将异常队列放在最后运行。
         if(exceptionOut !== null && exceptionOut === originExceptionOut) {
@@ -952,18 +969,16 @@ collections.base = (function(){
         });
       }
       static resolve(val) {
-        if (val instanceof Prom) {
+        //val instanceof Prom || val instanceof Promise 
+        if ( val  && typeof val.then === 'function' 
+                  && typeof val.catch === 'function') {
           return val;
         } else if(val instanceof Object
                && isFun(val.then)) {
           return new Prom(val.then);
-        } else if(val !== undefined) {
-          return new Prom(function(resolve) {
-            resolve(val);
-          });
         } else {
           return new Prom(function(resolve) {
-            resolve();
+            resolve(val);
           });
         }
       }
@@ -974,34 +989,21 @@ collections.base = (function(){
       }
       static race(ps) {
         return new Prom(function(resolve,reject) {
-          let xxx = {v : null,time : Math.random()};
-          let unInitVal = null;
+          let val = {};
+          let unInitVal = val;
           if(!Array.from(ps).length) {
             s([]);
             return;
           }
-          Object.defineProperty(xxx,'value',{
-            get : function() { log('get'); return this.v; },
-            set : function(v) { log('set'); this.v = v; }
-          })
-          /*
-          let valProxy = new Proxy(val,{
-            set(target,prop,value) {
-              log('set');
-               Reflect.set(target,prop,value);
-            }
-          });
-          */
           for(let [i,p] of ps.entries()) {
             Prom.resolve(p).then(function(result) { 
-              if(xxx.value === null) {
-                xxx.value = result;
+              if(unInitVal === val) {
+                val = result;
                 resolve(result);
               }
             },function(err) {
-              log('error');
-              if(xxx.value === unInitVal) {
-                xxx.value = err;
+              if(unInitVal === val) {
+                val = err;
                 reject(err);
               }
             });

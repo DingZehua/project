@@ -5,6 +5,7 @@ var
     http = require('http');
 let mysql = require('mysql');
 let {path:configPath,access} = require('./config');
+let {co} = require('./js/base');
 
 let allow = new RegExp([...new Set(access.allow
                         .filter(function(x){return x;}))]   // 排除掉空元素和重复元素

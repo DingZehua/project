@@ -14,7 +14,7 @@
       "type": "node",
       "request": "launch",
       "name": "node.js",
-      "program": "${workspaceFolder}\\helloWord.js"
+      "program": "${workspaceFolder}\\async.js"
     }
   ]
 }

@@ -67,7 +67,7 @@ class mysqlDB  {
 let path = require('path');
 
 (() => {
-  
+  /*
   function next(err,data) {
     if(err) throw err;
     let result = start.next(data);
@@ -90,7 +90,6 @@ let path = require('path');
       });
     }
   }
-
   //let start = main();
   let sql = new mysqlDB(config);
   function * main() {
@@ -99,6 +98,7 @@ let path = require('path');
     
     let file = fs.createReadStream('data/list(201309).txt');
     let result = null;
+    
     while(1) {
       let y = MyPromise.race([
         new MyPromise((resolve) => { log(file.once('data',function(data){resolve(data);})); }),
@@ -116,4 +116,5 @@ let path = require('path');
     yield sql.endThunk();
   }
   co(main()).catch(function(e){log(e)});
+  */
 })();
