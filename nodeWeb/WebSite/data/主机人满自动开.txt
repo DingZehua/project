@@ -1,0 +1,129 @@
+--[[
+    简介：自己C个主，可以切到外面来做事情，等人满后会自动开始倒数，
+中途如果没人退，就开始了。在开始后1秒打一行字。浩方平台测试通过
+vs我这里打不开主机功能，不知道可不可以
+    例如，建好一张DOTA图，人满后自动开始，打-RD。
+    注意，本脚本需求助手版本号至少4.1且主机功能打开
+                        
+                          作者：佳夢美貓兒      测试修正：星夜心雨
+]]
+--【用户修改处】
+-- 开始后打的文本
+gameText = '-rd'
+--倒数时间
+timeNum = 5
+--是否检测地图关键字，0为不检测，1为检测
+isMap = 1
+--地图关键字，若完全不符，则在开始后不打文本
+map = 'DotA Allstars'
+--【用户修改处结束】
+--脚本正文
+if getwshscriptversion() < 14 then
+    msgbox('助手版本号太低！')
+end
+if iswshfunctionenable(16) == 0 then
+    msgbox('主机功能未打开！')
+end
+settimer(1000, 'StartProc')
+iplay = 1
+function sendMsgfunc(msg)
+    hWar3 = getwar3window()
+    copytexttoclipboard(msg)
+    sendmessage(hWar3, 256, 13, 0)
+    sleep(1)
+    sendmessage(hWar3, 257, 13, 0)
+    sleep(1)
+    sendmessage(hWar3, 256, 17, 0)
+    sleep(1)
+    sendmessage(hWar3, 256, 86, 0)
+    sleep(1)
+    sendmessage(hWar3, 257, 17, 0)
+    sleep(1)
+    sendmessage(hWar3, 257, 86, 0)
+    sleep(1)
+    sendmessage(hWar3, 256, 13, 0)
+    sleep(1)
+    sendmessage(hWar3, 257, 13, 0)
+end
+function StartGame(key)
+    --这里用来点Alt + S和Alt + A
+    if key == 1 then
+        code = 83
+    else
+        code = 65
+    end
+    hWar3 = getwar3window()
+    sendmessage(hWar3, 256, 18, 0)
+    sleep(1)
+    sendmessage(hWar3, 256, code, 0)
+    sleep(1)
+    sendmessage(hWar3, 257, 18, 0)
+    sleep(1)
+    sendmessage(hWar3, 257, code, 0)
+end
+function StartProc()
+    if iplay == -1 then
+        iplay = 1
+    end
+    if 3 == getgamestatus() and iplay ~=0 then
+        --刚刚读条结束
+        iplay = 0
+        SlotID, team = getmyslotidteam()
+        mapname = getmapname()
+        if (isMap == 0 or string.find(mapname, map)~=nil) and SlotID == 1 then
+            sleep(1000)
+            sendMsgfunc(gameText)
+        end
+        
+    elseif 0 == getgamestatus() and isHost() == 1 then
+        if gethostfreeslot() > 0 then
+            iplay = 1
+        elseif isWaitCreat()==0 then
+            iplay = iplay + 1
+	    if iplay <= timeNum + 1 and isWaitStartReady() == 1 then
+		sendMsgfunc(timeNum + 2 - iplay)
+	    end
+        end
+        if gethostfreeslot() == 0 and iplay >= timeNum + 1 and isWaitStartReady() == 1 then
+            StartGame(1)
+        end
+    elseif 1 == getgamestatus() and iplay == -1 then
+        if gethostfreeslot() > 0 then
+            iplay = -1
+            StartGame(0)
+            if 0 == iswar3front() then
+                msgdlg('被秒了！', '重新C吧', 3)
+            end
+        end
+    end
+end
+
+function isHost()
+    for i = 0, 15, 1 do
+        ID, IP, port, name, state = getplayerinfo(i)
+        if name == '<自己>' then
+            return 0
+        end
+    end
+    return 1
+end
+
+function isWaitCreat()
+    for i = 0, 15, 1 do
+        ID, IP, port, name, state = getplayerinfo(i)
+        if string.len(name)~=0 then
+            return 0
+        end
+    end
+    return 1
+end
+
+function isWaitStartReady()
+    for i = 0, 15, 1 do
+        ID, IP, port, name, state = getplayerinfo(i)
+        if 0<state and state<100 then
+            return 0
+        end
+    end
+    return 1
+end

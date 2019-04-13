@@ -1,0 +1,235 @@
+--[[
+简介：
+    玩家状态提示脚本，该脚本可监视并提示主机开始游戏后地图未载入完成及已载入完成的玩家；
+可监视并提示离开游戏的玩家。
+
+注意： 1.【此脚本需要在开始游戏前开启助手主机页功能方可使用】
+       2. 建议开始游戏前启动脚本。主机名及建主时间、玩家退出游戏信息记录均记录在调试窗口。
+调试窗口默认是关闭的。可以将opendebugwindow()前的注释符号'--'去掉运行脚本即可显示调试窗口。
+
+更新:
+[2010年6月21日]
+1. 增加了记录IP信息,可以在调试窗口或日志文件看到
+
+[2010年5月13日]
+1. 增加了调试窗口记录主机及开始游戏时间。每一局游戏为一个段落记录便于区别。
+   如果游戏开始后再开启脚本则不记录开始游戏信息。
+2. 增加了自定义是否显示调试窗口。
+3. 更新了对d3d绘图文字相关代码,减少状态检测周期时间到200ms。
+4. 增加了用户自定义是否记录日志文件功能。默认不记录日志文件。
+日志文件名War3Player_Note.log，日志位于助手跟目录。
+
+                                       作者：星夜心雨
+				       测试：雪舞雨漩、Mg
+                                       			]]
+
+
+if getwshscriptversion() < 8 then
+    msgbox('请使用更高版本的助手')
+end
+
+--【用户修改处】
+--opendebugwindow()	--是否显示调试窗口，去掉opendebugwindow()注释符号'--'运行脚本即可显示调试窗口
+isWriteLog = true	--是否记录日志文件 true/false
+--【用户修改处结束】
+
+idWsh = 0
+ridWsh = 0
+idSet = 0
+ridSet = 0
+iInitState = 0
+iGamestatus = 0
+player = {}
+leavedPlayer = {}
+iLeaved = 0
+iSetTimel = 10000
+iSetTimes = 3000
+iplaying = 0
+iLoadedState = 1
+iPlayerNum = 0
+
+function isOneLoadedMap()
+
+    if 1==isplaying() and iGamestatus>1 then
+	iplaying = 2
+	return false
+    end
+    if iplaying == 2 and 0==isplaying() then 
+        iplaying = 3
+	return false
+    end
+    if 0==isplaying() and iGamestatus==2 then
+	iplaying = 1
+        for i = 0,15,1 do
+            playerID, playerIP, playerPort, playerName, playerState = getplayerinfo(i)
+            if playerState==256 then
+                return true
+            end  
+        end
+    else
+	iplaying = 4
+    end
+    return false
+end
+
+function isPlayerOnline(oldPlayerID)
+    for i = 0,15,1 do
+        playerID, playerIP, playerPort, playerName, playerState = getplayerinfo(i)
+        if oldPlayerID==playerID and playerName~='' then
+            return true
+        end  
+    end
+    return false
+end
+
+function writeLog(content)
+    local file = io.open(getwshpath().."War3Player_Note.log", "a+");
+    if(file) then
+	file:write(content)
+    end
+    io.close(file)
+end
+
+function myd3dsettext(nShowstate,strText,nAlpha)
+    war3w = getwar3window()
+    win3wl,win3wr,win3wt,win3wb = getclientrect(war3w)
+    x=(win3wr-win3wl)*0.05
+    y=(win3wb-win3wt)*0.69
+    if((win3wr-win3wl)<790) then
+        iFontW=5
+        iFontH=10
+    elseif((win3wr-win3wl)>=790 and (win3wr-win3wl)<1010) then
+        iFontW=6
+        iFontH=12
+    else
+        iFontW=7
+        iFontH=14
+    end
+    if nShowstate==0 then 
+        idWsh, ridWsh = d3dsettext(idWsh, ridWsh,'【助手】', iSetTimel, x, y, "宋体", 0x0000ff, nAlpha, iFontW, 0, 500, 0, 0, 0,0,2000)    
+        idSet, ridSet = d3dsettext(idSet, ridSet,strText, iSetTimel, (iFontH+2)*4+x, y, "宋体", 0xffffff, nAlpha, iFontW, 0, 500, 0, 0, 0,0,2000)
+    elseif nShowstate==1 then
+        idWsh, ridWsh = d3dsettext(idWsh, ridWsh,'【助手】',iSetTimes, x, y, "宋体", 0x0000ff, nAlpha, iFontW, 0, 500, 0, 0, 0,0,2000)    
+        idSet, ridSet = d3dsettext(idSet, ridSet,strText, iSetTimes, (iFontH+2)*4+x, y, "宋体", 0xffffff, nAlpha, iFontW, 0, 500, 0, 0, 0,0,2000)
+    else 
+        idWsh, ridWsh = d3dsettext(idWsh, ridWsh,'【助手】',0, x, y, "宋体", 0x0000ff, nAlpha, iFontW, iFontH, 500, 0, 0, 0,0,2000)    
+        idSet, ridSet = d3dsettext(idSet, ridSet,strText, 0, (iFontH+2)*4+x, y, "宋体", 0xffffff, nAlpha, iFontW, 0, 500, 0, 0, 0,0,2000)
+    end
+end
+
+function monitorPlayerfunc()
+    iGamestatus = getgamestatus()
+    if isOneLoadedMap() then
+        playerNotLoaded = ''
+        playerLoaded = ''
+        for i = 0,15,1 do
+            playerID, playerIP, playerPort, playerName, playerState = getplayerinfo(i)
+            if playerState == 256 and playerName~='' then
+                if playerLoaded ~= '' then playerLoaded = playerLoaded .. '、' end
+                playerLoaded = playerLoaded .. playerName
+            elseif  playerName~='' then
+                if playerNotLoaded ~= '' then playerNotLoaded = playerNotLoaded .. '、' end
+                playerNotLoaded = playerNotLoaded .. playerName
+            end
+        end
+	strText =''
+	if playerLoaded ~= '' then
+	    strText = strText..'玩家'..playerLoaded ..'地图载入已完成\n'
+	end
+	if playerNotLoaded~='' then 
+	    strText = strText..'玩家'..playerNotLoaded ..'地图载入尚未完成'
+	end
+	if strText ~='' then 
+            myd3dsettext(1,strText,255)
+	end
+    end
+    if iGamestatus > 1 and iInitState == 0 then
+	hostName = ''
+	hostIP = ''
+        iMinPlayerId = 16
+        for i = 0,15,1 do
+            playerID, playerIP, playerPort, playerName, playerState = getplayerinfo(i)
+            if playerID~=nil and playerName ~= '' then
+		if playerID<iMinPlayerId then
+		    iMinPlayerId = playerID
+		    hostName = playerName
+		    hostIP = playerIP
+		end
+                player[iPlayerNum] = {}
+                player[iPlayerNum][0] = playerID
+                player[iPlayerNum][1] = playerIP
+                player[iPlayerNum][2] = playerPort
+                player[iPlayerNum][3] = playerName
+                player[iPlayerNum][4] = playerState
+                iPlayerNum = iPlayerNum+1
+            end
+        end
+	if iGamestatus == 2 and hostName ~= '' then
+	    strText = '\n'..os.date("%Y-%m-%d %X",os.time{year=1970, month=1, day=1, hour=0})..'  玩家['..hostName..'] IP['..hostIP ..']开始了主机游戏\n'
+	    trace(strText)
+	    if isWriteLog then
+		writeLog(strText)
+	    end
+	elseif iGamestatus ~= 2 then
+	    trace('\n')
+	end
+        iInitState = 1
+    elseif iGamestatus < 2 then
+        iInitState = 0
+    end
+    if iplaying==2 then
+	if iLoadedState == 1 then 
+	    myd3dsettext(2,' ',255)
+	    iLoadedState = 0
+	end
+        if iPlayerNum>0 and table.getn(player)>0 then
+            for i=0, table.getn(player), 1 do
+                if player[i][3]~=nil and player[i][3]~='' and not isPlayerOnline(player[i][0]) then
+                    isInLeaved = false
+		    if iLeaved>0 then
+		        for j=0, iLeaved-1, 1 do
+			    if leavedPlayer[j]~=nil and player[i][0] == leavedPlayer[j][0] then
+			        isInLeaved = true
+			    end
+		        end
+		    end
+                    if not isInLeaved and player[i][3]~=''  then
+                        strText = os.date("%Y-%m-%d %X",os.time{year=1970, month=1, day=1, hour=0})..'  玩家['..player[i][3]..'] IP['..player[i][1] ..']已经离开游戏\n'
+			trace(strText)
+			if isWriteLog then
+			    writeLog(strText)
+	    		end
+			leavedPlayer[iLeaved] = {}
+			leavedPlayer[iLeaved] = player[i]
+			leavedPlayer[iLeaved][5] = gettickcount()
+			iLeaved = iLeaved +1
+		    end
+                end
+            end
+	    strLeavedPlayer = ''
+	    if iLeaved>0 then
+		for i=0, iLeaved-1, 1 do
+			if gettickcount()-leavedPlayer[i][5]<iSetTimel then
+			   if strLeavedPlayer ~= '' then strLeavedPlayer = strLeavedPlayer .. '、' end
+			    strLeavedPlayer = strLeavedPlayer .. leavedPlayer[i][3]
+			end
+		end
+	    end
+            if strLeavedPlayer~=''  then
+                strText = '玩家['..strLeavedPlayer..']已经离开游戏'
+                myd3dsettext(0,strText,255)
+            end
+        end
+    elseif iplaying == 3 then
+	myd3dsettext(2,' ',255)
+    elseif iplaying == 4 then
+	iplaying = 0 --end
+        player = {}
+        leavedPlayer = {}
+        iLeaved = 0
+	iPlayerNum = 0
+	iLoadedState = 1
+    end
+end
+
+tmMonitor = settimer(200, 'monitorPlayerfunc')

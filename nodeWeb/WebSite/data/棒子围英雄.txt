@@ -1,0 +1,96 @@
+--[[
+简介：
+    想在吹风之后用加血棒围住敌人？此脚本作用是快速在鼠标周围插下四根加血棒或加蓝棒
+之类道具。
+
+使用说明：
+    按下设定的快捷键时，插下四根棒子在鼠标所在位置的四周，用来配合吹风后用棒子
+围住敌方英雄。默认快捷键为B，使用道具栏7和8的道具。可自行修改，修改位置见脚本正
+文。
+    注意：使用的道具栏，例如道具7和8必须总共有4根以上的棒子；鼠标尽量放在所围英
+雄的中心处。
+
+备注：
+①如果总是放不全四根棒子请尝试全屏模式，或者联系我
+②由于丢下棒子不能太快，延迟的设置在我测试的时候没有问题，如果有问题可以联系我。
+③由于丢棒子不能用shift操作，所以操作距离不能太远，否则无法丢下。
+④如果棒子的位置不合适，可自行修改，不会可以联系我。
+⑤欢迎提出宝贵建议，qq:167849866； bbs.myebe.com
+
+感谢：
+stan 辛苦的测试
+                                      作者：╃Ｇ°
+                                                    ]]
+
+--脚本正文：
+
+
+--【用户修改处】
+dropkey=66        --66代表B的键码，可自行修改如O，改为79
+dropitem1=103     --103代表道具7，可自行修改，如道具1则为97
+dropitem2=104	  --104代表道具8，可自行修改，如道具2则为98
+itemn=7           --优先使用的道具的位置，7代表道具7，如先使用道具1则改为1
+--【用户修改处结束】
+
+itemtab={}                          --这里是道具位置表参考值
+itemtab[7]={x=0.666,y=0.833}        --道具7
+itemtab[8]={x=0.7125,y=0.833}       --道具8
+itemtab[4]={x=0.666,y=0.9}          --道具4
+itemtab[5]={x=0.7125,y=0.9}         --道具5
+itemtab[1]={x=0.666,y=0.963}        --道具1
+itemtab[2]={x=0.7125,y=0.963}       --道具2
+
+if getwshscriptversion() < 3 then
+    msgbox('请使用助手2.5版本以上')
+end
+
+mousetab={}
+mousetab[1]={x=0,y=0.045}          --四根棒子的位置表
+mousetab[2]={x=0,y=-0.045}
+mousetab[3]={x=0.045,y=0}
+mousetab[4]={x=-0.045,y=0}
+
+setkeywatch('keyhookfunc')
+
+function keyhookfunc(keycode, controlkey, downorup)
+    if 0==iswar3front() then return 0 end
+    if 1==ischat() then return 0 end
+    if downorup==1 then return 0 end
+    if keycode==dropkey and downorup==0 then
+        currentx,currenty = getcursorpos()
+        sleep(20)
+        war3w = getwar3window()
+        war3wl,war3wr,war3wt,war3wb = getwindowrect(war3w)
+        war3wlc,war3wrc,war3wtc,war3wbc = getclientrect(war3w)
+        itemx=war3wrc*itemtab[itemn]["x"]
+        itemy=war3wbc*itemtab[itemn]["y"]    
+	isitem=getpixel(war3w,itemx, itemy)
+	dropitem=dropitem1
+        j=0
+        sleep(50)
+	for i = 1,4,1 do
+            isitemt=getpixel(war3w,itemx, itemy)
+            sleep(100)
+	    if isitem~=isitemt or j>2 then dropitem=dropitem2 end
+            sleep(10)
+            mousex=currentx+(war3wr-war3wl)*mousetab[i]["x"]
+	    mousey=currenty+(war3wb-war3wt)*mousetab[i]["y"]
+	    setcursorpos(mousex, mousey)
+	    sleep(10)
+	    lockmouse(mousex, mousey)
+	    sleep(10)
+	    keydown(dropitem)
+	    sleep(10)
+	    keyup(dropitem)
+	    sleep(20)
+            mouseclick(0)
+	    sleep(20)
+	    lockmouse(-1, -1)
+            j=j+1
+	    sleep(230)      --丢下一根棒子之后的延迟，默认230ms，可自行修改
+	end
+        sleep(10)
+    return 1
+    end
+end
+

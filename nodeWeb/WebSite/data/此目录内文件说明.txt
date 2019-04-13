@@ -1,0 +1,20 @@
+附加工具说明：
+NoVoice.exe
+★游戏王★混沌力量  城之内篇 城之内闭嘴补丁
+没想到那么多人对城之内的美国英语那么反感＝ ＝，所以做了
+这个补丁来让他说不出话来，注意，只是说不出来而已，动画的
+速度还是一样的，不会变快。
+请放入游戏所在目录中执行或者选择游戏所在的目录执行。
+最好选中备份原文件（make bakup copy）以防不测。。。
+对于100M的安装程序的那个版本，请选中 Ignore if already 
+patched，并选中备份原文件，但是，我不能保证这个版本的能
+正常补上去。。。。。。。
+This file Make By blues city
+
+Region.en.dat
+Region.jp.dat
+语言切换文件，其中：Region.en.dat是英文版，Region.jp.dat是日文版，将文件改名为Region.dat放到游戏的目录就可以改变游戏默认的语言了（汉化版中默认为日文）
+
+joey use card.rar
+电脑用的卡组，如果你想研究一下电脑的打法的话这个就是了。
+使用方法：将文件解压到游戏安装目录中的Yu-Gi-Oh! Power of Chaos Common目录中，如果不是本汉化版，请将其解压到HKEY_LOCAL_MACHINE\SOFTWARE\KONAMI\Yu-Gi-Oh! Power Of Chaos\system\中的CommonDir这一项中所指点的目录中去（一般就是游戏的安装目录）

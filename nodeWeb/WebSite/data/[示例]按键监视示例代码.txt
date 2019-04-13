@@ -1,0 +1,25 @@
+--这是个示例代码，演示当按下A时，变成B
+--当然你也可以做更多的事情...
+
+-- 设置监视，告诉系统今后有按键信息就调用函数keyhookfunc
+setkeywatch('keyhookfunc')
+
+function keyhookfunc(keycode, controlkeycode, downorup)
+-- keycode : 按键键码
+-- controlkeycode : Alt Shift Ctrl 的状态
+-- 1:左Alt按下 2:右Alt按下
+-- 4:左Shift按下 8:右Shift按下
+-- 16:左Ctrl按下 32:右Ctrl按下
+-- 多个控制键可以位运算检测
+-- downorup:0 按下  1 放开
+-- 返回值1:助手不再继续处理该键
+-- 返回值0:助手继续处理该键
+    if keycode==65 and downorup==0 then
+        keydown(66)
+        return 1   --1:处理完毕,助手不再处理  0:助手继续处理此键
+    elseif keycode==65 and downorup==1 then
+        keyup(66)
+        return 1   --1:处理完毕,助手不再处理  0:助手继续处理此键
+    end
+end
+

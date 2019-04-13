@@ -1,0 +1,202 @@
+--[[
+简介：
+    魔兽视野模式自动保存设置脚本，设置一次保存后只要该脚本不停止或不重启，
+    每次进入魔兽开始游戏都会自动进行视野设置。与魔兽程序是否重启无关。
+用法：
+    按左Ctrl+P开始设置，[远]Alt+PageUp [近]Alt+PageDown [恢复]Alt+←
+			[远]Alt+下滚 [近]Alt+上滚 [恢复]Alt+中键
+    设置过程中按左Ctrl+O取消设置，按左Ctrl+S保存设置，按左Ctrl+Q操作提示。
+
+更新:
+[2009年9月4日]
+1. 更改视角词为视野，更改部分不贴切的信息提示。
+2. 增加了助手Alt+Up的视野调整，增加了设置过程中按左Ctrl+Q操作提示
+3. 修改了部分延时不完美的问题。
+[2009年9月6日]
+优化了脚本代码，更改了设置未保存提示时间的处理。
+[2009年9月7日]
+更改了提示信息位置，防止显示在有农民图标上不雅观。
+[2009年9月10日]
+增加了助手的Alt+滚轮视野调整的设置保存。
+    [远]Alt+下滚 [近]Alt+上滚 [恢复]Alt+中键
+[2009年10月26日]
+增加了设置自动保存和提示手动保存2种模式，默认为1分钟自动保存模式。
+保存时有信息提示。
+[2010年4月12日]
+更新了部分文字描述。
+[2010年5月4日]
+1.修改了脚本代码结构，防止可能出现助手或脚本崩溃。
+2.调整了不同分辨率下提示文字自适应字体大小。
+[2010年5月13日]
+更新了对d3d绘图文字相关代码。
+[2010年5月27日]
+随助手视野模式更新而更新，目前视野模式调整为12档，脚本视野模式从0到11。
+
+                                       作者：星夜心雨
+                                       			]]
+
+--脚本正文
+
+if getwshscriptversion() < 4 then
+    msgbox('请使用更高版本的助手')
+end
+
+--【用户修改处】
+nSetkey=80        --80为P的键码
+nSetkeyC=16       --32为左ctrl的键码
+nCancelkey=79     --79为O的键码
+nCancelkeyC=16    --32为左ctrl的键码
+nSavekey=83       --83为F的键码
+nSavekeyC=16      --32为左ctrl的键码
+nQuestkey=81      --81为Q的键码
+iSetTimes=60000    --视野设置保存最大提示时间(毫秒)
+iAutoSaves=1       --设置是否自动保存,1为自动保存，0为提示保存
+--【用户修改处结束】
+
+setglobalint('iSetTime', iSetTimes)
+setglobalint('iAutoSave', iAutoSaves)
+setglobalint('iIsSet', 0)
+setglobalint('iSetValue', 0)
+setglobalint('iSetState', 0)
+setglobalint('iLastTick', 0)
+setglobalint('nShowstate', 0)
+setglobalint('idWsh', 0)
+setglobalint('ridWsh', 0)
+setglobalint('idSet', 0)
+setglobalint('ridSet', 0)
+sOption='[远]Alt+PageUp [近]Alt+PageDown [恢复]Alt+← \n[取消设置]Ctrl+O [保存设置]Ctrl+S [操作提示]Ctrl+Q'
+
+function myd3dsettext(nShowstate,strText,nAlpha)
+    war3w = getwar3window()
+    win3wl,win3wr,win3wt,win3wb = getclientrect(war3w)
+    x=(win3wr-win3wl)*0.05
+    y=(win3wb-win3wt)*0.655
+    if((win3wr-win3wl)<790) then
+        iFontW=5
+    elseif((win3wr-win3wl)>=790 and (win3wr-win3wl)<1010) then
+        iFontW=6
+    else
+        iFontW=7
+    end
+    midWsh = getglobalvar('idWsh')
+    mridWsh = getglobalvar('ridWsh')
+    midSet = getglobalvar('idSet')
+    mridSet = getglobalvar('ridSet')
+    if nShowstate==0 then 
+        midWsh, mridWsh = d3dsettext(midWsh, mridWsh,'【助手】', 5000, x, y, "宋体", 0x0000ff, nAlpha, iFontW, 0, 500, 0, 0, 0,0,2000)    
+        midSet, mridSet = d3dsettext(midSet, mridSet,strText, 5000, (iFontW*2)*4+3+x, y, "宋体", 0xffffff, nAlpha, iFontW, 0, 500, 0, 0, 0,0,2000)
+    elseif nShowstate==1 then
+        midWsh, mridWsh = d3dsettext(midWsh, mridWsh,'【助手】',getglobalvar('iSetTime'), x, y, "宋体", 0x0000ff, nAlpha, iFontW, 0, 500, 0, 0, 0,0,2000)    
+        midSet, mridSet = d3dsettext(midSet, mridSet,strText, getglobalvar('iSetTime'), (iFontW*2)*4+3+x, y, "宋体", 0xffffff, nAlpha, iFontW, 0, 500, 0, 0, 0,0,2000)
+    else 
+        midWsh, mridWsh = d3dsettext(midWsh, mridWsh,'【助手】',0, x, y, "宋体", 0x0000ff, nAlpha, iFontW, 0, 500, 0, 0, 0,0,2000)    
+        midSet, mridSet = d3dsettext(midSet, mridSet,strText, 0, (iFontW*2)*4+3+x, y, "宋体", 0xffffff, nAlpha, iFontW, 0, 500, 0, 0, 0,0,2000)
+    end
+    setglobalint('idWsh', midWsh)
+    setglobalint('ridWsh', mridWsh)
+    setglobalint('idSet', midSet)
+    setglobalint('ridSet', mridSet)
+end
+
+setkeywatch('keyhookfunc')
+setmousewatch('mousehookfunc')
+
+function keyhookfunc(keycode, controlkey, downorup)
+    if 0==iswar3front() then return 0 end
+    if 1==ischat() then return 0 end  
+    if downorup==1 then return 0 end
+    if getglobalvar('iSetState')==1 and keycode==nCancelkey and controlkey==nCancelkeyC then 
+        setglobalint('iSetValue', 0)
+        setglobalint('iSetState', 0)
+        strText='视野设置已取消！'
+        myd3dsettext(0,strText,255)        
+        return 1
+    end
+
+    if getglobalvar('iSetState')==1 and keycode==nSavekey and controlkey==nSavekeyC then 
+        setglobalint('iIsSet', 1)    
+        setglobalint('iSetState', 0)
+        strText='当前视野模式'..tostring(getglobalvar('iSetValue'))..'\n视野设置已保存！'
+        myd3dsettext(0,strText,255)        
+        return 1
+    end
+
+    if getglobalvar('iSetState')==1 and keycode==nQuestkey and controlkey==nSavekeyC then 
+        strText='当前视野模式'..tostring(getglobalvar('iSetValue'))..'\n操作提示：'..sOption
+        myd3dsettext(1,strText,255)        
+        return 1
+    end
+
+    if getglobalvar('iSetState')==0 and keycode==nSetkey and nSetkeyC==controlkey then 
+        setglobalint('iLastTick', gettickcount())
+        if getglobalvar('iSetValue')==0 then enablewshfunction(16, 0) end
+        setglobalint('iSetState', 1)  
+        strText='开始按键进行视野设置，'..sOption
+        myd3dsettext(1,strText,255)
+        return 1
+
+    elseif getglobalvar('iSetState')==1 and keycode==34 and (1==controlkey or 2==controlkey) then
+        if getglobalvar('iSetValue')==0 then setglobalint('iSetValue', 12) end
+        enablewshfunction(16, -1)
+        setglobalint('iSetValue', getglobalvar('iSetValue')-1)
+        if getglobalvar('iSetValue')<0 then
+             setglobalint('iSetValue', 0)
+        end
+        strText='当前视野模式'..tostring(getglobalvar('iSetValue'))
+        myd3dsettext(0,strText,255)
+        return 1
+
+    elseif getglobalvar('iSetState')==1 and keycode==33 and (1==controlkey or 2==controlkey) then        
+        enablewshfunction(16, 1)
+        setglobalint('iSetValue', getglobalvar('iSetValue')+1) 
+        if getglobalvar('iSetValue')>11 then
+            setglobalint('iSetValue', 0)
+        end
+        strText='当前视野模式'..tostring(getglobalvar('iSetValue'))
+        myd3dsettext(0,strText,255)
+        return 1
+
+    elseif getglobalvar('iSetState')==1 and keycode==37 and (1==controlkey or 2==controlkey) then        
+        enablewshfunction(16, 0)
+        setglobalint('iSetValue', 0)
+        strText='视野设置已恢复！'
+        myd3dsettext(0,strText,255)        
+        return 1
+    end
+    return 0
+end
+
+function mousehookfunc(msg)
+    if 0==iswar3front() then return 0 end
+    if 1==ischat() then return 0 end  
+    if downorup==1 then return 0 end
+    if getglobalvar('iSetState')==1 and 0 > getkeystate(18) and msg==21 then
+        enablewshfunction(16, 1)
+        setglobalint('iSetValue', getglobalvar('iSetValue')+1)    
+        if getglobalvar('iSetValue')>11 then
+            setglobalint('iSetValue', 0)
+        end
+        strText='当前视野模式'..tostring(getglobalvar('iSetValue'))
+        myd3dsettext(0,strText,255)
+        return 1
+    elseif getglobalvar('iSetState')==1 and 0 > getkeystate(18) and msg==22 then
+	if getglobalvar('iSetValue')==0 then setglobalint('iSetValue', 12) end
+        enablewshfunction(16, -1)
+        setglobalint('iSetValue', getglobalvar('iSetValue')-1)
+        if getglobalvar('iSetValue')<0 then
+             setglobalint('iSetValue', 0)
+        end
+        strText='当前视野模式'..tostring(getglobalvar('iSetValue'))
+        myd3dsettext(0,strText,255)
+        return 1
+    elseif getglobalvar('iSetState')==1 and 0 > getkeystate(18) and msg==3 then
+        enablewshfunction(16, 0)
+        setglobalint('iSetValue', 0)
+        strText='视野设置已恢复！'
+        myd3dsettext(0,strText,255)  
+        return 1
+    else return 0
+    end
+end
+
+runlua('View_Settings.j')

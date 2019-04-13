@@ -1,0 +1,643 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script type="text/javascript">
+_hiido_wid=["_03920ff"];
+</script>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>第五赛季：辅助克制与选人指南-基友联盟|撸友之家-LOL-英雄联盟-多玩游戏论坛 - </title>
+<link href="http://bbs.duowan.com/thread-43592443-1-1.html" rel="canonical" />
+<meta name="keywords" content="第五赛季：辅助克制与选人指南,基友联盟|撸友之家,LOL-英雄联盟" />
+<meta name="description" content="第五赛季：辅助克制与选人指南-LOL-英雄联盟-多玩游戏论坛 " />
+<meta name="generator" content="Discuz! X2" />
+<meta name="author" content="Discuz! Team and Comsenz UI Team" />
+<meta name="copyright" content="2001-2011 Comsenz Inc." />
+<meta name="MSSmartTagsPreventParsing" content="True" />
+<meta http-equiv="MSThemeCompatible" content="Yes" />
+<link rel="stylesheet" type="text/css" href="data/cache/style_35_common.css?Cnm" />
+<link rel="stylesheet" type="text/css" href="data/cache/style_35_forum_viewthread.css?Cnm" />
+<link rel="stylesheet" href="http://att.bbs.duowan.com/static/embed/lol/global.css?Cnm" />
+    <script type="text/javascript">var IN_EMBED = 1, EMBED_CHANNEL='lol',STYLEID = '35', STATICURL = 'http://att.bbs.duowan.com/static/', IMGDIR = 'http://att.bbs.duowan.com/static/image/common', VERHASH = 'Cnm', charset = 'utf-8', discuz_uid = '0', cookiepre = 'bbs_4477_', cookiedomain = '.duowan.com', cookiepath = '/', showusercard = '1', attackevasive = '0', disallowfloat = 'newthread|viewvote|tradeorder|activity|debate|usergroups', creditnotice = '1|金钱|,2|威望|,4|多玩草|草,5|新人欢迎积分|,8|APP积分|', defaultstyle = '', REPORTURL = 'aHR0cDovL2Jicy5kdW93YW4uY29tL2ZvcnVtX2VtYmVkLnBocD9tb2Q9dmlld3RocmVhZCZ0aWQ9NDM1OTI0NDMmcGFnZT0xJmF1dGhvcmlkPTYwMzMxNzM2', SITEURL = 'http://bbs.duowan.com/', JSPATH = 'static/js/',HEROLIST = '60331736',fid='992',typeid='';</script>
+<script src="static/js/common.js?Cnm" type="text/javascript"></script>
+<!-- 嵌入sdk所需样式和Javascript文件  -->
+<script src="static/js/jquery.min.js" type="text/javascript"></script>
+<script type='text/javascript'>
+jQuery.noConflict(); 
+</script>
+<script src="static/js/forum.js?Cnm" type="text/javascript"></script>
+<script src="static/js/forum_viewthread.js?Cnm" type="text/javascript"></script>
+<script>
+    	var replyreload = '';
+    </script>
+
+<script src="http://res.udb.duowan.com/lgn/js/oauth/udbsdk/pcweb/udb.sdk.pcweb.popup.min.js?Cnm" type="text/javascript"></script>
+<script src="http://www.duowan.com/assets/js/dww2.js?Cnm" type="text/javascript"></script>
+<script src="http://assets.dwstatic.com/b=lego/2.0.0/js&f=lego.popupbox.js" type="text/javascript"></script>
+<script src="static/js/jquery.autocomplete.min.js?Cnm" type="text/javascript"></script>
+<script type="text/javascript">
+var embed_channel = "lol";
+</script>
+<!-- end -->
+</head>
+<body id="nv_forum" class="pg_viewthread" onkeydown="if(event.keyCode==27) return false;" scroll="no">
+<div id="append_parent"></div><div id="ajaxwaitid"></div><!-- 扫一扫{ -->
+<div id="saosao" class="saosao-ctn">
+<div class="hd">
+<a href="#" class="btn-close J_btnClose" title="关闭"></a>
+</div>
+<div class="bd">
+<span class="qrcode">
+</span>
+<div class="main saosao-cont">
+<h3>“扫一扫”与撸友大神实时交流签到发帖积分声望翻倍</h3>
+<a href="https://itunes.apple.com/cn/app/duo-wan-you-xi-lun-tan-di/id689933037?mt=8" class="apple"></a>
+<a href="http://att.bbs.duowan.com/mobile/android/duowanbbs_v157.apk" class="android"></a>
+</div>
+</div>
+</div>
+<!-- }扫一扫 -->
+
+<div class="posts_wapper">
+<div class="post_title_ctn">
+<span class="ui-button mrs fr">
+<a href="forum_embed.php?mod=viewthread&amp;tid=43592443&amp;page=1" class="see_owner" rel="nofollow">显示全部楼层</a>
+</span>
+<h2>第五赛季：辅助克制与选人指南</h2><span>(4回复)</span>
+</div>
+<div class="post_content_ctn">
+<div class="post_item">
+<div class="user_intro">
+<div class="normal_info"><img id='lolavatar' src="http://avatar.bbs.duowan.com/noavatar_small.jpg" alt=""><span id="zdl"></span></div>
+<div class="more_info">
+<div class="more_info_abc_a"><img id='lolavatar' src="http://avatar.bbs.duowan.com/noavatar_small.jpg" alt=""><span id="zdl"></span></div>
+<div class="more_info_abc_b" heroinfo="电信十:黎明在心跳瞬间">
+<p>昵称：黎明在心跳瞬间</p>
+<p>等级：<span id="level"></span></p>
+<p>服务器：<span id="server"></span></p>
+</div>
+<div class="more_info_abc_c"><a id='playerdetail' href="javascript:void(0);" title="">查看战绩</a><a class="sa_bd_none" title="发送短信" onclick="showWindow('sendpm', this.href);" href="home.php?mod=space&amp;do=pm&amp;action=send&amp;handlekey=showmsg_60331736&amp;uid=60331736&amp;pid=656946695&amp;tid=43592443">发送短信</a></div>
+</div>
+</div>
+<div class="post_content">
+<div class="post_info">
+<p class="post_info_left"><a href="#" class="autor">黎明在心跳瞬间</a></p>
+<span class="uid_60331736"></span>
+</div>
+<div class="post_content_text"><p>
+<strong><font size="5"><font color="#ff0000">文字版说明在12楼，可以点击“只看该作者”与作者交流</font></font></strong><br />
+<br />
+
+
+<a href="http://att.bbs.duowan.com/forum/201508/26/001627k5i20ez2wvgmei35.jpg"  target="_blank"><img id="aimg_34065330" src="http://att.bbs.duowan.com/forum/201508/26/001627k5i20ez2wvgmei35.jpg" alt="多玩镇楼图.jpg" title="多玩镇楼图.jpg" class="attachimg"/></a>
+
+<br />
+<br />
+
+
+<a href="http://att.bbs.duowan.com/forum/201508/26/001334x15n510n5gnl2rz1.jpg"  target="_blank"><img id="aimg_34065299" src="http://att.bbs.duowan.com/forum/201508/26/001334x15n510n5gnl2rz1.jpg" alt="A1.jpg" title="A1.jpg" class="attachimg"/></a>
+
+<br />
+<br />
+
+
+<a href="http://att.bbs.duowan.com/forum/201508/26/001352oz77nkznvbnoo08b.jpg"  target="_blank"><img id="aimg_34065304" src="http://att.bbs.duowan.com/forum/201508/26/001352oz77nkznvbnoo08b.jpg" alt="老鼠的牛头换露露A2修正版.jpg" title="老鼠的牛头换露露A2修正版.jpg" class="attachimg"/></a>
+
+<br />
+<br />
+
+
+<a href="http://att.bbs.duowan.com/forum/201508/26/0014231byp5mh0yyn2v0vd.jpg"  target="_blank"><img id="aimg_34065313" src="http://att.bbs.duowan.com/forum/201508/26/0014231byp5mh0yyn2v0vd.jpg" alt="A3.jpg" title="A3.jpg" class="attachimg"/></a>
+
+<br />
+<br />
+
+
+<a href="http://att.bbs.duowan.com/forum/201508/26/001444pb2wpkk0eek2spk7.jpg"  target="_blank"><img id="aimg_34065317" src="http://att.bbs.duowan.com/forum/201508/26/001444pb2wpkk0eek2spk7.jpg" alt="A4再次修正版.jpg" title="A4再次修正版.jpg" class="attachimg"/></a>
+
+<br />
+<br />
+
+
+<a href="http://att.bbs.duowan.com/forum/201508/26/001459lvpevmliu13l69qj.jpg"  target="_blank"><img id="aimg_34065320" src="http://att.bbs.duowan.com/forum/201508/26/001459lvpevmliu13l69qj.jpg" alt="A5.jpg" title="A5.jpg" class="attachimg"/></a>
+
+<br />
+<i class="pstatus"> 本帖最后由 安静的乌龟 于 2015-8-26 10:15 编辑 </i><br />
+	
+</p>
+</div><div class="post_info_link">
+<div class="post-date">
+楼主 <span title="2015-8-26 00:16:50">17&nbsp;小时前</span><p class="postfrom-intro"><i></i>手机APP发帖声望积分翻倍！</p>
+</div>
+<p class="post_info_right">
+<a class="a_rev" href="javascript:udblogin_embed_lol();">引用</a>
+<a class="a_reviews on">点评(14)</a>
+</p>
+</div>
+<div class="reply" id="comment_656946695">
+<div id="ins_comment_656946695"></div><div class="reply-post">
+<a href="#" class="reply-user flcomment">阿搜啦是否：</a>
+<div class="reply-cont">
+<p><font color="DarkSlateBlue">得玛西亚和小王子</font></p>
+</div>
+<span class="time"><span title="2015-8-26 18:03:43">8&nbsp;分钟前</span></span>
+</div>
+<div class="reply-post">
+<a href="#" class="reply-user flcomment">沐轩依晨Cc丶：</a>
+<div class="reply-cont">
+<p>呵呵。两个近战杀遍天下。闪现上去就是干。</p>
+</div>
+<span class="time"><span title="2015-8-26 16:13:11">1&nbsp;小时前</span></span>
+</div>
+<div class="reply-post">
+<a href="#" class="reply-user flcomment">女杀女什么的：</a>
+<div class="reply-cont">
+<p>楼下的那个盖伦和提莫。我给满分</p>
+</div>
+<span class="time"><span title="2015-8-26 15:25:16">2&nbsp;小时前</span></span>
+</div>
+<div class="reply-post">
+<a href="#" class="reply-user flcomment">我是1年级小学生：</a>
+<div class="reply-cont">
+<p>看不懂</p>
+</div>
+<span class="time"><span title="2015-8-26 15:05:15">3&nbsp;小时前</span></span>
+</div>
+<div class="reply-post">
+<a href="#" class="reply-user flcomment">小灬魅丶：</a>
+<div class="reply-cont">
+<p>锤石被日女克制？锤石会玩的都可以打断日女的E</p>
+</div>
+<span class="time"><span title="2015-8-26 13:53:12">4&nbsp;小时前</span></span>
+</div>
+<div class="reply-post">
+<a href="#" class="reply-user flcomment">大大大大神。。：</a>
+<div class="reply-cont">
+<p>盖伦配Timor呢？？？   打穿3路</p>
+</div>
+<span class="time"><span title="2015-8-26 12:45:40">5&nbsp;小时前</span></span>
+</div>
+<div class="hide-post">
+<div class="reply-post">
+<a href="#" class="reply-user flcomment">我怕so：</a>
+<div class="reply-cont">
+<p>什么都看不懂 我只知道 锤石和莫甘娜</p>
+</div>
+<span class="time"><span title="2015-8-26 12:10:36">6&nbsp;小时前</span></span>
+</div>
+<div class="reply-post">
+<a href="#" class="reply-user flcomment">电竞柯镇东：</a>
+<div class="reply-cont">
+<p>顶，好东西</p>
+</div>
+<span class="time"><span title="2015-8-26 11:13:31">6&nbsp;小时前</span></span>
+</div>
+<div class="reply-post">
+<a href="#" class="reply-user flcomment">我心有你穿越i：</a>
+<div class="reply-cont">
+<p>告诉我 ADC是煞笔你选个G M都要输</p>
+</div>
+<span class="time"><span title="2015-8-26 11:07:46">7&nbsp;小时前</span></span>
+</div>
+<div class="reply-post">
+<a href="#" class="reply-user flcomment">宁疯子002：</a>
+<div class="reply-cont">
+<p>这是什么玩意 从哪抄的</p>
+</div>
+<span class="time"><span title="2015-8-26 10:53:54">7&nbsp;小时前</span></span>
+</div>
+</div>
+<div class="replay-nav">
+<span class="ui-button mls"><a href="forum.php?mod=misc&amp;action=comment&amp;tid=43592443&amp;pid=656946695&amp;extra=&amp;page=1&amp;embed=1" onclick="showWindow('comment', this.href, 'get', 0)">点评</a></span>
+<div class="more-replay">
+还有7条点评，<a href="javascript:;" onclick="showHidePost(this)">点击查看</a>
+</div>
+<div class="nav-no">
+<a href="javascript:;" onclick="ajaxget('forum_embed.php?mod=misc&action=commentmore&tid=43592443&pid=656946695&page=2', 'comment_656946695')">下一页</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="post_item">
+<div class="user_intro">
+<div class="normal_info"><img id='lolavatar' src="http://avatar.bbs.duowan.com/noavatar_small.jpg" alt=""><span id="zdl"></span></div>
+<div class="more_info">
+<div class="more_info_abc_a"><img id='lolavatar' src="http://avatar.bbs.duowan.com/noavatar_small.jpg" alt=""><span id="zdl"></span></div>
+<div class="more_info_abc_b" heroinfo="电信十:黎明在心跳瞬间">
+<p>昵称：黎明在心跳瞬间</p>
+<p>等级：<span id="level"></span></p>
+<p>服务器：<span id="server"></span></p>
+</div>
+<div class="more_info_abc_c"><a id='playerdetail' href="javascript:void(0);" title="">查看战绩</a><a class="sa_bd_none" title="发送短信" onclick="showWindow('sendpm', this.href);" href="home.php?mod=space&amp;do=pm&amp;action=send&amp;handlekey=showmsg_60331736&amp;uid=60331736&amp;pid=656949015&amp;tid=43592443">发送短信</a></div>
+</div>
+</div>
+<div class="post_content">
+<div class="post_info">
+<p class="post_info_left"><a href="#" class="autor">黎明在心跳瞬间</a></p>
+<span class="uid_60331736"></span>
+</div>
+<div class="post_content_text"><p>
+文字说明版：<br />
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ <br />
+第五赛季：<br />
+辅助克制与选人指南<br />
+<br />
+制作： <br />
+黎明在心跳瞬间<br />
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ <br />
+如何阅读：<br />
+<br />
+▬这4个辅助跟VN 配合都比较好（VN + 娜美/奶妈/琴女/风女）<br />
+▬这4个辅助比较克制VN （琴女安妮风女璐璐 克制 VN）<br />
+<br />
+▬这6个辅助比较克制风女（奶妈娜美安妮琴女泰坦机器人 克制 风女）<br />
+（注意：第一排比第二排更加克制，<br />
+比如说一般奶妈比琴女更加克制风女）<br />
+<br />
+如何使用：<br />
+假设你打辅助位，并且你最后一个选人。<br />
+你的AD是VN，对面的下路是女警风女。<br />
+那么你在图上找到VN，女警，风女，<br />
+选择她们都有的一个辅助。<br />
+结论：选择奶妈配合VN 对抗女警风女。<br />
+(如右图所示)<br />
+<br />
+▬奶妈跟VN配合比较好<br />
+▬奶妈比较克制风女<br />
+▬奶妈比较克制女警<br />
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ <br />
+AD的协作与克制关系<br />
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ <br />
+AD的协作与克制关系<br />
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬<br />
+辅助的克制关系<br />
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬<br />
+特别感谢：<br />
+安魂，粗口，骑士，<br />
+小西，奶绿。<br />
+<br />
+说明：<br />
+下路2V2选人，只要选出来，对面2个都被你克，<br />
+而自己的组合又相性不错的，感觉好打就是对的。<br />
+对抗女警风女时候，自家AD又是VN，<br />
+最好的选择就是奶妈，<br />
+如果奶妈被BAN就选娜美或者琴女。<br />
+<br />
+其实图中所表达的是不完全的，<br />
+比如说大嘴婕拉，奥巴马风女，男枪机器人等也都是不错的组合，<br />
+不过考虑到一些一般一排就4个，<br />
+所以图中没有一些不错的组合。<br />
+<br />
+因为螃蟹跟奎因这2个路人局万年难得见一盘，<br />
+所以图中没有出现。<br />
+<br />
+提莫不是ADC，提莫不是ADC，提莫不是ADC。<br />
+（重要的事情说3次）<br />
+<br />
+蛤蟆巴德都有毒。<br />
+<br />
+一些冷门以及非主流的辅助其实搭配的好也有奇效，<br />
+比如说EZ大眼也是很强势的组合，<br />
+不过考虑到冷门的因素被省略。<br />
+<br />
+锤石娜美风女琴女等都是比较万金油的辅助，<br />
+可以搭配大多数AD，这也是被省略的因素。<br />
+（所以像男枪锤石等不错的组合也没有出现在图中）<br />
+<i class="pstatus"> 本帖最后由 黎明在心跳瞬间 于 2015-8-26 00:53 编辑 </i><br />
+</p>
+</div><div class="post_info_link">
+<div class="post-date">
+沙发 <span title="2015-8-26 00:46:01">17&nbsp;小时前</span><p class="postfrom-intro"><i></i>手机APP发帖声望积分翻倍！</p>
+</div>
+<p class="post_info_right">
+<a class="a_rev" href="javascript:udblogin_embed_lol();">引用</a>
+<a class="a_reviews" href="forum.php?mod=misc&amp;action=comment&amp;tid=43592443&amp;pid=656949015&amp;extra=&amp;page=1&amp;embed=1" onclick="showWindow('comment', this.href, 'get', 0)" >点评</a>
+</p>
+</div>
+<div class="reply" id="comment_656949015" style="display:none;">
+<div id="ins_comment_656949015"></div></div>
+</div>
+</div>
+<div class="post_item">
+<div class="user_intro">
+<div class="normal_info"><img id='lolavatar' src="http://avatar.bbs.duowan.com/noavatar_small.jpg" alt=""><span id="zdl"></span></div>
+<div class="more_info">
+<div class="more_info_abc_a"><img id='lolavatar' src="http://avatar.bbs.duowan.com/noavatar_small.jpg" alt=""><span id="zdl"></span></div>
+<div class="more_info_abc_b" heroinfo="电信十:黎明在心跳瞬间">
+<p>昵称：黎明在心跳瞬间</p>
+<p>等级：<span id="level"></span></p>
+<p>服务器：<span id="server"></span></p>
+</div>
+<div class="more_info_abc_c"><a id='playerdetail' href="javascript:void(0);" title="">查看战绩</a><a class="sa_bd_none" title="发送短信" onclick="showWindow('sendpm', this.href);" href="home.php?mod=space&amp;do=pm&amp;action=send&amp;handlekey=showmsg_60331736&amp;uid=60331736&amp;pid=656949029&amp;tid=43592443">发送短信</a></div>
+</div>
+</div>
+<div class="post_content">
+<div class="post_info">
+<p class="post_info_left"><a href="#" class="autor">黎明在心跳瞬间</a></p>
+<span class="uid_60331736"></span>
+</div>
+<div class="post_content_text"><p>
+有问题跟建议欢迎留言，<br />
+特别感谢朋友们的支持。<br />
+<i class="pstatus"> 本帖最后由 黎明在心跳瞬间 于 2015-8-26 00:48 编辑 </i><br />
+</p>
+</div><div class="post_info_link">
+<div class="post-date">
+板凳 <span title="2015-8-26 00:46:15">17&nbsp;小时前</span><p class="postfrom-intro"><i></i>手机APP发帖声望积分翻倍！</p>
+<span style="margin-left:10px;"><a href="http://lol.duowan.com/1504/292936138320.html" target="_blank" style="color:red;">点点击观看LOL短视频 够搞笑、超逗比</a></span></div>
+<p class="post_info_right">
+<a class="a_rev" href="javascript:udblogin_embed_lol();">引用</a>
+<a class="a_reviews" href="forum.php?mod=misc&amp;action=comment&amp;tid=43592443&amp;pid=656949029&amp;extra=&amp;page=1&amp;embed=1" onclick="showWindow('comment', this.href, 'get', 0)" >点评</a>
+</p>
+</div>
+<div class="reply" id="comment_656949029" style="display:none;">
+<div id="ins_comment_656949029"></div></div>
+</div>
+</div>
+<div class="post_item">
+<div class="user_intro">
+<div class="normal_info"><img id='lolavatar' src="http://avatar.bbs.duowan.com/noavatar_small.jpg" alt=""><span id="zdl"></span></div>
+<div class="more_info">
+<div class="more_info_abc_a"><img id='lolavatar' src="http://avatar.bbs.duowan.com/noavatar_small.jpg" alt=""><span id="zdl"></span></div>
+<div class="more_info_abc_b" heroinfo="电信十:黎明在心跳瞬间">
+<p>昵称：黎明在心跳瞬间</p>
+<p>等级：<span id="level"></span></p>
+<p>服务器：<span id="server"></span></p>
+</div>
+<div class="more_info_abc_c"><a id='playerdetail' href="javascript:void(0);" title="">查看战绩</a><a class="sa_bd_none" title="发送短信" onclick="showWindow('sendpm', this.href);" href="home.php?mod=space&amp;do=pm&amp;action=send&amp;handlekey=showmsg_60331736&amp;uid=60331736&amp;pid=656949244&amp;tid=43592443">发送短信</a></div>
+</div>
+</div>
+<div class="post_content">
+<div class="post_info">
+<p class="post_info_left"><a href="#" class="autor">黎明在心跳瞬间</a></p>
+<span class="uid_60331736"></span>
+</div>
+<div class="post_content_text"><p>
+文字说明版，在12楼。</p>
+</div><div class="post_info_link">
+<div class="post-date">
+地板 <span title="2015-8-26 00:49:14">17&nbsp;小时前</span><p class="postfrom-intro"><i></i>手机APP发帖声望积分翻倍！</p>
+</div>
+<p class="post_info_right">
+<a class="a_rev" href="javascript:udblogin_embed_lol();">引用</a>
+<a class="a_reviews" href="forum.php?mod=misc&amp;action=comment&amp;tid=43592443&amp;pid=656949244&amp;extra=&amp;page=1&amp;embed=1" onclick="showWindow('comment', this.href, 'get', 0)" >点评</a>
+</p>
+</div>
+<div class="reply" id="comment_656949244" style="display:none;">
+<div id="ins_comment_656949244"></div></div>
+</div>
+</div>
+<div class="post_item">
+<div class="user_intro">
+<div class="normal_info"><img id='lolavatar' src="http://avatar.bbs.duowan.com/noavatar_small.jpg" alt=""><span id="zdl"></span></div>
+<div class="more_info">
+<div class="more_info_abc_a"><img id='lolavatar' src="http://avatar.bbs.duowan.com/noavatar_small.jpg" alt=""><span id="zdl"></span></div>
+<div class="more_info_abc_b" heroinfo="电信十:黎明在心跳瞬间">
+<p>昵称：黎明在心跳瞬间</p>
+<p>等级：<span id="level"></span></p>
+<p>服务器：<span id="server"></span></p>
+</div>
+<div class="more_info_abc_c"><a id='playerdetail' href="javascript:void(0);" title="">查看战绩</a><a class="sa_bd_none" title="发送短信" onclick="showWindow('sendpm', this.href);" href="home.php?mod=space&amp;do=pm&amp;action=send&amp;handlekey=showmsg_60331736&amp;uid=60331736&amp;pid=657002947&amp;tid=43592443">发送短信</a></div>
+</div>
+</div>
+<div class="post_content">
+<div class="post_info">
+<p class="post_info_left"><a href="#" class="autor">黎明在心跳瞬间</a></p>
+<span class="uid_60331736"></span>
+</div>
+<div class="post_content_text"><p>
+<div class="quote"><blockquote><font size="2"><font color="#999999">潮音丶Sona 发表于 2015-8-26 12:26</font> <a href="http://bbs.duowan.com/forum.php?mod=redirect&amp;goto=findpost&amp;pid=656985904&amp;ptid=43592443" target="_blank"><img src='http://att.bbs.duowan.com/static/image/common/back.gif'/></a></font><br />
+你的图片，锤石的后面6个里，有个曙光克制锤石，可曙光的后面6个里又有锤石克制曙光，他们俩到底谁克谁呢？ ...</blockquote></div><br />
+相互克制的意思，因为要考虑实战，比如婕拉打琴女，婕拉的优势是poke射程更远 伤害也高 而且e到一套爆发打脆皮也疼，但是自己也是个脆皮被琴女qa也疼的而且琴女有w的回复护盾对耗也厉害，如果琴女能躲婕拉e,琴女会更有优势，而婕拉e先手到打一套就是婕拉更有优势</p>
+</div><div class="post_info_link">
+<div class="post-date">
+下水道 <span title="2015-8-26 15:12:43">2&nbsp;小时前</span> 来自 <a href="http://bbs.duowan.com/mobiapp/" target="_blank">Android客户端</a>
+<p class="postfrom-intro"><i></i>手机APP发帖声望积分翻倍！</p>
+<span style="margin-left:10px;"><a href="http://lol.duowan.com/1504/292936138320.html" target="_blank" style="color:red;">点点击观看LOL短视频 够搞笑、超逗比</a></span></div>
+<p class="post_info_right">
+<a class="a_rev" href="javascript:udblogin_embed_lol();">引用</a>
+<a class="a_reviews" href="forum.php?mod=misc&amp;action=comment&amp;tid=43592443&amp;pid=657002947&amp;extra=&amp;page=1&amp;embed=1" onclick="showWindow('comment', this.href, 'get', 0)" >点评</a>
+</p>
+</div>
+<div class="reply" id="comment_657002947" style="display:none;">
+<div id="ins_comment_657002947"></div></div>
+</div>
+</div>
+<div class="blank60"></div>
+</div>
+<div class="fast-review">
+<div style="background: none repeat scroll 0 0 #E5EDF2;height: 30px;padding: 3px;width: 705px;">
+<input type="text" name="message" id="fastpostmessage" placeholder="想说点什么？"><button name="replysubmit" id="fastpostsubmit" class="vm" value="replysubmit" onclick="udblogin_embed_lol();" type="submit" title="发表">发表</button>
+<a href="#" onclick="showWindow('newreply', 'forum_embed.php?mod=post&action=reply&fid=992&tid=43592443')" >高级模式</a>
+</div>
+</div>
+<div class="post_bottom_ctn">
+    	<div class="right rounded">
+    		<div class="control_bar">
+    			<span class="ui-button mls"><a href="thread-43592443-1-1.html?mode=default" title="查看原帖" target="_blank">查看原帖</a></span>
+    			<span class="ui-button mls"><a id="saosao-handler" href="javascript:void(0)" title="扫一扫"><i></i>扫一扫</a></span>
+    			<span style="padding-left:10px;"><a href="http://hd.king.duowan.com" target="_blank"><img src="http://img.dwstatic.com/www/1412/281731460709/1417776722461.jpg"/></a></span>
+    		</div>
+    	    <div class="mod-page">
+    	            	    </div>
+    	</div>
+</div>
+
+<div id="popupValidator" class="pop-box mod-bluePopupbox popupValidator" style="display:none;">
+<div class="box">
+<div class="box-hd">
+<h3 class="title">验证码</h3>
+<div class="act">
+<a href="#" class="btn-close J_btnClose" title="关闭"></a>
+</div>
+</div>
+<div class="box-bd">
+<div class="cont">
+<input name="sechash" type="hidden" value="SR4mznZ0" id="sechash_container" />
+
+<div class="form-line">
+<div class="normal-note">
+等级大于LV2不会出现验证码。
+</div>
+</div>
+</div>
+<div class="action right">
+<span class="ui-button J_btnConfirm"><a href="javascript:void(0)" onclick="submit_vfastform();">提交</a></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="data/cache/lolallheros.js?Cnm" type="text/javascript" type="text/javascript"></script>
+<script type="text/javascript">var herofid = new Array();herofid['河流之王']=8053;herofid['时间刺客']=8020;herofid['星界游神']=7869;herofid['虚空遁地兽']=7786;herofid['虚空之眼']=7253;herofid['弗雷尔卓德之心']=7439;herofid['迷失之牙']=7584;herofid['沙漠皇帝']=7632;herofid['复仇之矛']=7774;herofid['暴走萝莉']=6975;herofid['疾风剑豪']=7071;herofid['圣枪游侠']=6352;herofid['唤潮鲛姬']=5638;herofid['皮城执法官']=5669;herofid['魂锁典狱长']=5743;herofid['德玛西亚之翼']=5828;herofid['生化魔人']=6038;herofid['冰霜女巫']=6046;herofid['暗裔剑魔']=6196;herofid['影流之主']=5614;herofid['蜘蛛女皇']=5613;herofid['暗黑元首']=5612;herofid['皎月女神']=5611;herofid['傲之追猎者']=5610;herofid['未来守护者']=5609;herofid['荆棘之兴']=5608;herofid['虚空恐惧']=5519;herofid['麦林炮手']=5587;herofid['赏金猎人']=5555;herofid['琴瑟仙女']=5581;herofid['策士统领']=5583;herofid['永恒梦魇']=5562;herofid['复仇焰魂']=5516;herofid['水晶先锋']=5580;herofid['深海泰坦']=5560;herofid['诺克萨斯之手']=5521;herofid['狂暴之心']=5544;herofid['深渊巨口']=5545;herofid['诡术妖姬']=5546;herofid['盲僧']=5547;herofid['曙光女神']=5548;herofid['仙灵女巫']=5549;herofid['光辉女郎']=5550;herofid['熔岩巨兽']=5551;herofid['虚空先知']=5552;herofid['扭曲树精']=5553;herofid['无极剑圣']=5554;herofid['齐天大圣']=5556;herofid['金属大师']=5557;herofid['堕落天使']=5558;herofid['沙漠死神']=5559;herofid['狂野女猎手']=5561;herofid['雪人骑士']=5563;herofid['发条魔灵']=5564;herofid['狂战士']=5565;herofid['战争之王']=5566;herofid['钢铁大使']=5567;herofid['披甲龙龟']=5568;herofid['荒漠屠夫']=5569;herofid['放逐之刃']=5570;herofid['机械公敌']=5571;herofid['流浪法师']=5572;herofid['凛冬之怒']=5573;herofid['恶魔小丑']=5574;herofid['暮光之眼']=5575;herofid['龙血武姬']=5576;herofid['炼金术士']=5577;herofid['亡灵勇士']=5578;herofid['战争女神']=5579;herofid['众星之子']=5582;herofid['刀锋之影']=5584;herofid['宝石骑士']=5585;herofid['迅捷斥候']=5586;herofid['巨魔之王']=5588;herofid['蛮族之王']=5589;herofid['卡牌大师']=5590;herofid['瘟疫之源']=5591;herofid['兽灵行者']=5592;herofid['首领之傲']=5593;herofid['惩戒之箭']=5594;herofid['暗夜猎手']=5595;herofid['邪恶小法师']=5596;herofid['机械先驱']=5597;herofid['猩红收割者']=5598;herofid['嗜血猎手']=5599;herofid['德邦总管']=5600;herofid['远古巫灵']=5601;herofid['掘墓者']=5602;herofid['时光守护者']=5603;herofid['雷霆咆哮']=5604;herofid['潮汐海灵']=5605;herofid['九尾妖狐']=5606;herofid['爆破鬼才']=5607;herofid['虚空掠夺者']=5508;herofid['暗影之拳']=5509;herofid['牛头酋长']=5510;herofid['殇之木乃伊']=5511;herofid['冰晶凤凰']=5512;herofid['黑暗之女']=5513;herofid['寒冰射手']=5514;herofid['蒸汽机器人']=5515;herofid['皮城女警']=5517;herofid['魔蛇之拥']=5518;herofid['英勇投弹手']=5520;herofid['荣耀行刑官']=5522;herofid['祖安狂人']=5523;herofid['寡妇制造者']=5524;herofid['探险家']=5525;herofid['末日使者']=5526;herofid['无双剑姬']=5527;herofid['哨兵之殇']=5528;herofid['海洋之灾']=5529;herofid['德玛西亚之力']=5530;herofid['酒桶']=5531;herofid['法外狂徒']=5532;herofid['大发明家']=5533;herofid['战争之影']=5534;herofid['刀锋意志']=5535;herofid['风暴之怒']=5536;herofid['德玛西亚皇子']=5537;herofid['武器大师']=5538;herofid['天启者']=5539;herofid['死亡颂唱者']=5540;herofid['虚空行者']=5541;herofid['不祥之刃']=5542;herofid['审判天使']=5543;herofid['公告']=5639;var server = new Array();var area = new Array();var city = new Array();server['电信一']=['艾欧尼亚',2901, 1344];server['电信二']=['祖安',2902, 1344];server['电信三']=['诺克萨斯',2903, 1344];server['电信四']=['班德尔城',2904, 1344];server['电信五']=['皮尔特沃夫',2905, 1344];server['电信六']=['战争学院',2906, 1344];server['电信七']=['巨神峰',3459, 1344];server['电信八']=['雷瑟守备',3730, 1344];server['电信九']=['裁决之地',4083, 1344];server['电信十']=['黑色玫瑰',4320, 1344];server['电信十一']=['暗影岛',4462, 1344];server['电信十二']=['钢铁烈阳',4569, 1344];server['电信十三']=['均衡教派',5167, 1344];server['电信十四']=['水晶之痕',5313, 1344];server['电信十五']=['影流',5485, 1344];server['电信十六']=['守望之海',5707, 1344];server['电信十七']=['征服之海',5771, 1344];server['电信十八']=['卡拉曼达',6155, 1344];server['电信十九']=['皮城警备',6473, 1344];server['网通一']=['比尔吉沃特',5958, 2132];server['网通二']=['德玛西亚',5959, 2132];server['网通三']=['弗雷尔卓德',5960, 2132];server['网通四']=['无畏先锋',5961, 2132];server['网通五']=['恕瑞玛',5962, 2132];server['网通六']=['扭曲丛林',5963, 2132];server['网通七']=['巨龙之巢',7631, 2132];server['教育一']=['教育网专区',5964, 2132];area[0]=[2211,'江苏','s'];area[1]=[2208,'四川','s'];area[2]=[2199,'广东','s'];area[3]=[2266,'湖北','s'];area[4]=[2209,'浙江','s'];area[5]=[2207,'湖南','s'];area[6]=[2201,'重庆','s'];area[7]=[2256,'安徽','s'];area[8]=[2258,'福建','s'];area[9]=[2260,'广西','s'];area[10]=[2261,'贵州','s'];area[11]=[2200,'上海','s'];area[12]=[2268,'江西','s'];area[13]=[2277,'云南','s'];area[14]=[2262,'海南','s'];area[15]=[2275,'西藏','s'];area[16]=[2278,'港澳台','s'];area[17]=[2264,'河南','n'];area[18]=[2257,'北京','n'];area[19]=[2274,'天津','n'];area[20]=[2215,'陕西','n'];area[21]=[2210,'山东','n'];area[22]=[2269,'辽宁','n'];area[23]=[2263,'河北','n'];area[24]=[2265,'黑龙江','n'];area[25]=[2272,'山西','n'];area[26]=[2267,'吉林','n'];area[27]=[2259,'甘肃','n'];area[28]=[2271,'宁夏','n'];area[29]=[2273,'青海','n'];area[30]=[2276,'新疆','n'];area[31]=[2270,'内蒙古','n'];area[32]=[857,'内部搞基版','n'];city['广州']=6330;city['深圳']=6331;city['珠海']=6332;city['东莞']=6346;city['中山']=6347;city['汕头']=6333;city['佛山']=6334;city['韶关']=6335;city['湛江']=6336;city['肇庆']=6337;city['惠州']=6340;city['梅州']=6341;city['汕尾']=6342;city['河源']=6343;city['阳江']=6344;city['清远']=6345;city['潮州']=6348;city['揭阳']=6349;city['云浮']=6350;city['江门']=6338;city['茂名']=6339;city['公告']=6351;city['长沙']=6403;city['株洲']=6404;city['湘潭']=6405;city['衡阳']=6406;city['邵阳']=6407;city['岳阳']=6408;city['益阳']=6409;city['常德']=6410;city['娄底']=6411;city['郴州']=6412;city['永州']=6413;city['怀化']=6414;city['张家界']=6415;city['湘西州']=6416;city['成都']=6430;city['绵阳']=6431;city['自贡']=6432;city['泸州']=6433;city['德阳']=6434;city['广元']=6435;city['遂宁']=6436;city['内江']=6437;city['乐山']=6438;city['资阳']=6439;city['宜宾']=6440;city['南充']=6441;city['达州']=6442;city['雅安']=6443;city['广安']=6444;city['巴中']=6445;city['眉山']=6446;city['攀枝花']=6447;city['凉山']=6448;city['甘孜']=6449;city['阿坝藏族羌族自治州']=6450;city['杭州']=6504;city['宁波']=6505;city['温州']=6506;city['嘉兴']=6507;city['湖州']=6508;city['绍兴']=6509;city['金华']=6510;city['衢州']=6511;city['舟山']=6512;city['台州']=6513;city['丽水']=6514;city['济南']=6487;city['青岛']=6488;city['淄博']=6489;city['枣庄']=6490;city['东营']=6491;city['烟台']=6492;city['潍坊']=6493;city['济宁']=6494;city['泰安']=6495;city['威海']=6496;city['日照']=6497;city['滨州']=6498;city['德州']=6499;city['聊城']=6500;city['临沂']=6501;city['菏泽']=6502;city['莱芜']=6503;city['南京']=6417;city['无锡']=6418;city['徐州']=6419;city['常州']=6420;city['苏州']=6421;city['南通']=6422;city['淮安']=6423;city['盐城']=6424;city['扬州']=6425;city['镇江']=6426;city['泰州']=6427;city['宿迁']=6428;city['连云港']=6429;city['西安']=6477;city['宝鸡']=6478;city['咸阳']=6479;city['渭南']=6480;city['铜川']=6481;city['延安']=6482;city['榆林']=6483;city['汉中']=6484;city['安康']=6485;city['商洛']=6486;city['合肥']=6518;city['芜湖']=6519;city['蚌埠']=6520;city['淮南']=6521;city['淮北']=6522;city['铜陵']=6523;city['安庆']=6524;city['黄山']=6525;city['阜阳']=6526;city['宿州']=6527;city['滁州']=6528;city['六安']=6529;city['宣城']=6530;city['池州']=6531;city['亳州']=6532;city['马鞍山']=6533;city['福州']=6534;city['厦门']=6535;city['泉州']=6536;city['莆田']=6537;city['三明']=6538;city['漳州']=6539;city['南平']=6540;city['龙岩']=6541;city['宁德']=6542;city['兰州']=6553;city['金昌']=6554;city['白银']=6555;city['天水']=6556;city['武威']=6557;city['张掖']=6558;city['酒泉']=6559;city['平凉']=6560;city['庆阳']=6561;city['定西']=6562;city['陇南']=6563;city['临夏']=6564;city['南宁']=6565;city['柳州']=6566;city['桂林']=6567;city['梧州']=6568;city['北海']=6569;city['钦州']=6570;city['贵港']=6571;city['玉林']=6572;city['百色']=6573;city['河池']=6574;city['贺州']=6575;city['来宾']=6576;city['崇左']=6577;city['防城港']=6578;city['贵阳']=6579;city['遵义']=6580;city['铜仁']=6581;city['安顺']=6582;city['毕节']=6583;city['黔南']=6584;city['黔西南']=6585;city['黔东南']=6586;city['六盘水']=6587;city['海口']=6588;city['三亚']=6589;city['三沙']=6590;city['琼海']=6591;city['儋州']=6592;city['文昌']=6593;city['东方']=6594;city['万宁']=6595;city['定安']=6596;city['屯昌']=6597;city['澄迈']=6598;city['临高']=6599;city['陵水']=6600;city['琼中']=6601;city['保亭']=6602;city['乐东']=6603;city['昌江']=6604;city['白沙']=6605;city['洋浦']=6606;city['五指山']=6607;city['石家庄']=6608;city['保定']=6609;city['邯郸']=6610;city['秦皇岛']=6611;city['张家口']=6612;city['唐山']=6613;city['承德']=6614;city['廊坊']=6615;city['沧州']=6616;city['衡水']=6617;city['邢台']=6618;city['郑州']=6619;city['开封']=6620;city['平顶山']=6621;city['洛阳']=6622;city['商丘']=6623;city['安阳']=6624;city['新乡']=6625;city['许昌']=6626;city['鹤壁']=6627;city['焦作']=6628;city['濮阳']=6629;city['漯河']=6630;city['三门峡']=6631;city['周口']=6632;city['驻马店']=6633;city['南阳']=6634;city['信阳']=6635;city['济源']=6636;city['哈尔滨']=6637;city['齐齐哈尔']=6638;city['牡丹江']=6639;city['佳木斯']=6640;city['大庆']=6641;city['鸡西']=6642;city['双鸭山']=6643;city['伊春']=6644;city['七台河']=6645;city['鹤岗']=6646;city['黑河']=6647;city['绥化']=6648;city['大兴安岭']=6649;city['武汉']=6650;city['黄石']=6651;city['十堰']=6652;city['荆州']=6653;city['宜昌']=6654;city['襄阳']=6655;city['鄂州']=6656;city['荆门']=6657;city['孝感']=6658;city['黄冈']=6659;city['咸宁']=6660;city['随州']=6661;city['恩施']=6662;city['仙桃']=6663;city['天门']=6664;city['潜江']=6665;city['神农架']=6666;city['长春']=6669;city['吉林']=6670;city['四平']=6671;city['辽源']=6672;city['通化']=6673;city['白山']=6674;city['松原']=6675;city['白城']=6676;city['延边']=6677;city['南昌']=6678;city['上饶']=6679;city['九江']=6680;city['萍乡']=6681;city['新余']=6682;city['鹰潭']=6683;city['赣州']=6684;city['宜春']=6685;city['吉安']=6686;city['抚州']=6687;city['景德镇']=6688;city['沈阳']=6689;city['大连']=6690;city['鞍山']=6691;city['抚顺']=6692;city['本溪']=6693;city['丹东']=6694;city['锦州']=6695;city['营口']=6696;city['阜新']=6697;city['辽阳']=6698;city['盘锦']=6699;city['铁岭']=6700;city['朝阳']=6701;city['葫芦岛']=6702;city['呼和浩特']=6703;city['包头']=6704;city['乌海']=6705;city['赤峰']=6706;city['通辽']=6707;city['鄂尔多斯']=6708;city['呼伦贝尔']=6709;city['巴彦淖尔']=6710;city['乌兰察布']=6711;city['兴安盟']=6712;city['锡林郭勒盟']=6713;city['阿拉善盟']=6714;city['银川']=6715;city['石嘴山']=6716;city['吴忠']=6717;city['固原']=6718;city['中卫']=6719;city['太原']=6728;city['大同']=6729;city['阳泉']=6730;city['长治']=6731;city['晋城']=6732;city['朔州']=6733;city['晋中']=6734;city['运城']=6735;city['忻州']=6736;city['临汾']=6737;city['吕梁']=6738;city['西宁']=6720;city['海东']=6721;city['海北']=6722;city['海南']=6723;city['海西']=6724;city['黄南']=6725;city['果洛']=6726;city['玉树']=6727;city['昆明']=6739;city['曲靖']=6740;city['玉溪']=6741;city['保山']=6742;city['昭通']=6743;city['丽江']=6744;city['普洱']=6745;city['临沧']=6746;city['德宏']=6747;city['怒江']=6748;city['迪庆']=6749;city['大理']=6750;city['楚雄']=6751;city['红河']=6752;city['文山']=6753;city['西双版纳']=6754;city['香港']=6755;city['澳门']=6756;city['台湾']=6757;;;;
+</script>
+<script src="http://att.bbs.duowan.com/static/embed/lol/lolbbs.js?Cnm" type="text/javascript" type="text/javascript"></script>
+<script src="http://assets.dwstatic.com/b=lego/2.0.0/js&f=lego.popupbox.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+function showHidePost(elem){
+var d_elem = jQuery(elem),
+d_hidePost = d_elem.parent().parent().prev(),
+d_navNo = d_elem.parent().siblings(".nav-no");
+
+d_hidePost.slideDown();
+
+//显示分页
+if(d_navNo.length!=0){
+d_navNo.show();
+}
+d_elem.parent().hide();
+return false;
+}
+function checkpost(uid) {
+if(!uid) {
+udblogin();
+return false;
+} else {
+var msg = jQuery('#fastpostmessage').val();
+if(msg.length < 10) {
+alert("发帖内容不能少于10个字符");
+return false;
+}
+return true;
+}
+
+}
+jQuery(document).ready(function() {
+jQuery.each(jQuery('img'), function(i, n) {
+var imgid = jQuery(this).attr('id');
+if(imgid) {
+if(imgid.indexOf('lolitem_') != -1) {
+var tmp = imgid.split('_');
+var itemid = tmp[1];
+showItemTips("#"+imgid,itemid,'left');
+}else if(imgid.indexOf('lolspell_') != -1) {
+var tmp = imgid.split('_');
+showAbilityTips("#"+imgid, tmp[1], tmp[2], 'left');
+}
+}
+});
+jQuery('.post_content_ctn>.post_item').last().css({'min-height':'120px'}).addClass('ie6-height-120');
+jQuery("div.post_content_ctn").delegate('div.user_intro', 'mouseover', function(event) {
+jQuery(this).parent().css("z-index","100");
+jQuery(this).addClass('hover');
+});
+jQuery("div.post_content_ctn").delegate('div.user_intro', 'mouseout', function(event) {
+jQuery(this).removeClass('hover');
+jQuery(this).parent().css("z-index","1");
+});
+initthread(); // hide dislaying zhandouli temporalily
+
+jQuery('.posts_wapper').bind('copy', function(e){
+alert('非常抱歉，LOL盒子论坛已禁止了复制功能。');
+e.preventDefault();
+});
+jQuery('.post_title_ctn').bind('dragstart', function(e) { e.preventDefault(); });
+jQuery('.post_content').bind('dragstart', function(e) { e.preventDefault(); });
+});
+
+//创建一个叫alice的弹窗
+var alice = LEGO.popupBox("#popupValidator",{
+ok : function(dt){//确认后回调函数
+alice.close();
+},
+existMask : false ,// 遮罩层，扩展参数existMask,默认为true
+cancle : function(dt){
+
+}
+},{});
+
+jQuery(".post-date a").hover(function() {
+jQuery(this).parent().find(".postfrom-intro").fadeIn();
+}, function() {
+jQuery(this).parent().find(".postfrom-intro").fadeOut();
+/* Stuff to do when the mouse leaves the element */
+});
+
+jQuery(".levelicon-ctn").hover(function() {
+jQuery(this).find('.levelintro').fadeIn();
+}, function() {
+jQuery(this).find('.levelintro').fadeOut();
+});
+
+//创建一个叫alice的弹窗
+var grace = LEGO.popupBox("#saosao",{
+ok : function(dt){//确认后回调函数
+grace.close();
+},
+existMask : true ,// 遮罩层，扩展参数existMask,默认为true
+cancle : function(dt){
+
+}
+},{});
+jQuery("#saosao-handler").on('click', '', function(event) {
+var ctn = jQuery("#saosao");
+ if( ctn.is(":hidden"))
+{
+grace.open();
+}
+else{
+grace.close();
+}
+event.preventDefault();
+/* Act on the event */
+});
+
+function showcomment(obj, pid) {
+var comment_detail = jQuery("#comment_"+pid);
+if(comment_detail.is(":hidden")) {
+jQuery(obj).addClass("on");
+comment_detail.show();
+}else {
+jQuery(obj).removeClass("on");
+comment_detail.hide();
+}
+}
+
+//打开窗口方法
+function trigger_openseccode()
+{
+document.getElementById('popupValidator').style.display = '';
+alice.open();
+}
+
+function submit_vfastform()
+{
+if (checkpost(0)) {
+var theform = document.getElementById('fastreplyform');
+var chk = 1, chkv = '';
+var str_sechash = document.getElementById('sechash_container').value;
+chkv = document.getElementById('checkseccodeverify_' + str_sechash).innerHTML;
+if(chkv.indexOf('loading') !== -1) {
+setTimeout(function () { submit_vfastform(); }, 100);
+chk = 0;
+} else if(chkv.indexOf('check_right') === -1) {
+showError('验证码错误，请重新填写');
+chk = 0;
+} else {
+document.getElementById('sechash_input').value = str_sechash;
+document.getElementById('seccodeverify_input').value = document.getElementById('seccodeverify_' + str_sechash).value;
+}
+if (chk) {
+theform.submit();
+}
+}
+}
+</script>
+<script type="text/javascript">
+    var uids = [60331736];
+    var fid = 992 ? 992 : '';
+</script>
+<script src="http://att.bbs.duowan.com/static/prestige/viewthread_pinfo.js?Cnm" type="text/javascript"></script>
+<script type="text/javascript">
+    jQuery(function(){
+        load_users_pinfo_embed();
+    });
+</script><script type="text/javascript">
+try { sct_eximg_xformat(); } catch(e) {};
+</script>
+<script src="http://www.duowan.com/duowan.js?Cnm" type="text/javascript" type="text/javascript"></script>
+</body>
+</html>

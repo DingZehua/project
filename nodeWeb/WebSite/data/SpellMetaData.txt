@@ -1,0 +1,4 @@
+NotSingleTargetSpell | Any spell that doesn't have a single target cursor should have this true.
+DoesntBreakShields | If set to true, the spell's execution won't break shields.  Useful for spells like Absolute Zero.
+DoesntTriggerSpellCasts | This should be false for all spells besides toggle spells.
+CastingBreaksStealth | Used to override whether or not 'triggers spell casts' should break stealth when cast.

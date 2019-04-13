@@ -755,8 +755,6 @@ collections.base = (function(){
     return obj instanceof constructor;
   }
 
-  hideAttr(Function.prototype);
-
   //抽象方法
   var AbstractMethod = function(){ throw new Error("This is abstract method"); };
 
@@ -772,9 +770,12 @@ collections.base = (function(){
       }
       while(exception.list.length) {
         let except = exception.list.shift();
+        /*
         setTimeout(function(){
           throw except;
         },0);
+        */
+       log(except);
       }
       exceptionOut = null;
     }
@@ -866,7 +867,7 @@ collections.base = (function(){
           if(param.status !== PENDING) {
             this.status = param.status;
             this.value = param.value;
-            this.onAll(param.value);
+            this.onAll();
           }
           else {
             this.status = PENDING;
@@ -1190,6 +1191,33 @@ collections.base = (function(){
       }
     }
 
+
+    let thunkify = function(fn) {
+      return function() {
+        let args = [];
+        for(let i = 0; i < arguments.length; i++) {
+          args.push(arguments[i]);
+        }
+        let cxt = this;
+        return function(callback) {
+          let called;
+          args.push(function() {
+            if(called) return;
+            called = true;
+            callback.apply(null,arguments);  
+          });
+          try {
+            fn.apply(cxt,args);
+          } catch (e) {
+            callback(e);
+          }
+        }
+      }
+    };
+
+  hideAttr(Function.prototype);
+  hideAttr(Object.prototype);
+
   base.enumerable = enumerable;
   base.enumerableTree = enumerableTree;
   base.Range = Range;
@@ -1233,6 +1261,7 @@ collections.base = (function(){
   base.method.heapSort = heapSort;
   base.method.log = log;
   base.method.co = co;
+  base.method.thunkify = thunkify = thunkify;
 
   base.CONST = {};
   base.CONST.ERR_ = ERR_;

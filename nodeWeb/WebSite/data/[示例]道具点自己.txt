@@ -1,0 +1,133 @@
+--[[
+简介：
+    此脚本作用是用按键替代操作“按下道具或技能后点击英雄头像”，例如
+用W代替操作给英雄喝药水，给英雄自己放虚无技能等等。新加入了支持鼠标操作。
+
+使用说明：
+    提供了4个可以修改的快捷键，默认为W、E、R、无，还有2个可以修改的鼠标键，
+默认为鼠标上滚。还提供了4个按键替代键，2个鼠标替代键。作用类似于改键，默认为
+小键盘7、小键盘8、无、无，鼠标代替操作为num1和无。这些键都可以自行修改，修改
+位置见脚本正文。
+    例如默认设置的作用是：按下W时，给英雄使用小键盘7处的道具；按下E时，
+给英雄使用小键盘8处的道具；按下R时，给英雄使用技能R。鼠标上滚时，给英雄使用
+小键盘1处的道具。
+
+备注：
+①此脚本偶尔会出现鼠标位置错误，需要加上锁鼠函数。
+②欢迎提出宝贵建议，qq:167849866； bbs.myebe.com
+
+                                      作者：╃Ｇ°
+                                                    ]]
+
+--脚本正文：
+
+if getwshscriptversion() < 2 then
+    msgbox('请使用助手2.4版本以上')
+end
+
+--【用户修改处】
+--下面四个为具有“道具点自己”功能的键，不需要使用改为0，如第四个
+useselfkey1=87    --让W(键码87)具有此功能，可自行修改
+useselfkey2=69    --让E(键码69)具有此功能，可自行修改，可改为0不使用
+useselfkey3=82    --让R(键码82)具有此功能，可自行修改，可改为0不使用
+useselfkey4=0     --不使用
+
+useselfmouse1=21  --21代表鼠标上滚
+useselfmouse2=0   --0表示不使用
+
+--下面四个对应于上面四个键进行改键，如把103替代87，即当按下W(87)时
+--相当于按下小键盘7(103)。不需要使用改为useselfkey?，如第三个第四个
+useselfkey1c=103               --替换为小键盘7（103）
+useselfkey2c=104               --替换为小键盘8（104）
+useselfkey3c=useselfkey3       --不替换按键，即依然为上面的R
+useselfkey4c=useselfkey4       --不替换按键，即不使用
+
+useselfmouse1c=97              --97代表替换num1
+useselfmouse2c=useselfmouse2   --表示不替换按键
+--【用户修改处结束】
+
+useselfkey=0
+useselfkeyc=0
+useselfmouse=0
+useselfmousec=0
+
+setkeywatch('keyhookfunc')
+setmousewatch('mousehookfunc')
+
+function keyhookfunc(keycode, controlkey, downorup)
+    if 0==iswar3front() then return 0 end
+    if 1==ischat() then return 0 end
+    if downorup==1 then return 0 end
+    if keycode==useselfkey1 then
+        useselfkey=1
+        useselfkeyc=useselfkey1c
+    elseif keycode==useselfkey2 then
+        useselfkey=1
+        useselfkeyc=useselfkey2c
+    elseif keycode==useselfkey3 then
+        useselfkey=1
+        useselfkeyc=useselfkey3c
+    elseif keycode==useselfkey4 then
+        useselfkey=1
+        useselfkeyc=useselfkey4c
+    else
+        useselfkey=0
+    end
+    if useselfkey==1 and downorup==0 then
+        currentx,currenty = getcursorpos()
+        sleep(10)
+        war3w = getwar3window()
+        war3wl,war3wr,war3wt,war3wb = getwindowrect(war3w)
+        herox=war3wl+(war3wr-war3wl)*0.3125
+        heroy=war3wt+(war3wb-war3wt)*0.9
+        keydown(useselfkeyc)
+        sleep(10)
+        keyup(useselfkeyc)
+        sleep(10)
+        setcursorpos(herox, heroy)
+        sleep(10)
+        mousedown(0)
+        sleep(10)        
+        mouseup(0)
+        sleep(10)
+        setcursorpos(currentx, currenty)
+    return 1
+    end
+end
+
+
+function mousehookfunc(mousemsg)
+
+    if 0==iswar3front() then return 0 end
+    if 1==ischat() then return 0 end
+
+    if mousemsg==useselfmouse1 then
+        useselfmouse=1
+        useselfmousec=useselfmouse1c
+    elseif keycode==useselfmouse2 then
+        useselfmouse=1
+        useselfmousec=useselfmouse2c
+    else
+        useselfmouse=0
+    end
+    if useselfmouse==1 then
+        currentx,currenty = getcursorpos()
+        sleep(10)
+        war3w = getwar3window()
+        war3wl,war3wr,war3wt,war3wb = getwindowrect(war3w)
+        herox=war3wl+(war3wr-war3wl)*0.3125
+        heroy=war3wt+(war3wb-war3wt)*0.9
+        keydown(useselfmousec)
+        sleep(10)
+        keyup(useselfmousec)
+        sleep(10)
+        setcursorpos(herox, heroy)
+        sleep(10)
+        mousedown(0)
+        sleep(10)        
+        mouseup(0)
+        sleep(10)
+        setcursorpos(currentx, currenty)
+    return 1
+    end
+end

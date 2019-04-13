@@ -1,0 +1,49 @@
+--[[
+简介：一直开着本脚本就行了，它会自动抢麦的。YY频道窗口也不必在最前面哦 :)
+
+注意：抢麦速度受你的网速和电脑反应速度影响。并且大家都用抢麦的话，有失败的几率。
+
+
+                        作者：南南        测试：雪舞雨漩
+
+                                       			]]
+
+--【用户修改处】
+-- 是否开启急速模式。【0-否 1-是】急速模式会对CPU占用极高。
+-- 一般情况下不需要开启急速模式。单核CPU不推荐开启急速模式。
+JiSuMoShi = 0
+--【用户修改处结束】
+
+
+--脚本正文
+
+if getwshscriptversion() < 11 then
+    msgbox('请使用更高版本的助手')
+end
+
+
+while 1==1 do
+    if JiSuMoShi ~= 1 then
+        sleep(1)
+    end
+    hwnd = findwindow('YYChannelWindow', nil)
+    while hwnd ~= 0 do
+        hwnd2 = nil
+        hwnd2 = findwindowex(hwnd, hwnd2, nil, '')
+        while hwnd2 ~= 0 do
+            hwnd3 = nil
+            hwnd3 = findwindowex(hwnd2, hwnd3, nil, "抢麦")
+            while hwnd3 ~= 0 do
+                if 1==iswindowvisible(hwnd3) then
+                        if 1==iswindowenabled(hwnd3) then
+                            postmessage(hwnd3, 0x201, 1, 0)
+                            postmessage(hwnd3, 0x202, 0, 0)
+                        end
+                end
+                hwnd3 = findwindowex(hwnd2, hwnd3, nil, "抢麦")
+            end
+            hwnd2 = findwindowex(hwnd, hwnd2, nil, '')
+        end
+        hwnd = findwindowex(nil, hwnd, 'YYChannelWindow', nil)
+    end
+end

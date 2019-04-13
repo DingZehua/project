@@ -1,0 +1,19 @@
+nIndex = 0
+nRID = 0
+id=0
+rid=0
+id2=0
+rid2=0
+
+
+while 1==1 do
+
+nIndex, nRID = d3dsetpicture(nIndex, nRID, 'c:\\2.png', 4000, 10, 10, 1, 1, 0xFFFFFFFF, 2000, 2000)
+id, rid = d3dsettext(id, rid, nRID, 10000, 20, 80, "ºÚÌå", 0xff00ff, 255, 12, 24, 500, 0, 0, 0, 2000, 2000);
+sleep(4000);
+
+nIndex, nRID = d3dsetpicture(nIndex, nRID, 'c:\\1.jpg', 4000, 10, 10, 0.8, 0.5, 0xFFFFFFFF, 2000, 2000)
+id2, rid2 = d3dsettext(id2, rid2, nIndex, 10000, 20, 120, "ºÚÌå", 0xff00ff, 255, 12, 24, 500, 0, 0, 0, 2000, 2000);
+sleep(4000);
+
+end

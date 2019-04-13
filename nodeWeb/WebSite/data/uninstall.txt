@@ -1,0 +1,21 @@
+如果你是要升级PhotoCap，比如说4.01版要升级为4.2版，你并不需要解除4.01的安装
+请直接安装4.2版即可。
+
+由于PhotoCap并非真正的安装型程式，没有注册到Windows安装/移除的系统上
+因此若你要移除PhotoCap，必须手动删除。
+
+1. 桌面的捷径
+请直接移除它即可。鼠标移到该捷径上方，按下右键然后选择〔删除〕即可。
+
+2. 程式集里的PhotoCap捷径
+同样也请直接移除它即可。方式跟桌面的捷径一样。
+
+3. 机码(Registry)
+PhotoCap在执行的时会，会利用Registry来纪录一些资讯，你需在RegEdit里删除它
+Registry的路径如下：
+HKEY_CURRENT_USER\Software\Johnson\PhotoCap4
+请点选windows的〔开始〕〔执行〕，然后输入Regedit即可叫出Registry的编辑程式。
+
+4. 主程式与其它档案
+同样也直接删除即可。路径就在你第一次安装photocap时的路径，若你没有变更
+则预设值会在C:\Program Files\PhotoCap4

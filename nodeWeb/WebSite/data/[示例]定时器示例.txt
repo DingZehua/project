@@ -1,0 +1,6 @@
+--设置定时器，2秒执行一次func
+settimer(2000, 'func')
+
+function func()
+    msgbox('欢迎使用魔兽超级助手!') --弹出对话框
+end

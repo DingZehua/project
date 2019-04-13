@@ -1,28 +1,20 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE html>
+<html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>欢迎页面</title>
-        <!--[if IE 6]>
-            <script src="js/DD_belatedPNG_0.0.8a-min.js"></script>
-            <script>
-            DD_belatedPNG.fix('.fix');
-            </script>
-        <![endif]-->
-        <link type="text/css" rel="stylesheet" href="css/index.css" charset="utf-8" />
     </head>
     <body>
-        <div class="welcome">
-            <div id="page-2" class="page page-2">
-                <div class="btn instant">
-                    <a href="javascript:close(this);" id="navToNextPage"><img class="fix" src="images/final.png" /></a>
-                </div>
-                <div class="btn close">
-                    <a href="javascript:close(this);"><img class="fix" src="images/close.png" /></a>
-                </div>
-            </div>
-        </div>
-        <script type="text/javascript" src="js/index.js">
+        <script src='js/myjs1.4.js'></script>
+        <link href="2.css" rel="stylesheet" type="text/css" />
+        <img src='/images/img02.jpg'/>
+        <% for(let user of users) {%>
+            <li>
+                <span>用户名</span>:<span><%= user.user_name%></span>
+                <span>email</span>:<span><%= user.email%></span>
+            </li>
+        <%}%> 
+        <script>
         </script>
-    </body>
+    </body> 
 </html>

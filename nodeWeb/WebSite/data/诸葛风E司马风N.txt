@@ -1,0 +1,145 @@
+--[[
+简介：
+    1. 适用于真三国无双诸葛风E司马风N，默认需要按Z键手动点击目标后吹起自动EN。
+此脚本默认用户修改数值为单机测试虾的结果，请结合自己具体网络情况针对英雄测试适合自己的
+程序延迟时间(WaitTime)，才能真正完成完美E完美N。
+    2. 当按默认操作键Z键将要对目标使用风时，针对实际情况可鼠标右键取消操作，当按默认
+操作键Z键已经对目标使用风后请你【不要移动鼠标自行进行其他操作】（否则将可能EN失败），
+时刻看准E和N完成时自行进行下一步操作，比如诸葛准备X、A、G，司马准备A、E、F。也可以自己直
+接把诸葛X、G，司马E、F再加到后面，但是实际对战的时候像诸葛E完之后X技能还没好，或者E完之
+后不需要或者不适合X了，所以不建议再增加下一步脚本操作，之后的操作还是自行根据实际情况完成。
+    3. 使用默认操作键时请确认还有风可用，否则可能会有一次无效的EN。吹起目标时请请确保周
+围无敌方单位效果最佳。这里提醒如诸葛经过多次测试与目标的距离不一样、网络状况不一样所需
+的最佳WaitTime也不同，如何掌握这个距离与测试出最佳WaitTime，将是该脚本实际效果的关键。
+
+注意：该脚本默认设置下不可用于实战，需要仔细看简介进行修改。
+      该脚本不建议在多人游戏模式下使用！多人模式游戏多变的情况脚本不能处理！自己把握好！
+
+更新：
+[2010年6月25日晚]
+    1. 改进了程序工作模式，优化了模拟操作代码，现在只要你处理好延时时间，按说明进行风E风N操作
+时将不会出现特大错误情况！当然失误与否的问题在于自己把握！
+    2. 更改了风暴杖使用方式，不需要指定物品位置！
+[2009年8月20日晚]
+改进了风吹后延时等待的模式，使用定时器以避免鼠标迟钝的情况
+[2009 年8月22日早]
+改进了程序脚本延时等待模式，修正了吹起敌方单位时附近有其他敌方单位乱跑的问题，风吹后即H在
+原地等待EN完成。修改默认操作键为Z键更易于操作和控制。
+[2009年8月28日]
+增加了游戏内较色操作首次提示，支持1.2+版本助手。
+[2010年4月12日]
+更新了文字描述。
+[2010年5月10日]
+更新对应新版本助手的功能函数。
+                                       作者：星夜心雨    测试：雪舞雨漩
+                                                              ]]
+--脚本正文：
+--【用户修改处】
+unitClickKey=90        --默认操作键Z键，根据自己的情况可改变
+freezeWaitTime=4800    --诸葛风吹后等待时间，根据自己的游戏实际网络状况改变
+starWaitTime=3100      --司马风吹后等待时间，根据自己的游戏实际网络状况改变
+--【用户修改处结束】
+hero1='800H'             --800H为14E诸葛ID
+hero2='A00U'             --A00U为14E司马ID
+promptState1=0           --提示信息状态参数
+promptState2=0           --提示信息状态参数
+message1='你选中了英雄诸葛，出风后可以按下Z键吹人自动风E'
+message2='你选中了英雄司马，出风后可以按下Z键吹人自动风N'
+idm=0
+ridm=0
+idp=0
+ridp=0
+nSetting=0
+
+setglobalint('EN_nSetting', nSetting)
+setglobalint('EN_freezeWaitTime', freezeWaitTime)
+setglobalint('EN_starWaitTime', starWaitTime)
+setkeywatch('keyhookfunc')
+setmousewatch('mousehookfunc')
+
+if getwshscriptversion() < 8 then
+    msgbox('请使用更高版本的助手')
+end
+
+function hasRes(hHD, sRes)
+    hasPurif_=false
+    for i=0,5,1 do
+        gHD,gID,gNUM= getunititem(hHD,i)
+        if gID==sRes and gNUM>0 then
+            hasPurif_ = true
+        end
+    end
+    return hasPurif_
+end
+
+function keyhookfunc(keycode, controlkeycode, downorup)
+    if 0==iswar3front() then return 0 end
+    if 1==ischat() then return 0 end
+    strCurrSelUID,hCurrSelHD = getcurrentunit()
+    war3w = getwar3window()
+    win3wl,win3wr,win3wt,win3wb = getclientrect(war3w)
+    x=(win3wr-win3wl)*0.0018
+    y=(win3wb-win3wt)*0.66
+    if strCurrSelUID==hero1 and promptState1==0 then
+        idp,ridp=d3dsettext(idp,ridp,'【助手】', 20000, x,y, "宋体", 0x0000ff, 255, 8, 16, 500, 0, 0, 0,1000, 2000)
+        idm,ridm=d3dsettext(idm,ridm,message1, 20000, 16*4+x,y, "宋体", 0xffffff, 255, 8, 16, 500, 0, 0, 0,1000, 2000)
+        promptState1=1
+    end
+    if strCurrSelUID==hero2 and promptState2==0 then 
+        idp,ridp=d3dsettext(idp,ridp,'【助手】', 20000, x,y, "宋体", 0x0000ff, 255, 8, 16, 500, 0, 0, 0,1000, 2000)
+        idm,ridm=d3dsettext(idm,ridm,message2, 20000, 16*4+x,y, "宋体", 0xffffff, 255, 8, 16, 500, 0, 0, 0,1000, 2000)
+        promptState2=1
+    end
+--[[
+以下为选中诸葛时的启动操作脚本]]
+    if strCurrSelUID==hero1 and keycode==unitClickKey and downorup==0 and hasRes(hCurrSelHD, "gens") then    --800H为诸葛ID
+        runkeys('使用物品gens')
+        setglobalint('EN_nSetting', 1)
+        return 1
+    end 
+--[[
+以下为选中司马时的启动操作脚本]]
+    if strCurrSelUID==hero2 and keycode==unitClickKey and downorup==0 and hasRes(hCurrSelHD, "gens") then    --A00U为司马ID
+        runkeys('使用物品gens')
+        setglobalint('EN_nSetting', 1)
+        return 1
+    end
+end 
+function mousehookfunc(mousemsg)
+    if 0==iswar3front() then return 0 end
+    if 1==ischat() then return 0 end
+    strCurrSelUID,hCurrSelHD = getcurrentunit()
+--[[
+以下为选中诸葛时的操作脚本]]
+    if strCurrSelUID==hero1 and mousemsg==1 and getglobalvar('EN_nSetting')==1 then
+	mouseclick(0)
+        currentx,currenty = getcursorpos()
+        setglobalint('EN_currentx', currentx)
+        setglobalint('EN_currenty', currenty)
+        keypress(72)
+        runlua("autosgFreeze.j")
+        return 1
+    end
+    if getcurrentunit()==hero1 and mousemsg==2 and getglobalvar('EN_nSetting')==1 then    --右键取消风吹
+        mouseclick(1)
+        setglobalint('EN_nSetting', 0) 
+        return 1
+    end
+--[[
+以下为选中司马时的操作脚本]]
+    if strCurrSelUID==hero2 and mousemsg==1 and getglobalvar('EN_nSetting')==1 then
+	mouseclick(0)
+        currentx,currenty = getcursorpos()
+        setglobalint('EN_currentx', currentx)
+        setglobalint('EN_currenty', currenty)
+        keypress(72)
+        runlua("autosgStar.j")
+        return 1
+    end
+    if getcurrentunit()==hero2 and mousemsg==2 and getglobalvar('EN_nSetting')==1 then    --右键取消风吹
+        mouseclick(1)
+        setglobalint('EN_nSetting', 0) 
+        return 1
+    end
+    return 0
+end

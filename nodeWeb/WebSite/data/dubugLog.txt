@@ -1,0 +1,6 @@
+Begin InitInstance
+end AfxEnableControlContainer
+end ParseCommandLine
+end UpdateRegistryAll
+g_bIsRegist is TRUE return !!!
+end ExitInstance

@@ -1,0 +1,2 @@
+TVP(KIRIKIRI) 2 core / Scripting Platform for Win32
+(KIRIKIRI core) (C) 1997-2008 W.Dee and Contributors All Rights Reserved. This software is based in part on the work of Independent JPEG Group. For details: Run this program with '-about' option.

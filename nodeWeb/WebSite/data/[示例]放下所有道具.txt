@@ -1,0 +1,71 @@
+--[[
+简介：
+    此脚本作用是丢下英雄所有道具。
+
+使用说明：
+    按下设定的快捷键是丢下英雄全部道具到鼠标所在位置，默认快捷键为I，
+可自行修改，修改位置见脚本正文。
+
+备注：
+①欢迎提出宝贵建议，qq:167849866； bbs.myebe.com
+
+                                      作者：╃Ｇ°
+                                                    ]]
+
+--脚本正文：
+
+if getwshscriptversion() < 2 then
+    msgbox('请使用助手2.4版本以上')
+end
+
+--【用户修改处】
+--73代表I的键码，可自行修改如O，改为79
+dropkey=73  
+--【用户修改处结束】
+
+itemtab={}
+itemtab[1]={x=0.66,y=0.83}
+itemtab[2]={x=0.71,y=0.83}
+itemtab[3]={x=0.66,y=0.9}
+itemtab[4]={x=0.71,y=0.9}
+itemtab[5]={x=0.66,y=0.96}
+itemtab[6]={x=0.71,y=0.96}
+
+setkeywatch('keyhookfunc')
+
+function keyhookfunc(keycode, controlkey, downorup)
+    if 0==iswar3front() then return 0 end
+    if 1==ischat() then return 0 end
+    if downorup==1 then return 0 end
+    if keycode==dropkey and downorup==0 then
+        currentx,currenty = getcursorpos()
+        sleep(20)
+        war3w = getwar3window()
+        war3wl,war3wr,war3wt,war3wb = getwindowrect(war3w)
+        keydown(16)
+        sleep(10)
+	for i = 1,6,1 do
+            itemx=war3wl+(war3wr-war3wl)*itemtab[i]["x"]
+            itemy=war3wt+(war3wb-war3wt)*itemtab[i]["y"]
+            setcursorpos(itemx, itemy)
+            lockmouse(itemx, itemy)
+            sleep(30)
+            mousedown(1)
+            sleep(10)
+            mouseup(1)
+            sleep(30)
+            lockmouse(-1, -1)
+            setcursorpos(currentx, currenty)
+            lockmouse(currentx, currenty)
+            sleep(30)
+            mousedown(0)
+            sleep(10)
+            mouseup(0)
+            sleep(30)
+            lockmouse(-1, -1)
+	end
+        sleep(10)
+        keyup(16)
+    return 1
+    end
+end

@@ -1,0 +1,113 @@
+--[[
+简介：很简单，运行此脚本，然后在游戏里就可以看到你的APM情况了。
+注意：此脚本仅统计键盘鼠标点击情况，所以与录像分析的APM有偏差。
+
+
+                                       作者：南南
+                                                              ]]
+
+--脚本正文
+
+if getwshscriptversion() < 10 then
+    msgbox('请使用更高版本的助手')
+end
+
+m_LastPlaying = 0
+
+idSet = 0
+ridSet = 0
+
+function InitData()
+    m_LastNtc = -1
+    m_LastAPMTickCount = 0
+    setglobalint('m_nTotalActions', 0)
+    setglobalint('m_nTotalStartTime', 0)
+    setglobalint('m_nLastAPMTickCount', 0)
+    for n=0,59,1 do
+        setglobalint('m_ActionsPerSecond'..n, 0)
+    end
+end
+InitData()
+runlua('APM_view.j')
+
+setmousewatch('mousehookfunc')
+setkeywatch('keyhookfunc')
+
+function DoAPM()
+
+    nTotalStartTime = getglobalvar('m_nTotalStartTime')
+    if nTotalStartTime == 0 then
+        setglobalint('m_nTotalActions', 0)
+        setglobalint('m_nTotalStartTime', gettickcount())
+    end
+    nTotalActions = getglobalvar('m_nTotalActions') + 1
+    setglobalint('m_nTotalActions', nTotalActions)
+
+    setglobalint('m_nLastAPMTickCount', gettickcount())
+    ntc = math.floor(math.mod(gettickcount()/1000, 60))
+    if gettickcount() - m_LastAPMTickCount > 60000 then
+        for x=0, 59, 1 do
+            setglobalint('m_ActionsPerSecond'..x, 0)
+        end
+    else
+        if m_LastNtc ~= ntc then
+            if m_LastNtc < ntc then
+                for x=m_LastNtc+1, ntc, 1 do
+                    setglobalint('m_ActionsPerSecond'..x, 0)
+                end
+            else
+                for x=m_LastNtc+1, 59, 1 do
+                    setglobalint('m_ActionsPerSecond'..x, 0)
+                end
+                for x=0, ntc, 1 do
+                    setglobalint('m_ActionsPerSecond'..x, 0)
+                end
+            end
+
+            m_LastNtc = ntc
+        end
+    end
+
+    m_LastAPMTickCount = gettickcount()
+
+    
+    setglobalint('m_ActionsPerSecond'..ntc, 1+getglobalvar('m_ActionsPerSecond'..ntc))
+
+end
+
+
+function mousehookfunc(msg)
+    if 0==iswar3front() then return 0 end
+    if 0==isplaying() then
+        if m_LastPlaying == 1 then
+            m_LastPlaying = 0
+            InitData()
+        end
+        return 0
+    end
+    m_LastPlaying = 1
+    
+    if msg~=1 and msg~=2 and msg~=3 and msg~=4 and msg~=5 then return 0 end
+
+    DoAPM()
+
+    return 0
+end
+
+function keyhookfunc(keycode, controlkeycode, downorup)        
+    if 0==iswar3front() then return 0 end
+    if 0==isplaying() then
+        if m_LastPlaying == 1 then
+            m_LastPlaying = 0
+            InitData()
+        end
+        return 0
+    end
+    m_LastPlaying = 1
+    
+    if downorup~=0 then return 0 end
+
+    DoAPM()
+
+    return 0
+end

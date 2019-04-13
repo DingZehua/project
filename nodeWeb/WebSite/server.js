@@ -1,66 +1,41 @@
-var
-    fs = require('fs'),
-    url = require('url'),
-    path = require('path'),
-    http = require('http');
-let mysql = require('mysql');
-let {path:configPath,access} = require('./config');
-let {co} = require('./js/base');
+let http = require('http');
+let config = require('./config');
+let {mysql : mysqlDB} = require('./includes/sql');
+let log = console.log.bind(console.log);
+let {[Symbol.for('server')] : serverConfig,mysql : mysqlConfig} = config;
 
-let allow = new RegExp([...new Set(access.allow
-                        .filter(function(x){return x;}))]   // 排除掉空元素和重复元素
-                            .join('|')   
-                            .replace(/\\/g,''.padStart(2,'\\'))
-                            .replace(/\//g,''.padStart(2,'\\//'))
-                            .replace(/[.]/g,'[.]')
-                            .replace(/[\[]([\\\.])[\]]/g,'.')
-                        );
-let deny = new RegExp([...new Set(access.deny
-                    .filter(function(x){return x;}))]       // 排除掉空元素和重复元素
-                        .join('|')   
-                        .replace(/\\/g,''.padStart(2,'\\'))
-                        .replace(/\//g,''.padStart(2,'\\//'))
-                        .replace(/[.]/g,'[.]')
-                        .replace(/[\[]([\\\.])[\]]/g,'.')
-                    );
+// 创建服务器
+let server = http.createServer();
+server.on('request',main);
+server.listen(serverConfig.port,serverConfig.hostName);
+log(`http server runing at http://${serverConfig.hostName}`);
 
-// 从命令行参数获取root目录，默认是当前目录:
-var root = '.';
-// 创建服务器:
-var server = http.createServer(function (request, response) {
-    // 获得URL的path，类似 '/css/bootstrap.css':
-    var pathname = url.parse(request.url).pathname;
+// mysql数据库
+let sql = new mysqlDB(mysqlConfig);
 
-    if(deny.test(pathname)
-      ||!allow.test(pathname)) {
-        pathname = configPath.pc + pathname;
-    }
+// SESSION
+const SESSION = {};
 
-    // 获得对应的本地文件路径，类似 '/srv/www/css/bootstrap.css':
-    var filepath = path.join(root, pathname);
-    if(filepath === path.join(configPath.pc) + '\\') {
-        filepath += 'index.html';
-    }
+// 得到请求。
+function main(req,res) {
 
-    // 获取文件状态:
-    fs.stat(filepath, function (err, stats) {
-        if (!err && stats.isFile()) {
-            // 没有出错并且文件存在:
-            console.log('200 ' + request.url);
-            // 发送200响应:
-            response.writeHead(200,{'Content-Type': 'text/html'});
-            // 将文件流导向response:
-            fs.createReadStream(filepath).pipe(response);
-        } else {
-            // 出错了或者文件不存在:
-            console.log('404 ' + request.url);
-            // 发送404响应:
-            response.writeHead(404);
-            response.end('404');
-        }
+  let {...GLOBALS} = require('./constant').time;
+  GLOBALS.PHYSICAL_ROOT = process.cwd();          // 物理路径
+  GLOBALS.TIME = new Date().getTime();
+
+  
+  async function response(request,response,sql,GLOBALS,config) {
+    let {data,status,contentType,cookies} = await require('./router')({request,response,sql,GLOBALS,config});
+    res.writeHead(status,{
+      "content-type":`${contentType};charset=utf-8`,
+      'Set-Cookie': cookies
     });
-});
-
-server.listen(80);
-
-console.log('Server is running at http://192.168.0.14:80/');
+    res.write(data);
+    res.end();
+  }
+  response(req,res,sql,GLOBALS,config).catch((err) => {
+    log(err);
+    res.writeHead(404);
+    res.end('404');
+  });
+};

@@ -1,0 +1,81 @@
+--[[
+简介：
+    此脚本作用是把用快捷键开启自动释放的技能，如男巫的加血，骷髅射手
+的火箭等等。
+
+使用说明：
+    提供了4个可以修改的快捷键，默认为3、4、5、无，可以自行修改，修改
+位置见脚本正文。
+    例如使用默认设置，当第一格技能为可自动施放技能时，按下3模拟右击
+单位的第一格技能，这样来开启第一格技能的自动施放。
+
+备注：
+①此脚本偶尔会出现鼠标位置错误，需要加上锁鼠函数。
+②欢迎提出宝贵建议，qq:167849866； bbs.myebe.com
+
+                                      作者：╃Ｇ°
+                                                    ]]
+
+--脚本正文：
+
+if getwshscriptversion() < 2 then
+    msgbox('请使用助手2.4版本以上')
+end
+
+--【用户修改处】
+--以下4个变量分别为4个技能的快捷键，若不使用某格技能则将其改为0
+skill1rclk=51  --第一格技能的快捷键，51则代表按键3
+skill2rclk=52  --第二格技能的快捷键，52则代表按键4
+skill3rclk=53  --第三格技能的快捷键，53则代表按键5
+skill4rclk=0   --不使用第四格,0表示无按键
+--【用户修改处结束】
+
+
+skill1x=0.8
+skill2x=0.85
+skill3x=0.9
+skill4x=0.95
+skilly=0.95
+
+skillcx=0
+skillrclk=0
+
+setkeywatch('keyhookfunc')
+
+function keyhookfunc(keycode, controlkey, downorup)
+    if 0==iswar3front() then return 0 end
+    if 1==ischat() then return 0 end
+    if downorup==1 then return 0 end
+    if keycode==skill1rclk then
+	skillcx=skill1x
+	skillrclk=1
+    elseif keycode==skill2rclk then
+	skillcx=skill2x
+	skillrclk=1
+    elseif keycode==skill3rclk then
+	skillcx=skill3x
+	skillrclk=1
+    elseif keycode==skill4rclk then
+	skillcx=skill4x
+	skillrclk=1
+    else
+	skillcx=0
+	skillrclk=0
+    end
+    if skillrclk==1 and downorup==0 then
+        currentx,currenty = getcursorpos()
+        sleep(20)
+        war3w = getwar3window()
+        war3wl,war3wr,war3wt,war3wb = getwindowrect(war3w)
+        herox=war3wl+(war3wr-war3wl)*skillcx
+        heroy=war3wt+(war3wb-war3wt)*skilly
+        setcursorpos(herox, heroy)
+        sleep(20)
+        mousedown(1)
+	sleep(5)
+        mouseup(1)
+        sleep(20)
+        setcursorpos(currentx, currenty)
+    return 1
+    end
+end

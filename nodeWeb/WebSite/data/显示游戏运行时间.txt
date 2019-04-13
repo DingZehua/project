@@ -1,0 +1,100 @@
+--[[
+简介：
+    显示魔兽游戏运行时间脚本，即时显示开始游戏后的游戏运行时间。
+    进入游戏前脚本处于运行状态时与实际时间误差小于2秒。
+注意：进入游戏后再运行脚本则以脚本运行时间开始计时游戏时间。
+
+更新
+[2009年9月6日]
+更改了时间处理方式，改用lua自身处理方法。
+更改时间提示到秒(当然也可以到毫秒)。
+[2009年9月7日]
+更改了显示方式为游戏开始后一直显示
+显示位置可选择2处，显示颜色可自定义
+[2009年10月26日]
+调整优化了显示模式！
+[2010年4月12日]
+更新了部分文字描述。
+[2010年4月26日]
+1.增加了显示当前系统时间。
+2.增加了一处显示位置，位置为指令技能栏上边框。
+3.调整了不同分辨率下自适应字体大小。
+                                       作者：星夜心雨
+                                                              ]]
+--脚本正文
+if getwshscriptversion() < 4 then
+    msgbox('请使用更高版本的助手')
+end
+--【用户修改处】
+nShowPosition=1         --显示位置，可选1(金钱位置下方)，2(小地图上边框)，3(指令技能栏上边框)
+fontColor=0x00FFFF      --显示颜色，0xFFFFFF为白色，0x0000FF为红色,0x00FF00为绿色,0x00FFFF为黄色
+--【用户修改处结束】
+iPLstate=0
+iLastTick = 0
+iTickCount = 0
+iPLtime=0
+sTimeOut=''
+iFontW=7
+iFontH=14
+
+function myd3dsettext(nShowstate,strText,nAlpha)
+    war3w = getwar3window()
+    win3wl,win3wr,win3wt,win3wb = getclientrect(war3w)
+    if((win3wr-win3wl)<790) then
+        iFontW=5
+    elseif((win3wr-win3wl)>=790 and (win3wr-win3wl)<1010) then
+        iFontW=6
+    else
+        iFontW=7
+    end
+    if nShowPosition==1 then
+        x=(win3wr-win3wl)*0.553
+        y=(win3wb-win3wt)*0.045
+    end
+    if nShowPosition==2 then
+        x=(win3wr-win3wl)*0.02
+        y=(win3wb-win3wt)*0.7345
+    end
+    if nShowPosition==3 then
+        x=(win3wr-win3wl)*0.768
+        y=(win3wb-win3wt)*0.7525
+    end
+    if nShowstate==0 then 
+        idSet, ridSet = d3dsettext(idSet, ridSet,strText, 1000, x, y, "宋体", fontColor, nAlpha, iFontW, 0, 500, 0, 0, 0,0,0)
+    else 
+        idSet, ridSet = d3dsettext(idSet, ridSet,strText, 0, x, y, "宋体", fontColor, nAlpha, iFontW, 0, 500, 0, 0, 0,0,0)
+    end
+end
+
+function runshowfunc()
+    if 1==isplaying() then
+        if 0==iPLstate then
+            iPLstate=1
+            iLastTick = gettickcount()
+        end
+        iTickCount=gettickcount()
+        iPLtime=tonumber(string.format('%d',(iTickCount-iLastTick)/1000))
+        if iPLtime>3600 then
+            sTimeH=tonumber(string.format('%d',iPLtime/3600))
+            sTimeM=tonumber(string.format('%d',iPLtime/60))-sTimeH*60
+            sTimeS=iPLtime-(sTimeH*3600+sTimeM*60)
+            sTimeOut=sTimeH..':'..sTimeM..':'..sTimeS
+        elseif iPLtime>60 then
+            sTimeM=tonumber(string.format('%d',iPLtime/60))
+            sTimeS=iPLtime-sTimeM*60
+            sTimeOut='00:'..sTimeM..':'..sTimeS
+        elseif iPLtime>0 then
+            sTimeOut='00:'..'00:'..iPLtime
+        end
+        if(sTimeOut~='') then 
+            sTimeOut = 'Used['..sTimeOut..']  Now['..os.date("%X",os.time{year=1970, month=1, day=1, hour=0})..']'
+        end
+        myd3dsettext(0,sTimeOut,255)
+    else
+        iPLstate=0
+        sTimeOut=' '
+	myd3dsettext(1,sTimeOut,255)
+    end
+end
+
+settimer(1000, 'runshowfunc')

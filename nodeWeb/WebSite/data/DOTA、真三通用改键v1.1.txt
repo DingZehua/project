@@ -1,0 +1,218 @@
+--[[
+          【DOTA、真三通用改键】
+
+  ┌─┐┏━┓┏━┓┏━┓┏━┓┌─┐
+  │Q │┃Ｗ┃┃Ｅ┃┃Ｒ┃┃Ｔ┃│Y │
+  └─┘┗━┛┗━┛┗━┛┗━┛└─┘
+  　　　　↑    ↑    ↑    ↑
+          │    │    │    │
+       第一招   │    │    │
+              第二招  │    │
+                    第三招  │
+                           大招！
+
+
+【注意】请从助手启动魔兽，以显示提示信息！
+						   
+更新：
+【10.05.31】   1.1版
+1.修正了改键后会导致相应的WERT组合键不能使用的问题
+【10.05.10】   1.1版
+1.支持选中多个英雄的情况
+【09.09.15】   1.1版
+1.修改了文字提示，更加人性化
+2.修正了单位识别的bug
+3.修正了一些细节问题
+【09.09.09】
+1.修改了提示信息的位置
+2.增加了设置按键时仅字母键有效
+3.修正了一些细节问题
+【09.09.01】
+1.修正了文字无法显示的问题
+【09.08.23】
+1.加入文字提示，删除语音提示
+2.修正了一些变身英雄变身后无法使用通用改键的bug
+【09.08.10】
+1.加入语音提示
+2.加入选择单位判别,当光标不在设置改建的英雄上时,改键不作用.
+3.当设置按键时不会有操作效果,以防设置按键时误放技能或误学技能.
+
+简介：
+    觉得dota、真三里英雄的技能的快捷键乱吗?想把它们统统改成统
+一的键?用依次排列的按键WERT来依次代替英雄的1~4技能?一个个的手
+动设置方案很麻烦?那就试试这个脚本吧,它会帮助您更加舒适的操作每
+个英雄,使用技能时更加得心应手.
+
+使用说明：
+①勾上脚本的执行选框,游戏开始之后,按右Ctrl+P键开始
+  设置(注意是右)
+②记住您选择的英雄原本的1到4技能的快捷键,依次从键盘按下
+  它们,例如您选择了先知，则依次按下TRFW.
+③这样英雄原本的技能就被替换成了顺序排列的WERT,还是例如
+  先知,当您按下W则相当于按下了第一个技能,而E,R,T分别是第
+  二,三,四技能.
+④如果设置错了,随时按右Ctrl+P键回到第一步重新设置.
+⑤想取消使用改脚本,按ctrl+Q停止执行脚本即可.
+
+备注：
+①用WERT来操作如果不习惯可以自行更改,更改位置见脚本正文
+②启动设置快捷键右Ctrl+P,右Ctrl+Q键也可以自行更改,更改位置
+  见脚本正文
+③对于拥有多于4个技能的英雄,可选择性的将4个技能改至WERT
+  位置,例如船长,第二招被动技能可以不设快捷键而将x标记设
+  置为E,返回标记依然为R
+④欢迎提出宝贵建议,qq:167849866 ; bbs.war3h.com
+
+                                      作者：╃Ｇ°
+
+                                                    ]]
+
+--脚本正文
+
+--【用户修改处】
+--以下四个变量用于设置修改后的技能快捷键，可自行修改
+--例如分别改为81，87，69，82则替换为QWER
+nNewCode1=87     --87为W的键码
+nNewCode2=69     --69为E的键码
+nNewCode3=82     --82为R的键码
+nNewCode4=84     --84为T的键码
+--以下四个变量代表开始设置键和取消设置键，可自行修改
+--修改方法同上
+nSetkey=80       --80为P的键码
+nSetkeyC=32      --32为右ctrl的键码
+nCancelkey=79    --79为O的键码
+nCancelkeyC=32   --32为右ctrl的键码
+--【用户修改处结束】
+
+nOldCode1=0
+nOldCode2=0
+nOldCode3=0
+nOldCode4=0
+nSetting=5
+
+tHeroidtab={"iveE","mveE","I00H","J00H","mlbH","W60H","800U","510E","rglH","F00H","E00H","G00H","I10N","H10N","T10N","J10N","O10N","310N","410N","510N","R00H","I70H"}
+ntablength=#tHeroidtab
+
+tCodeNumb={"0","1","2","3","4","5","6","7","8","9"}
+tCodeWord={"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"}
+tCodeFunc={"F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12"}
+
+function fCodeToKey(code)
+	if code>=48 and code<=57 then return tCodeNumb[code-47] end
+	if code>=65 and code<=90 then return tCodeWord[code-64] end
+	if code>=112 and code<=123 then return tCodeFunc[code-111] end
+end
+
+idWsh,ridWsh=0,0
+idSet,ridSet=0,0
+
+function myd3dsettext()
+    war3w = getwar3window()
+    --war3wl,war3wr,war3wt,war3wb = getwindowrect(war3w)
+    win3wl,win3wr,win3wt,win3wb = getclientrect(war3w)
+    x=(win3wr-win3wl)*0.05
+    y=(win3wb-win3wt)*0.655
+    if nShowstay==0 then 
+        idWsh, ridWsh = d3dsettext(idWsh, ridWsh,'【助手】', 5000, x, y, "宋体", 0x0000ff, nAlpha, 8, 16, 500, 0, 0, 0,0,2000)    
+        idSet, ridSet = d3dsettext(idSet, ridSet,strText, 5000, 16*4+x, y, "宋体", 0xffffff, nAlpha, 8, 16, 500, 0, 0, 0,0,2000)
+    else
+        idWsh, ridWsh = d3dsettext(idWsh, ridWsh,'【助手】', 30000, x, y, "宋体", 0x0000ff, nAlpha, 8, 16, 500, 0, 0, 0,0,2000)    
+        idSet, ridSet = d3dsettext(idSet, ridSet,strText, 30000, 16*4+x, y, "宋体", 0xffffff, nAlpha, 8, 16, 500, 0, 0, 0,0,2000)
+    end
+end
+
+setkeywatch('keyhookfunc')
+
+function keyhookfunc(keycode, controlkey, downorup)
+    if 0==iswar3front() then return 0 end
+    if downorup==1 then return 0 end
+    if keycode==nCancelkey and controlkey==nCancelkeyC then 
+        nSetting=5
+        nAlpha = 255
+        nShowstay=0
+        strText='通用改键取消！'
+        myd3dsettext()
+		return 1
+    end
+    if keycode==nSetkey and nSetkeyC==controlkey then 
+        nSetting=4
+        strHeros=getcurrentunit()
+        nAlpha = 255
+        nShowstay=1
+        strText='开始设置通用改键，请选中您的英雄，依次按下该英雄默认的技能热键'
+        myd3dsettext()
+        return 1
+    elseif nSetting==4 and keycode>64 and keycode<91 then
+        keydown(0)
+        keyup(0)
+        nSetting = 3
+        nOldCode1=keycode
+        nAlpha = 255
+        nShowstay=1
+        strText='改键情况：  '..fCodeToKey(keycode)..' → '..fCodeToKey(nNewCode1)
+        myd3dsettext()
+        return 1
+    elseif nSetting==3 and keycode>64 and keycode<91 then
+        keydown(0)
+        keyup(0)
+        nSetting = 2
+        nOldCode2=keycode
+        nAlpha = 255
+        nShowstay=1
+        strText=strText..'    '..fCodeToKey(keycode)..' → '..fCodeToKey(nNewCode2)
+        myd3dsettext()
+        return 1
+    elseif nSetting==2 and keycode>64 and keycode<91 then
+        keydown(0)
+        keyup(0)
+        nSetting = 1
+        nOldCode3=keycode
+        nAlpha = 255
+        nShowstay=1
+        strText=strText..'    '..fCodeToKey(keycode)..' → '..fCodeToKey(nNewCode3)
+        myd3dsettext()
+        return 1
+    elseif nSetting==1 and keycode>64 and keycode<91 then
+        keydown(0)
+        keyup(0)
+        nSetting = 0
+        nOldCode4=keycode
+        nAlpha = 255
+        nShowstay=0
+        strText=strText..'    '..fCodeToKey(keycode)..' → '..fCodeToKey(nNewCode4)..'       通用改键设置成功！'
+        myd3dsettext()
+        return 1
+    else
+        nHeroSelected=0
+        if strHeros==getcurrentunit() then
+            nHeroSelected=1
+        else
+            strHerostmp=getcurrentunit()
+            for i=1,ntablength,1 do
+                if strHerostmp==tHeroidtab[i] then
+		    nHeroSelected=1
+		end
+            end
+        end
+        if 0==ischat() and nSetting==0 and nHeroSelected==1 and (controlkey==0 or controlkey==4 or controlkey==8)  then
+            if keycode==nNewCode1 then
+                keydown(nOldCode1)
+                keyup(nOldCode1)
+                return 1
+            elseif keycode==nNewCode2 then
+                keydown(nOldCode2)
+                keyup(nOldCode2)
+                return 1
+            elseif keycode==nNewCode3 then
+                keydown(nOldCode3)
+                keyup(nOldCode3)
+                return 1
+            elseif keycode==nNewCode4 then
+                keydown(nOldCode4)
+                keyup(nOldCode4)
+                return 1
+            end
+        end
+    end
+    return 0
+end

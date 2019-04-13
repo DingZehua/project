@@ -1,0 +1,2 @@
+禁止删除本文件,否则"超级急救盘"将无法使用
+Don't delete this file, otherwise "Super SOS DISK" is not used.

@@ -1,0 +1,607 @@
+*********************************
+Date   : Fri Nov 30 18:12:25 2012
+Error Number: (29005)
+Message: Write sector failure, result = 1, drive = 1, sectors 551598 to 551662
+Version: 11.0.2.1573 (Nov 14 2007, Build=1573)
+OS Version: Microsoft Windows XP Professional Service Pack 3 (Build 2600)
+Command line arguments:
+Active Switches :
+       AutoName
+PathName            : 1107 typocore.dll
+DumpFile            : 1.5:\USBXP_EWF u盘上的XP系统\USBXP_EWF By Tony.GHO
+DumpPos             : 147901083
+Last LFO Buffersize : 0
+Last LFO Path       : 
+  Full Path         : 1.5:\USBXP_EWF u盘上的XP系统\USBXP_EWF By Tony.GHO
+  Disk:Partition    : 1:5
+  Drive Letter      : G:\ 
+Last LFO Filesystem : Native
+FlagImplode         : 0
+FlagExplode         : 3
+
+Operation Details :
+  Total size.........2026
+  MB copied..........276
+  MB remaining.......1750
+  Percent complete...13%
+  Speed..............184 MB/min
+  Time elapsed.......1:30   
+  Time remaining.....9:30   
+
+Program Call Stack
+AbortLog
+Generic_Abort
+WriteDiskSectors
+WritePhysSectors
+WriteNTFSVolume
+NTFSWriteNewClusters
+loadRun
+loadAttribute
+loadAttributes
+loadMFTRec
+loadMFT
+loadVol
+LoadNTFSPartition
+ProcessNTFSPartition
+CopyPartition
+CopyFileToPart
+CopyMainline
+AttemptOperation
+sub_main
+main
+
+Call Stack
+Address            Frame              Logical Addr              Module
+0x000000007c92e4f4 0x000000000012d1d0 KiFastSystemCallRet+0x0000000000000000
+0x000000000012d4d0 0x0000000000000003 0x0000:0x0000000000000000 
+End Call Stack
+
+
+Start heap available: 1252392960
+Cur   heap available: 1254772736
+Total Memory:         2146480128
+
+Allocated
+  33500 ..\ghost.cpp:1396
+Free
+
+Fat details:
+  SRC:
+  FatType..........32
+  firstSector.......32
+  ClusterSize......4096
+  clusters.........1950358
+  root_next_avail..0
+  data_next_avail..0
+  dir_sector.......0
+  root_sector......30512
+  data_sector......30512
+  FAT_sector.......0
+
+NTFS details:
+----------------
+
+NTFS Global Flags:
+----------------
+	 contiguousWrite=1 forceDiskClusterMapping=0 
+	 inhibitCHKDSK=1 ignoreBadLog=0 ignoreCHKDSKBit=0
+	 enable_cache=0 xfrbuflen=32768 
+	 last_attr_type = 0 
+	 loadExact = 0 
+----------------
+	=======================================================
+	NTFS volume 0:
+	----------------
+	initialised..............1
+	read cached..............N
+	Selective caching........N
+	flags....................Volume OK
+	drive....................0x01
+	part order...............0
+	version..................0x0400
+	volsize..................15633375
+	blocksize................512
+	clusterfactor............1
+	clustersize..............512
+	mftrecordsize............1024
+	indexrecordsize..........4096
+	indexclustperrecord......8
+	bootSectorCopyOffset.....15633375
+	pagefileSys..............-1
+	bootIni..................8313
+	volumeLabel..............[USBXP_EWF]
+	sectorsInUse.............4149459
+	totalNonCopiedBytes......0
+	bytesToCopy..............0
+	bitmapClusters...........3822
+	bitmapUsedBytes..........1956856
+	estimatedClusters........3822
+	estimatedUsedBytes.......1956856
+	clustersizeShift.........9
+	blocksizeShift...........9
+	mftrecordsizeShift.......10
+	indexrecordsizeShift.....12
+	totalRootMftRecs.........9774
+	clustermap failover......N
+	Boot sector details
+		name....................[NTFS    ]
+		blocksize...............512
+		clusterfactor...........1
+		reservedSectorsUnused...0
+		mediaType...............0xf8
+		secPerTrack.............63
+		numHeads................255
+		hiddenSectors...........32
+		volsize.................15633375
+		mftcluster..............6291456
+		mftmirrorcluster........16
+		clustersPerMFTRecord....2
+		clustersPerIndexBuffer..8
+
+		---------------------------------------------------
+		Cluster Allocation Map
+		---------------------------------------------------
+		Start: 0 Length: 556300 Next: 556300
+							Gap: 5735156
+		Start: 6291456 Length: 1954174 Next: 8245630
+							Gap: 7387745
+		Start: 15633375 Length: 0 Next: 15633375
+
+
+	=======================================================
+
+Disk Error Details
+
+Win32 error: (0x00000037)
+The specified network resource or device is no longer available.
+
+
+Disk Info :
+  remote.............0
+  drive..............1
+  sectorsUsedCount.......15654849
+  estimatedUsedCount.....4149460
+  numPartitions..............1
+  Version............1102
+
+ # Ord Boot Id Ext     First        Num       Last       Used NTFS
+ 0  0    1   7 No         63   15654849   15654912    4149459 Yes
+
+Disk Info :
+  remote.............0
+  drive..............1
+  sectorsUsedCount.......15633376
+  estimatedUsedCount.....8
+  numPartitions..............1
+  Version............0
+
+ # Ord Boot Id Ext     First        Num       Last       Used NTFS
+ 0  0    0   7 No         32   15633376   15633408          8 Yes
+
+Fixed Drives
+
+Drive 0 ST3500418AS             6VM4A2JQ
+WinNT (Active)
+Total Sectors            976773168
+Bytes per Sector         512
+MB                       476940
+Cylinders                60801
+Heads                    255
+Sectors per Track        63
+Successful IO Count      43
+
+Drive 1 SanDisk Cruzer Fit 1.26 4C532000000919108221
+ASPI
+Total Sectors            15633408
+Bytes per Sector         512
+MB                       7633
+Successful IO Count      0
+Error Count (bad media)  0
+Error Count (other)      1
+Last Error
+Win32 error: (0x00000037)
+The specified network resource or device is no longer available.
+
+
+
+WinNT (Active)
+Total Sectors            15633408
+Bytes per Sector         512
+MB                       7633
+Cylinders                973
+Heads                    255
+Sectors per Track        63
+Successful IO Count      9352
+Error Count (bad media)  0
+Error Count (other)      2
+Last Error
+Win32 error: (0x00000002)
+The system cannot find the file specified.
+
+
+
+Remote Drives
+AsyncIo : 0
+NTFS MFT or Attribute Structure 
+000: 80 00 00 00 50 00 00 00 01 00 00 00 00 00 03 00 	....P...........
+016: 00 00 00 00 00 00 00 00 40 26 00 00 00 00 00 00 	........@&......
+032: 40 00 00 00 00 00 00 00 00 82 4C 00 00 00 00 00 	@.........L.....
+048: 98 81 4C 00 00 00 00 00 98 81 4C 00 00 00 00 00 	..L.......L.....
+064: 31 03 E8 0B 04 42 3E 26 5D C9 D5 00 00 50 5A E1 	1....B>&]....PZ.
+080: FF FF FF FF 82 79 47 11 00 00 00 00 00 00 00 00 	.....yG.........
+096: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+112: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+128: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+144: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+160: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+176: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+192: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+208: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+224: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+240: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+256: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+272: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+288: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+304: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+320: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+336: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+352: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+368: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+384: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+400: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+416: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+432: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+448: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+464: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+480: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+496: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+512: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+528: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+544: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+560: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+576: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+592: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+608: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+624: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+640: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+656: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+672: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+688: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+704: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+720: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+736: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 	................
+752: 45 00 81 00 29 01 08 01 00 00 00 00 72 61 6D 20 	E...).......ram 
+768: 43 61 6C 6C 20 53 74 61 63 6B 0A 41 62 6F 72 74 	Call Stack.Abort
+784: 4C 6F 67 0A 47 65 6E 65 72 69 63 5F 41 62 6F 72 	Log.Generic_Abor
+800: 74 0A 57 72 69 74 65 44 69 73 6B 53 65 63 74 6F 	t.WriteDiskSecto
+816: 72 73 0A 57 72 69 74 65 50 68 79 73 53 65 63 74 	rs.WritePhysSect
+832: 6F 72 73 0A 57 72 69 74 65 4E 54 46 53 56 6F 6C 	ors.WriteNTFSVol
+848: 75 6D 65 0A 4E 54 46 53 57 72 69 74 65 4E 65 77 	ume.NTFSWriteNew
+864: 43 6C 75 73 74 65 72 73 0A 6C 6F 61 64 52 75 6E 	Clusters.loadRun
+880: 0A 6C 6F 61 64 41 74 74 72 69 62 75 74 65 0A 6C 	.loadAttribute.l
+896: 6F 61 64 41 74 74 72 69 62 75 74 65 73 0A 6C 6F 	oadAttributes.lo
+912: 61 64 4D 46 54 52 65 63 0A 6C 6F 61 64 4D 46 54 	adMFTRec.loadMFT
+928: 0A 6C 6F 61 64 56 6F 6C 0A 4C 6F 61 64 4E 54 46 	.loadVol.LoadNTF
+944: 53 50 61 72 74 69 74 69 6F 6E 0A 50 72 6F 63 65 	SPartition.Proce
+960: 73 73 4E 54 46 53 50 61 72 74 69 74 69 6F 6E 0A 	ssNTFSPartition.
+976: 43 6F 70 79 50 61 72 74 69 74 69 6F 6E 0A 43 6F 	CopyPartition.Co
+992: 70 79 46 69 6C 65 54 6F 50 61 72 74 0A 43 6F 70 	pyFileToPart.Cop
+1008: 79 4D 61 69 6E 6C 69 6E 65 0A 41 74 74 65 6D 70 	yMainline.Attemp
+1024: 74 4F 70 65 72 61 74 69 6F 6E 0A 73 75 62 5F 6D 	tOperation.sub_m
+1040: 61 69 6E 0A 6D 61 69 6E 0A 0A 43 61 6C 6C 20 53 	ain.main..Call S
+1056: 74 61 63 6B 0A 41 64 64 72 65 73 73 20 20 20 20 	tack.Address    
+1072: 20 20 20 20 20 20 20 20 46 72 61 6D 65 20 20 20 	        Frame   
+1088: 20 20 20 20 20 20 20 20 20 20 20 4C 6F 67 69 63 	           Logic
+1104: 61 6C 20 41 64 64 72 20 20 20 20 20 20 20 20 20 	al Addr         
+1120: 20 20 20 20 20 4D 6F 64 75 6C 65 0A 30 78 30 30 	     Module.0x00
+1136: 30 30 30 30 30 30 37 63 39 32 65 34 66 34 20 30 	0000007c92e4f4 0
+1152: 78 30 30 30 30 30 30 30 30 30 30 31 32 64 31 64 	x000000000012d1d
+1168: 30 20 4B 69 46 61 73 74 53 79 73 74 65 6D 43 61 	0 KiFastSystemCa
+1184: 6C 6C 52 65 74 2B 30 78 30 30 30 30 30 30 30 30 	llRet+0x00000000
+1200: 30 30 30 30 30 30 30 30 0A 30 78 30 30 30 30 30 	00000000.0x00000
+1216: 30 30 30 30 30 31 32 64 34 64 30 20 30 78 30 30 	0000012d4d0 0x00
+1232: 30 30 30 30 30 30 30 30 30 30 30 30 30 33 20 30 	00000000000003 0
+1248: 78 30 30 30 30 3A 30 78 30 30 30 30 30 30 30 30 	x0000:0x00000000
+1264: 30 30 30 30 30 30 30 30 20 0A 45 6E 64 20 43 61 	00000000 .End Ca
+1280: 6C 6C 20 53 74 61 63 6B 0A 0A 00 FF FF FF FF FF 	ll Stack........
+1296: FF FF FF FF FF FF FF FF 2D 00 45 00 FF 00 FF 01 	........-.E.....
+1312: E0 02 3E 00 E0 02 3E 00 FF FF FF FF FF FF FF FF 	..>...>.........
+1328: FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 	................
+1344: FF FF FF FF FF FF FF FF FF FF FF 00 FF FF FF FF 	................
+1360: FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 	................
+1376: FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 	................
+1392: FF FF FF FF FF FF FF 00 FF FF FF FF FF FF FF FF 	................
+1408: FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 	................
+1424: FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 	................
+1440: FF FF FF 00 FF FF FF FF FF FF FF FF FF FF FF FF 	................
+1456: FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 	................
+1472: FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 	................
+1488: 16 00 DD 00 06 00 06 01 28 02 3E 00 58 DF 40 01 	........(.>.X.@.
+1504: 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 	................
+1520: 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 	................
+1536: 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 	................
+1552: 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 	................
+1568: 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 	................
+1584: 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 	................
+1600: 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 	................
+1616: 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 	................
+1632: 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 06 	................
+1648: 02 00 F1 00 00 00 FF 01 88 01 3E 00 10 AA 3A 01 	..........>...:.
+1664: 28 00 2D 00 BB 01 0A 01 20 1D E2 00 00 E2 12 00 	(.-..... .......
+1680: 00 E9 92 7C 08 02 93 7C FF FF FF FF 31 3A 31 00 	...|...|....1:1.
+1696: 88 4A 3E 00 58 E1 12 00 FC E0 12 00 3B CD 42 00 	.J>.X.......;.B.
+1712: 43 3A 00 00 00 00 00 00 58 E1 12 00 F0 49 3E 00 	C:......X....I>.
+1728: 00 49 3E 00 03 00 00 00 43 3A 00 3A 00 49 3E 00 	.I>.....C:.:.I>.
+1744: 3C E1 12 00 A4 CD 42 00 88 4A 3E 00 43 3A 20 31 	<.....B..J>.C: 1
+1760: 2E 31 3A 20 5B 5D 00 00 07 00 00 00 F0 49 3E 00 	.1: [].......I>.
+1776: 15 39 55 00 88 4A 3E 00 01 00 00 00 58 E1 12 00 	.9U..J>.....X...
+1792: F0 49 3E 00 AC E1 12 00 F0 49 3E 00 F0 49 3E 00 	.I>......I>..I>.
+1808: 78 E1 12 00 16 3A 55 00 8E 3A 55 00 34 2F 1E 31 	x....:U..:U.4/.1
+1824: 48 F3 06 31 2E 32 3A 00 E2 12 00 00 E9 92 7C 08 	H..1.2:.......|.
+1840: 02 93 7C FF FF FF FF 31 3A 32 00 88 4A 3E 00 58 	..|....1:2..J>.X
+1856: E1 12 00 FC E0 12 00 3B CD 42 00 44 3A 00 00 00 	.......;.B.D:...
+1872: 00 00 00 58 E1 12 00 F0 49 3E 00 00 49 3E 00 03 	...X....I>..I>..
+1888: 00 00 00 44 3A 00 3A 00 49 3E 00 3C E1 12 00 A4 	...D:.:.I>.<....
+1904: CD 42 00 88 4A 3E 00 44 3A 20 31 2E 32 3A 20 5B 	.B..J>.D: 1.2: [
+1920: B1 BE B5 D8 B4 C5 C5 CC 5D 00 00 15 39 55 00 88 	........]...9U..
+1936: 4A 3E 00 01 00 00 00 58 E1 12 00 F0 49 3E 00 AC 	J>.....X....I>..
+1952: E1 12 00 F0 49 3E 00 F0 49 3E 00 78 E1 12 00 16 	....I>..I>.x....
+1968: 3A 55 00 8E 3A 55 00 34 2F 1E 31 48 F3 06 00 00 	:U..:U.4/.1H....
+1984: 01 02 28 00 C3 01 08 01 33 CC CC FF 0B 00 00 00 	..(.....3.......
+2000: 00 00 00 FF FF FF FF FF 33 CC 00 FF 02 00 00 00 	........3.......
+2016: 00 00 00 FF FF FF FF FF 00 00 00 FF FF FF FF FF 	................
+2032: CC 99 66 FF 0D 00 00 00 00 00 00 FF FF FF FF FF 	..f.............
+Image Devices
+
+Key[1]   1.1:
+Key[2]   1:1
+Key[3]   C:
+Path     C:
+Desc     C: 1.1: []
+Type     NTFS
+Disk     0
+Offset   63
+
+Key[1]   1.2:
+Key[2]   1:2
+Key[3]   D:
+Path     D:
+Desc     D: 1.2: [本地磁盘]
+Type     NTFS
+Disk     0
+Offset   40965813
+
+Key[1]   1.3:
+Key[2]   1:3
+Key[3]   E:
+Path     E:
+Desc     E: 1.3: [本地磁盘]
+Type     NTFS
+Disk     0
+Offset   163846998
+
+Key[1]   1.4:
+Key[2]   1:4
+Key[3]   F:
+Path     F:
+Desc     F: 1.4: [本地磁盘]
+Type     NTFS
+Disk     0
+Offset   327693933
+
+Key[1]   1.5:
+Key[2]   1:5
+Key[3]   G:
+Path     G:
+Desc     G: 1.5: [本地磁盘]
+Type     NTFS
+Disk     0
+Offset   491540868
+
+Key[1]   I:
+Path     I:
+Desc     I:
+Type     Floppy
+
+Key[1]   J:
+Path     J:
+Desc     J: [GRC1CULFRER_CN_DVD]
+Type     CD
+
+Key[1]   @CD-R1
+Path     @CD-R1
+Desc     @CD-R1 DTSOFT  BDROM           
+Type     DVD
+
+
+DiskManager diagnostic...
+=========================
+
+Fixed Drives
+
+Drive 0 ST3500418AS             6VM4A2JQ
+WinNT (Active)
+Total Sectors            976773168
+Bytes per Sector         512
+MB                       476940
+Cylinders                60801
+Heads                    255
+Sectors per Track        63
+Successful IO Count      43
+
+Drive 1 SanDisk Cruzer Fit 1.26 4C532000000919108221
+ASPI
+Total Sectors            15633408
+Bytes per Sector         512
+MB                       7633
+Successful IO Count      0
+Error Count (bad media)  0
+Error Count (other)      1
+Last Error
+Win32 error: (0x00000037)
+The specified network resource or device is no longer available.
+
+
+
+WinNT (Active)
+Total Sectors            15633408
+Bytes per Sector         512
+MB                       7633
+Cylinders                973
+Heads                    255
+Sectors per Track        63
+Successful IO Count      9352
+Error Count (bad media)  0
+Error Count (other)      2
+Last Error
+Win32 error: (0x00000002)
+The system cannot find the file specified.
+
+
+
+FilesystemManager diagnostic...
+===============================
+
+Volume 1
+VolumePos: 1.1:
+DriveLetter: C:
+Description:   19.53GB Primary Disk 0 Offset   31.50KB   19.53GB ST3500418AS             6VM4A2JQ
+Type:        fsfNtfsWindowsXP
+Name:        
+
+Volume 2
+VolumePos: 1.2:
+DriveLetter: D:
+Description:   58.59GB Logical Disk 0 Offset   19.53GB   58.59GB ST3500418AS             6VM4A2JQ
+Type:        fsfNtfsWindowsXP
+Name:        
+
+Volume 3
+VolumePos: 1.3:
+DriveLetter: E:
+Description:   78.13GB Logical Disk 0 Offset   78.13GB   78.13GB ST3500418AS             6VM4A2JQ
+Type:        fsfNtfsWindowsXP
+Name:        
+
+Volume 4
+VolumePos: 1.4:
+DriveLetter: F:
+Description:   78.13GB Logical Disk 0 Offset  156.26GB   78.13GB ST3500418AS             6VM4A2JQ
+Type:        fsfNtfsWindowsXP
+Name:        
+
+Volume 5
+VolumePos: 1.5:
+DriveLetter: G:
+Description:  231.37GB Logical Disk 0 Offset  234.38GB  231.37GB ST3500418AS             6VM4A2JQ
+Type:        fsfNtfsWindowsXP
+Name:        
+
+Volume 6
+VolumePos: 2.1:
+DriveLetter: H:
+Description:    7.45GB Primary Disk 1 Offset      16KB    7.45GB SanDisk Cruzer Fit 1.26 4C532000000919108221
+Volume Inaccessible
+
+
+FilesystemMounter diagnostic...
+===============================
+
+
+LfoFilesystemManager diagnostic...
+==================================
+
+Filesystem Index: 0
+Filesystem Descriptor:
+  ID's:
+    ID Type: 2
+    ID: C:
+    ID Type: 1
+    ID: 1.1:
+  DriveType: 4
+  FilesystemInfo:
+    formatType: 8
+    volumeName: 
+
+Filesystem Index: 1
+Filesystem Descriptor:
+  ID's:
+    ID Type: 2
+    ID: D:
+    ID Type: 1
+    ID: 1.2:
+    ID Type: 4
+    ID: :
+  DriveType: 4
+  FilesystemInfo:
+    formatType: 8
+    volumeName: 
+
+Filesystem Index: 2
+Filesystem Descriptor:
+  ID's:
+    ID Type: 2
+    ID: E:
+    ID Type: 1
+    ID: 1.3:
+    ID Type: 4
+    ID: :
+  DriveType: 4
+  FilesystemInfo:
+    formatType: 8
+    volumeName: 
+
+Filesystem Index: 3
+Filesystem Descriptor:
+  ID's:
+    ID Type: 2
+    ID: F:
+    ID Type: 1
+    ID: 1.4:
+    ID Type: 4
+    ID: :
+  DriveType: 4
+  FilesystemInfo:
+    formatType: 8
+    volumeName: 
+
+Filesystem Index: 4
+Filesystem Descriptor:
+  ID's:
+    ID Type: 2
+    ID: G:
+    ID Type: 1
+    ID: 1.5:
+    ID Type: 4
+    ID: :
+  DriveType: 4
+  FilesystemInfo:
+    formatType: 8
+    volumeName: 
+
+Filesystem Index: 5
+Filesystem Descriptor:
+  ID's:
+    ID Type: 2
+    ID: H:
+    ID Type: 1
+    ID: 2.1:
+    ID Type: 4
+    ID: USBXP_EWF:
+  DriveType: 2
+  FilesystemInfo:
+    formatType: 3
+    volumeName: USBXP_EWF
+  Filesystem is inaccessible.
+
+Filesystem Index: 6
+Filesystem Descriptor:
+  ID's:
+    ID Type: 2
+    ID: J:
+  DriveType: 8
+  No FilesystemInfo structure.
+  Filesystem has no VolumePtr
+
+
+*********************************

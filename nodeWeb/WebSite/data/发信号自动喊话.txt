@@ -1,0 +1,82 @@
+--[[
+简介：
+    发信号自动喊话脚本。请修改自己需要喊话的内容。
+    按信号快捷键或点击信号图标发信号都可以自动喊话。
+
+更新：
+[2009年9月9日]
+增加了Alt+鼠标左键小地图发信号自动喊话支持
+[2010年4月12日]
+更改了Alt+鼠标键信号的同步模式，减少出错的可能性。
+[2010年4月26日]
+调整优化了代码，排除了发信号自动喊话会导致鼠标键失灵的问题。
+
+                                       作者：星夜心雨
+                                                              ]]
+
+--脚本正文
+
+if getwshscriptversion() < 4 then
+    msgbox('请使用更高版本的助手')
+end
+
+--【用户修改处】
+sTalkMsg='【魔兽超级助手提醒】-----注意信号地点-----'       --发信号喊话内容
+--【用户修改处结束】
+
+iPressState=0
+
+setmousewatchex('mousehookfuncex')
+setmousewatch('mousehookfunc')
+setkeywatch('keyhookfunc')
+
+function mousehookfuncex(msg, x, y)
+    if 0==iswar3front() then return 0 end
+    war3w = getwar3window()
+    win3wl,win3wr,win3wt,win3wb = getclientrect(war3w)
+    mx=(win3wr-win3wl)*0.195
+    my=(win3wb-win3wt)*0.761
+    mw=(win3wr-win3wl)*0.0265
+    mh=(win3wb-win3wt)*0.0325
+    mx,my = clienttoscreen(war3w, mx, my)
+    if x>mx and y>my and x<(mx+mw) and y<(my+mh) then
+        if msg==11 then 
+            mouseup(0)
+            iPressState=1
+            return 1
+        end
+    end
+end
+
+function mousehookfunc(msg)
+    if 0==iswar3front() then return 0 end
+    if 0==isplaying() then return 0 end
+    if iPressState==1 then
+        if msg==11 then
+            talk(sTalkMsg,0)
+            iPressState=0
+            return 0
+        end
+    end
+    if (1==getcontrolkeystate(1) or 1==getcontrolkeystate(2)) and 11==msg then
+            keydown(18)
+            sleep(10)
+            mousedown(0)
+            sleep(10)
+            mouseup(0)
+            sleep(10)
+            keyup(18)
+            sleep(10)
+            talk(sTalkMsg,0)
+            return 1
+    end
+end
+
+function keyhookfunc(keycode, controlkeycode, downorup)        
+    if 0==iswar3front() then return 0 end
+    if 0==isplaying() then return 0 end
+    if 71==keycode and (1==controlkeycode or 2==controlkeycode) and downorup==0 then
+        iPressState=1
+        return 0
+    end
+end

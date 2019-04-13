@@ -1,0 +1,65 @@
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17154) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17155) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17156) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17157) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17270) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17271) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17272) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17273) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17276) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17277) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17282) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17285) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17296) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17297) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17298) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17299) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17320) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17321) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17322) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17323) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17337) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17338) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17341) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17342) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17345) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17350) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17352) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17354) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17355) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17362) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17367) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17368) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17369) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17370) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17371) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17372) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17373) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17377) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17380) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17381) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17384) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17387) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17388) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17389) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17390) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17391) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17392) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17393) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17394) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17395) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17396) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17397) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17398) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17399) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17400) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17401) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17406) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17422) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17425) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17426) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17428) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17462) - closing quote " character expected
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17463) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17464) - unexpected statement
+Error: FontConfig(File DATA/Menu/fontconfig_zh_cn.txt, Line 17465) - closing quote " character expected

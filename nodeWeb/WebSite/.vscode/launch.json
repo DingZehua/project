@@ -13,8 +13,14 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "node.js",
-      "program": "${workspaceFolder}\\async.js"
+      "name": "pc",
+      "program": "${workspaceFolder}/terminal/pc/index.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "uploadFile",
+      "program": "${workspaceFolder}/test.js"
     }
   ]
 }

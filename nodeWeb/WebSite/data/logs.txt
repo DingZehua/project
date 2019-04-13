@@ -1,0 +1,7 @@
+{"event":"session","status":1,"params":{"apk_key":"9c8e1061439cb2044a992a963f18987f04ef2ee18"},"created":1387941991}
+{"event":"device","status":0,"params":{"device_model":"HS-T909","device_os_version":"4.0.4","device_resolution":"480X800","location":"unknown","application_version":"1.7.9.1","device_id":"869004010261800","language":"中文","network":"wifi","ip":"fe80::21a:98ff:fe58:187%wlan0"},"created":1387941991}
+{"event":"info","status":0,"params":{"value":"v1.7.9.1_s1.5.1-000100","category_id":"CATEGORY_VERSION"},"created":1387941992}
+{"event":"info","status":0,"params":{"value":"AD0S0N00000","category_id":"CATEGORY_CHANNEL"},"created":1387941992}
+{"event":"info","status":0,"params":{"value":"com.halfbrick.fruitninjafree","category_id":"CATEGORY_GAME"},"created":1387941992}
+{"event":"info","status":0,"params":{"user_id":"312079947"},"created":1387941994}
+{"event":"session","status":2,"params":null,"created":1387942014}

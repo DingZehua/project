@@ -1,0 +1,27 @@
+
+            ****Readme text to AUTOFONT.LSP Sept. 1, 1996***********
+
+Developed by Peter Allen Landeck.  All rights reserved @ 1996
+  100314.1364@compuserve.com
+More LSP drafting routines may be found at:
+  http://ourworld.compuserve.com/homepages/PLANDECK
+
+Thanks to J. Smith & R. Gesner authors of "Maximizing Autocad Volume II" some of whose subroutines are used in AUTOFONT.LSP.
+
+AUTOFONT.LSP collects and assembles in a separate directory named AUTOFONT all big and small font files required to open a given drawing.  This is usually an .SHX font file.  However, any other referenced font file will be collected.  If no special font files are referenced by the drawing (i.e. only the TXT.SHX font is used) user is prompted that no font files are referenced.  Typically, special font files are used in title blocks and company logos which appear on Autocad drawings.  User may also be prompted regarding named font styles which are not actually files.  These are not assembled in the AUTOFONT directory and the user is prompted accordingly.  It should not be necessary to export these with a drawing to have that drawing successfully opend on another computer system.
+
+The AUTOFONT directory is automatically created in the Autocad path, usually at C:/ACAD/AUTOFONT.  The user is prompted regarding its exact location.  The directory may be deleted after use.  Files in AUTOFONT directory will be overwritten by new font files with the same name when routine is used again.  
+
+This program is useful when transferring Autocad drawings to another computer or computer system which may not have the same set of font files.
+
+LOADING:  To load, make sure the AUTOFONT.LSP is in your ACAD path, usually ACAD/SUPPORT is a good location for LSP files.  From the Autocad command line type (LOAD "AUTOFONT") including the parentheses and quotation marks. After the user prompt type AF to run the routine.  Follow the prompts regarding files to be assembled in AUTOFONT directory. 
+
+If you load another drawing or quit the drawing editor you need to manually reload AUTOFONT.LSP as described above.  This process may be automated in your ACAD.LSP file.  See the Autocad reference manual for instructions how to automatically load LSP files when opening a drawing.
+
+AUTOLOCK:  AUTOFONT.LSP is equipped with another LSP program which will limit your use of AUTOFONT.LSP to 10 loadings, afterwhich AUTOFONT.LSP will cease to function.  To obtain a copy with unlimited use send $20 to the following address:
+
+        Peter Landeck
+        606 West 49th Terrace
+        Kansas City, MO  64112
+
+

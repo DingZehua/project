@@ -1,0 +1,6 @@
+; 其它时间服务器可以被添加到此文件
+; 但在添加信息时，必须使用以下格式:说明 (服务器名称)
+;
+美国国家标准和技术协会 (time.nist.gov)
+美国海军气象台 (tock.usno.navy.mil)
+加利福尼亚理工学院 (montpelier.caltech.edu)

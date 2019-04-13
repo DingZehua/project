@@ -1,0 +1,740 @@
+--[[
+
+【注意】请从助手启动魔兽，否则无法显示菜单！
+
+更新：
+【2010.06.10】	1.4a版
+1.修正了魔兽未在前端时游戏图标的屏幕位置不可操作的BUG
+2.修正了d3d未成功加载时，虽助手图标未显示，但实际仍可操作的BUG
+
+更新：
+【2010.05.20】	1.4版
+1.更改了切换改键方案模式，改为可直接设置哪些方案启用与停用
+2.增加了切换喊话方案、查询当前已选改键方案、查询当前改键信息、查询当前喊话方案内容、最小化到任务栏等功能
+3.大幅优化了代码结构，调整了XP下动画过慢的情况，加速了菜单显示速度
+
+【2010.04.07】	1.3b版
+1.修正了视野突然变化的问题
+
+【2009.09.14】	1.3版
+1.更换了菜单的界面
+2.加入了菜单的动画效果
+3.烦人的文字提示现在只出现一次
+
+【2009.09.11】	1.2版
+1.加入了隐藏图标的功能,加入了文字提示
+2.优化了程序结构，删除了冗余的全局变量
+3.一些细节修改，例如右击关闭菜单
+4.加入清空改键方案按钮
+5.加入调整视野的二级菜单
+
+简介：
+    内嵌入魔兽界面的菜单，具有改变超级助手的设置的各项功能。
+
+使用说明：
+    打开使用，鼠标选择，左边ctrl+F8开关图标的显示
+
+备注：
+欢迎提出宝贵建议,qq:167849866 ; bbs.war3h.com
+
+                                      作者：╃Ｇ°
+				    1.4 版：星夜心雨
+
+                                                    ]]
+
+tKeyscheme = {} 
+tTalkscheme = {} 
+idWsh = 0
+ridWsh = 0
+war3w = getwar3window()
+iMenuNum = 13
+setglobalint('MenuNum', iMenuNum)
+setglobalint('bMenuEn',0)
+setglobalint('bMenuBtmUp', 0)
+setglobalint('bMenuBt1Down', 0)
+nBtnx={}
+nBtny={}
+isEnableD3d = true
+
+war3wln,war3wrn,war3wtn,war3wbn = 0,0,0,0
+function fXYSet()
+	war3w = getwar3window()
+	war3wl,war3wr,war3wt,war3wb = getclientrect(war3w)
+
+	if war3wl~=war3wln or war3wr~=war3wrn or war3wt~=war3wtn or war3wb~=war3wbn then
+		war3wln,war3wrn,war3wtn,war3wbn=war3wl,war3wr,war3wt,war3wb
+		
+		mx=(war3wr-war3wl)*0.05
+		my=(war3wb-war3wt)*0.655
+		
+		mx_noplay=(war3wr-war3wl)*0.05
+		my_noplay=(war3wr-war3wl)*0.01
+		setglobalint('nMenuBtmx', war3wr*0.056)
+		setglobalint('nMenuBtmy', war3wb*0.045)
+		nBtmx=getglobalvar('nMenuBtmx')
+		nBtmy=getglobalvar('nMenuBtmy')
+
+		nBtnx[1]=nBtmx+32
+		nBtny[1]=nBtmy+4
+		for i=2,iMenuNum,1 do
+			nBtnx[i]=nBtnx[1]
+			nBtny[i]=nBtny[i-1]+20			
+		end
+		
+		nBt6xEx1=nBtnx[6]+145
+		nBt6yEx1=nBtny[6]-4
+		nBt6xEx2=nBt6xEx1
+		nBt6yEx2=nBt6yEx1+20
+		nBt6xEx3=nBt6xEx1
+		nBt6yEx3=nBt6yEx2+20
+		
+	end
+end
+
+function Upclear()
+	--setglobalint('bMenu6ExEn', 0)
+	--setglobalint('bMenu7ExEn', 0)
+	--setglobalint('bMenu9ExEn', 0)
+	for i=1,iMenuNum,1 do
+		setglobalint('bMenuBt'..i..'Up', 0)
+	end	
+	setglobalint('bMenuBt6Ex1Up', 0)
+	setglobalint('bMenuBt6Ex2Up', 0)
+	setglobalint('bMenuBt6Ex3Up', 0)
+	for i=1, table.getn(tKeyscheme),1 do
+		setglobalint('bMenuBt7Ex'..i..'Up', 0)
+	end
+	for i=1, table.getn(tTalkscheme),1 do
+		setglobalint('bMenuBt9Ex'..i..'Up', 0)
+	end
+end
+
+function UpclearAll()
+	setglobalint('bMenu6ExEn', 0)
+	setglobalint('bMenu7ExEn', 0)
+	setglobalint('bMenu9ExEn', 0)
+	for i=1,iMenuNum,1 do
+		setglobalint('bMenuBt'..i..'Up', 0)
+	end
+	for i=1, table.getn(tKeyscheme),1 do
+		setglobalint('bMenuBt7Ex'..i..'Up', 0)
+	end
+	for i=1, table.getn(tTalkscheme),1 do
+		setglobalint('bMenuBt9Ex'..i..'Up', 0)
+	end
+end
+
+function parseOverInt(value)
+	for i=0,10, 1 do
+		if i<value and value<i+1 then return i+1 end
+	end
+	return value
+end
+
+function parseLowerInt(value)
+	for i=0,100, 1 do
+		if i<value and value<i+1 then return i end
+	end
+	return value
+end
+
+fXYSet()
+
+runlua('war3wshmenu.j')
+
+setmousewatchex('mousehookfuncex')
+setkeywatch('keyhookfunc')				--隐藏快捷键监视
+
+setglobalint('bMenuBtmUp_hidestate',0)			--隐藏状态全局参数
+iLastTick = 0
+sHelpText = 1
+
+function isKeySchemeSel(selKeyscheme,keyScheme)
+    ii=0
+    jj=0
+    while true do 
+        ii = string.find(selKeyscheme, "\n", ii+1)
+        if ii == nil then break end
+        if string.sub(selKeyscheme, jj, ii-1)==keyScheme then 
+            return true
+        end
+        jj = ii+1
+    end 
+    if string.sub(selKeyscheme, jj, string.len(selKeyscheme)) == keyScheme then return true end
+    return false
+end
+
+function isEnableD3dset()
+    tid, trid = d3dsettext(tid, trid,' ', 0, 1, 1, "宋体", 0x000000, 0, 1, 0, 0, 0, 0, 0,0,0)
+    if tid==0 or trid==0 then
+        return false
+    else
+	return true
+    end
+    return true
+end
+
+function myd3dsettext(nShowstate,strTitle,strText,nAlpha)
+    war3w = getwar3window()
+    win3wl,win3wr,win3wt,win3wb = getclientrect(war3w)
+    x=(win3wr-win3wl)*0.05+32
+    y=(win3wb-win3wt)*0.055+iMenuNum*20
+    if((win3wr-win3wl)<790) then
+        iFontW=5
+    elseif((win3wr-win3wl)>=790 and (win3wr-win3wl)<1010) then
+        iFontW=6
+    else
+        iFontW=7
+    end
+    if nShowstate==0 then 
+        idWsh, ridWsh = d3dsettext(idWsh, ridWsh,'【'..strTitle..'】', 10000, x, y, "宋体", 0x0000ff, nAlpha, iFontW, 0, 500, 0, 0, 0,0,2000)    
+        idSet, ridSet = d3dsettext(idSet, ridSet,strText, 10000, iFontW*string.len(strTitle)+x+string.len(strTitle)*2, y, "宋体", 0xffffff, nAlpha, iFontW, 0, 500, 0, 0, 0,0,2000)
+    else 
+        idWsh, ridWsh = d3dsettext(idWsh, ridWsh,'【'..strTitle..'】',0, x, y, "宋体", 0x0000ff, nAlpha, iFontW, 0, 500, 0, 0, 0,0,2000)    
+        idSet, ridSet = d3dsettext(idSet, ridSet,strText, 0, iFontW*string.len(strTitle)+x+string.len(strTitle)*2, y, "宋体", 0xffffff, nAlpha, iFontW, 0, 500, 0, 0, 0,0,2000)
+    end
+end
+
+function mousehookfuncex(msg, x, y)
+	if 0==iswar3front() then return 0 end
+	war3w = getwar3window()
+	if war3w==0 then return 0 end
+	war3wl,war3wr,war3wt,war3wb = getclientrect(war3w)
+	iTickCount = gettickcount()
+	if iTickCount-iLastTick >=5000 then
+		isEnableD3d = isEnableD3dset()
+		iLastTick = iTickCount
+		fXYSet()
+	end
+	if not isEnableD3d then return 0 end
+	sKeyscheme = getglobalvar('keyScheme')
+	sSelKeyscheme = getglobalvar('selKeyscheme')
+	if sKeyscheme~=nil and string.len(sKeyscheme)>0 then
+		iPosS = 0 
+		iPosE = 0
+		tKeyscheme = {} 
+		while true do 
+		    iPosE = string.find(sKeyscheme, "\n", iPosE+1)  -- find 'next' newline 
+		    if iPosE == nil then break end
+		    table.insert(tKeyscheme, string.sub(sKeyscheme, iPosS, iPosE-1))
+		    iPosS = iPosE+1
+		end 
+		table.insert(tKeyscheme, string.sub(sKeyscheme, iPosS, string.len(sKeyscheme)))
+	end
+
+	sTalkscheme = getglobalvar('talkScheme')
+	sSelTalkscheme = getglobalvar('selTalkscheme')
+	if sTalkscheme~=nil and string.len(sTalkscheme)>0 then 
+		iPosS = 0 
+		iPosE = 0
+		tTalkscheme = {} 
+		while true do 
+		    iPosE = string.find(sTalkscheme, "\n", iPosE+1)  -- find 'next' newline 
+		    if iPosE == nil then break end
+		    table.insert(tTalkscheme, string.sub(sTalkscheme, iPosS, iPosE-1))
+		    iPosS = iPosE+1
+		end 
+		table.insert(tTalkscheme, string.sub(sTalkscheme, iPosS, string.len(sTalkscheme)))
+	end
+	
+	iKSDispalyRow = 0
+	if table.getn(tKeyscheme)>getglobalvar('KSPageNum') then
+		iKSDispalyRow = getglobalvar('KSPageNum')
+	else 
+		iKSDispalyRow = table.getn(tKeyscheme)
+	end
+
+	iTSDispalyRow = 0
+	if table.getn(tTalkscheme)>getglobalvar('TSPageNum') then
+		iTSDispalyRow = getglobalvar('TSPageNum')
+	else 
+		iTSDispalyRow = table.getn(tTalkscheme)
+	end
+
+	x,y = screentoclient(war3w, x, y)
+	
+	if x>nBtmx and y>nBtmy and x<nBtmx+32 and y<nBtmy+32 then
+		if getglobalvar('bMenuBtmUp_hidestate')==0 and getglobalvar('bMenuEn')==0 then	--图标不隐藏时执行
+			if msg==1 then
+				setglobalint('bMenuBtmUp', 0)
+				setglobalint('bMenuBtmDown', 1)
+				return 1
+			elseif msg==11 then
+				setglobalint('bMenuEn', 1)
+				setglobalint('bMenuBtmUp', 1)
+				setglobalint('bMenuBtmDown', 0)
+				return 1
+			else
+				setglobalint('bMenuBtmUp', 1)
+				setglobalint('bMenuBtmDown', 0)
+				if sHelpText==1 then
+				if isplaying()==1 then
+					idp,ridp=d3dsettext(idp,ridp,'【助手】', 8000, mx,my, "宋体", 0x0000ff, 255, 7, 14, 500, 0, 0, 0,500, 1000)
+					idm,ridm=d3dsettext(idm,ridm,'助手功能操作图标。游戏开始后可以按左Ctrl+F8 隐藏或显示该图标', 8000, 16*4+mx,my, "宋体", 0xffffff, 255, 8, 14, 500, 0, 0, 0,500, 1000)
+				else 
+					idp,ridp=d3dsettext(idp,ridp,'【助手】', 8000, mx_noplay,my_noplay, "宋体", 0x0000ff, 255, 7, 14, 500, 0, 0, 0,500, 1000)
+					idm,ridm=d3dsettext(idm,ridm,'助手功能操作图标。游戏开始后可以按左Ctrl+F8 隐藏或显示该图标', 8000, 16*4+mx_noplay,my_noplay, "宋体", 0xffffff, 255, 8, 14, 500, 0, 0, 0,500, 1000)
+				end
+				sHelpText=0
+				end
+				return 0
+			end
+		elseif getglobalvar('bMenuBtmUp_hidestate')==0 and getglobalvar('bMenuEn')==1 then	--图标不隐藏时执行
+			if msg==1 then
+				setglobalint('bMenuBtmUp', 0)
+				setglobalint('bMenuBtmDown', 1)
+				return 1
+			elseif msg==11 then
+				setglobalint('bMenuEn',0)
+				setglobalint('bMenuBtmUp', 1)
+				setglobalint('bMenuBtmDown', 0)
+				return 1
+			else
+				setglobalint('bMenuBtmUp', 1)
+				setglobalint('bMenuBtmDown', 0)
+				return 0
+			end
+		end
+
+	--1
+	elseif x>nBtnx[1] and y>nBtny[1] and x<nBtnx[1]+150 and y<nBtny[1]+20 and getglobalvar('bMenuEn')==1 then
+--		sHelpText=1
+		if msg==2 then setglobalint('bMenuEn',0) return 1 end
+		if msg==1 then
+			setglobalint('bMenuBt1Up', 0)
+			setglobalint('bMenuBt1Down', 1)
+			return 1
+		elseif msg==11 then
+			setglobalint('bMenuBt1Up', 1)
+			setglobalint('bMenuBt1Down', 0)
+			if 0 == iswshfunctionenable(1) then 
+				enablewshfunction(1, 1)
+			else
+				enablewshfunction(1, 0)
+			end
+			return 1
+		else
+			UpclearAll()
+			setglobalint('bMenuBt1Up', 1)
+			setglobalint('bMenuBt1Down', 0)
+			return 0
+		end
+
+	--2
+	elseif x>nBtnx[2] and y>nBtny[2] and x<nBtnx[2]+150 and y<nBtny[2]+20 and getglobalvar('bMenuEn')==1 then
+--		sHelpText=1
+		if msg==2 then setglobalint('bMenuEn',0) return 1 end
+		if msg==1 then
+			setglobalint('bMenuBt2Up', 0)
+			setglobalint('bMenuBt2Down', 1)
+			return 1
+		elseif msg==11 then
+			setglobalint('bMenuBt2Up', 1)
+			setglobalint('bMenuBt2Down', 0)
+			if 0 == iswshfunctionenable(2) then 
+				enablewshfunction(2, 1)
+			else
+				enablewshfunction(2, 0)
+			end
+			return 1
+		else
+			UpclearAll()
+			setglobalint('bMenuBt2Up', 1)
+			setglobalint('bMenuBt2Down', 0)
+			return 0
+		end
+
+	--3
+	elseif x>nBtnx[3] and y>nBtny[3] and x<nBtnx[3]+150 and y<nBtny[3]+20 and getglobalvar('bMenuEn')==1 then
+--		sHelpText=1
+		if msg==2 then setglobalint('bMenuEn',0) return 1 end
+		if msg==1 then
+			setglobalint('bMenuBt3Up', 0)
+			setglobalint('bMenuBt3Down', 1)
+			return 1
+		elseif msg==11 then
+			setglobalint('bMenuBt3Up', 1)
+			setglobalint('bMenuBt3Down', 0)
+			if 0 == iswshfunctionenable(5) then 
+				enablewshfunction(5, 1)
+			else
+				enablewshfunction(5, 0)
+			end
+			return 1
+		else
+			UpclearAll()
+			setglobalint('bMenuBt3Up', 1)
+			setglobalint('bMenuBt3Down', 0)
+			return 0
+		end
+
+	--4
+	elseif x>nBtnx[4] and y>nBtny[4] and x<nBtnx[4]+150 and y<nBtny[4]+20 and getglobalvar('bMenuEn')==1 then
+--		sHelpText=1
+		if msg==2 then setglobalint('bMenuEn',0) return 1 end
+		if msg==1 then
+			setglobalint('bMenuBt4Up', 0)
+			setglobalint('bMenuBt4Down', 1)
+			return 1
+		elseif msg==11 then
+			setglobalint('bMenuBt4Up', 1)
+			setglobalint('bMenuBt4Down', 0)
+			if 0 == iswshfunctionenable(6) then 
+				enablewshfunction(6, 1)
+			else
+				enablewshfunction(6, 0)
+			end
+			return 1
+		else
+		   UpclearAll()
+			setglobalint('bMenuBt4Up', 1)
+			setglobalint('bMenuBt4Down', 0)
+			return 0
+		end
+
+	--5
+	elseif x>nBtnx[5] and y>nBtny[5] and x<nBtnx[5]+150 and y<nBtny[5]+20 and getglobalvar('bMenuEn')==1 then
+--		sHelpText=1
+		if msg==2 then setglobalint('bMenuEn',0) return 1 end
+		if msg==1 then
+			setglobalint('bMenuBt5Up', 0)
+			setglobalint('bMenuBt5Down', 1)
+			return 1
+		elseif msg==11 then
+			setglobalint('bMenuBt5Up', 1)
+			setglobalint('bMenuBt5Down', 0)
+
+			if 0==iswshfunctionenable(12) and 0==iswshfunctionenable(13) then 
+				enablewshfunction(12, 1)
+				enablewshfunction(13, 0)
+			elseif 1==iswshfunctionenable(12) and 0==iswshfunctionenable(13) then 
+				enablewshfunction(12, 0)
+				enablewshfunction(13, 1)
+			elseif 0==iswshfunctionenable(12) and 1==iswshfunctionenable(13) then 
+				enablewshfunction(12, 1)
+				enablewshfunction(13, 1)
+			elseif 1==iswshfunctionenable(12) and 1==iswshfunctionenable(13) then 
+				enablewshfunction(12, 0)
+				enablewshfunction(13, 0)
+			end
+
+			return 1
+		else
+			UpclearAll()
+			setglobalint('bMenuBt5Up', 1)
+			setglobalint('bMenuBt5Down', 0)
+			return 0
+		end
+
+	--6
+	elseif x>nBtnx[6] and y>nBtny[6] and x<nBtnx[6]+150 and y<nBtny[6]+20 and getglobalvar('bMenuEn')==1 then
+--		sHelpText=1
+		if msg==2 then setglobalint('bMenuEn',0) return 1 end
+		if msg==1 then
+			setglobalint('bMenuBt6Up', 0)
+			setglobalint('bMenuBt6Down', 1)
+			return 1
+		elseif msg==11 then
+			setglobalint('bMenuBt6Up', 1)
+			setglobalint('bMenuBt6Down', 0)
+			--enablewshfunction(16, 1)
+			return 1
+		else
+			Upclear()
+			setglobalint('bMenu6ExEn', 1)
+			setglobalint('bMenuBt6Up', 1)
+			setglobalint('bMenuBt6Down', 0)
+			return 0
+		end
+		
+	--6ex1	
+	elseif x>nBt6xEx1 and y>nBt6yEx1 and x<nBt6xEx1+50 and y<nBt6yEx1+24 and getglobalvar('bMenu6ExEn')==1 then
+--		sHelpText=1
+		if msg==2 then setglobalint('bMenuEn',0) return 1 end
+		if msg==1 then
+			setglobalint('bMenuBt6Ex1Up', 0)
+			setglobalint('bMenuBt6Ex1Down', 1)
+			return 1
+		elseif msg==11 then
+			setglobalint('bMenuBt6Ex1Up', 1)
+			setglobalint('bMenuBt6Ex1Down', 0)
+			enablewshfunction(16, 1)
+			
+			return 1
+		else
+			setglobalint('bMenuBt6Ex1Up', 1)
+			setglobalint('bMenuBt6Ex2Up', 0)
+			setglobalint('bMenuBt6Ex3Up', 0)
+			setglobalint('bMenuBt6Ex1Down', 0)
+			return 0
+		end
+		
+	--6ex2	
+	elseif x>nBt6xEx2 and y>nBt6yEx2 and x<nBt6xEx2+50 and y<nBt6yEx2+24 and getglobalvar('bMenu6ExEn')==1 then
+--		sHelpText=1
+		if msg==2 then setglobalint('bMenuEn',0) return 1 end
+		if msg==1 then
+			setglobalint('bMenuBt6Ex2Up', 0)
+			setglobalint('bMenuBt6Ex2Down', 1)
+			return 1
+		elseif msg==11 then
+			setglobalint('bMenuBt6Ex2Up', 1)
+			setglobalint('bMenuBt6Ex2Down', 0)
+			enablewshfunction(16, -1)
+			
+			return 1
+		else
+			setglobalint('bMenuBt6Ex1Up', 0)
+			setglobalint('bMenuBt6Ex2Up', 1)
+			setglobalint('bMenuBt6Ex3Up', 0)
+			setglobalint('bMenuBt6Ex1Down', 0)
+			return 0
+		end
+
+		
+	--6ex3	
+	elseif x>nBt6xEx3 and y>nBt6yEx3 and x<nBt6xEx3+50 and y<nBt6yEx3+24 and getglobalvar('bMenu6ExEn')==1 then
+--		UpclearAll()
+--		sHelpText=1
+		if msg==2 then setglobalint('bMenuEn',0) return 1 end
+		if msg==1 then
+			setglobalint('bMenuBt6Ex3Up', 0)
+			setglobalint('bMenuBt6Ex3Down', 1)
+			return 1
+		elseif msg==11 then
+			setglobalint('bMenuBt6Ex3Up', 1)
+			setglobalint('bMenuBt6Ex3Down', 0)
+			enablewshfunction(16, 0)
+			
+			return 1
+		else
+			setglobalint('bMenuBt6Ex1Up', 0)
+			setglobalint('bMenuBt6Ex2Up', 0)
+			setglobalint('bMenuBt6Ex3Up', 1)
+			setglobalint('bMenuBt6Ex1Down', 0)
+			return 0
+		end
+
+	
+	--7
+	elseif x>nBtnx[7] and y>nBtny[7] and x<nBtnx[7]+150 and y<nBtny[7]+20 and getglobalvar('bMenuEn')==1 then
+--		UpclearAll()
+--		sHelpText=1
+		if msg==2 then setglobalint('bMenuEn',0) return 1 end
+		if msg==1 then
+			setglobalint('bMenuBt7Up', 0)
+			setglobalint('bMenuBt7Down', 1)
+			return 1
+		elseif msg==11 then
+			setglobalint('bMenuBt7Up', 1)
+			setglobalint('bMenuBt7Down', 0)
+--			enablewshfunction(18, 0)
+			return 1
+		else
+			UpclearAll()
+			setglobalint('bMenu7ExEn', 1)
+			setglobalint('bMenuBt7Up', 1)
+			setglobalint('bMenuBt7Down', 0)
+			return 0
+		end
+
+	--7Ex
+	elseif x>nBtnx[7]+145 and y>nBtny[7]-4 and x<nBtnx[7]+145+getglobalvar('KSPageTotal')*150 and y<nBtny[7]-4+iKSDispalyRow*20 and getglobalvar('bMenu7ExEn')==1 then
+		for i=1, table.getn(tKeyscheme),1 do
+			iPage = parseOverInt(i/getglobalvar('KSPageNum'))
+			if iPage>getglobalvar('AllowPage') then break end
+			nBt7xExi = nBtnx[7]+145+(iPage-1)*150
+			nBt7yExi = nBtny[7]-4 + (i-(iPage-1)*getglobalvar('KSPageNum')-1)*20
+			if x>nBt7xExi and y>nBt7yExi and x<nBt7xExi+150 and y<nBt7yExi+20 and getglobalvar('bMenu7ExEn')==1 then
+				if msg==2 then setglobalint('bMenuEn',0) return 1 end
+				if msg==1 then
+					setglobalint('bMenuBt7Ex'..i..'Up', 0)
+					setglobalint('bMenuBt7Ex'..i..'Down', 1)
+					return 1
+				elseif msg==11 then
+					setglobalint('bMenuBt7Ex'..i..'Up', 1)
+					setglobalint('bMenuBt7Ex'..i..'Down', 0)
+					if isKeySchemeSel(sSelKeyscheme,tKeyscheme[i]) then selkeyscheme(tKeyscheme[i], 0) else selkeyscheme(tKeyscheme[i], 1) end	--iskeyschemesel(tKeyscheme[i])==1
+					return 1
+				else
+					for j=1, table.getn(tKeyscheme),1 do
+						setglobalint('bMenuBt7Ex'..j..'Up', 0)
+					end
+					setglobalint('bMenuBt7Ex'..i..'Up', 1)
+					setglobalint('bMenuBt7Ex1Down', 0)
+					return 0
+				end
+			end
+		end
+	--8
+	elseif x>nBtnx[8] and y>nBtny[8] and x<nBtnx[8]+150 and y<nBtny[8]+20 and getglobalvar('bMenuEn')==1 then
+--		sHelpText=1
+		if msg==2 then setglobalint('bMenuEn',0) return 1 end
+		if msg==1 then
+			setglobalint('bMenuBt8Up', 0)
+			setglobalint('bMenuBt8Down', 1)
+			return 1
+		elseif msg==11 then
+			setglobalint('bMenuBt8Up', 1)
+			setglobalint('bMenuBt8Down', 0)
+			usenonekeymap()
+			return 1
+		else
+			UpclearAll()
+			setglobalint('bMenuBt8Up', 1)
+			setglobalint('bMenuBt8Down', 0)
+			return 0
+		end
+	--9
+	elseif x>nBtnx[9] and y>nBtny[9] and x<nBtnx[9]+150 and y<nBtny[9]+20 and getglobalvar('bMenuEn')==1 then
+		if msg==2 then setglobalint('bMenuEn',0) return 1 end
+		if msg==1 then
+			setglobalint('bMenuBt9Up', 0)
+			setglobalint('bMenuBt9Down', 1)
+			return 1
+		elseif msg==11 then
+			setglobalint('bMenuBt9Up', 1)
+			setglobalint('bMenuBt9Down', 0)
+--			enablewshfunction(18, 0)
+			return 1
+		else
+			UpclearAll()
+			setglobalint('bMenu9ExEn', 1)
+			setglobalint('bMenuBt9Up', 1)
+			setglobalint('bMenuBt9Down', 0)
+			return 0
+		end
+	--9Ex
+	elseif x>nBtnx[9]+145 and y>nBtny[9]-4 and x<nBtnx[9]+145+getglobalvar('TSPageTotal')*150 and y<nBtny[9]-4+iTSDispalyRow*20 and getglobalvar('bMenu9ExEn')==1 then
+		for i=1, table.getn(tTalkscheme),1 do
+			iPage = parseOverInt(i/getglobalvar('TSPageNum'))
+			if iPage>getglobalvar('AllowPage') then break end
+			nBt9xExi = nBtnx[9]+145+(iPage-1)*150
+			nBt9yExi = nBtny[9]-4 + (i-(iPage-1)*getglobalvar('TSPageNum')-1)*20
+			if x>nBt9xExi and y>nBt9yExi and x<nBt9xExi+150 and y<nBt9yExi+20 and getglobalvar('bMenu9ExEn')==1 then
+				if msg==2 then setglobalint('bMenuEn',0) return 1 end
+				if msg==1 then
+					setglobalint('bMenuBt9Ex'..i..'Up', 0)
+					setglobalint('bMenuBt9Ex'..i..'Down', 1)
+					return 1
+				elseif msg==11 then
+					setglobalint('bMenuBt9Ex'..i..'Up', 1)
+					setglobalint('bMenuBt9Ex'..i..'Down', 0)
+					seltalkscheme(tTalkscheme[i])
+					return 1
+				else
+					for j=1, table.getn(tTalkscheme),1 do
+						setglobalint('bMenuBt9Ex'..j..'Up', 0)
+					end
+					setglobalint('bMenuBt9Ex'..i..'Up', 1)
+					setglobalint('bMenuBt9Ex1Down', 0)
+					return 0
+				end
+			end
+		end
+	--10
+	elseif x>nBtnx[10] and y>nBtny[10] and x<nBtnx[10]+150 and y<nBtny[10]+20 and getglobalvar('bMenuEn')==1 then
+--		sHelpText=1
+		if msg==2 then setglobalint('bMenuEn',0) return 1 end
+		if msg==1 then
+			setglobalint('bMenuBt10Up', 0)
+			setglobalint('bMenuBt10Down', 1)
+			return 1
+		elseif msg==11 then
+			setglobalint('bMenuBt10Up', 1)
+			setglobalint('bMenuBt10Down', 0)
+			myd3dsettext(0,'当前已选改键方案',getselkeyscheme(),255)
+			return 1
+		else
+			UpclearAll()
+			setglobalint('bMenuBt10Up', 1)
+			setglobalint('bMenuBt10Down', 0)
+			return 0
+		end
+	--11
+	elseif x>nBtnx[11] and y>nBtny[11] and x<nBtnx[11]+150 and y<nBtny[11]+20 and getglobalvar('bMenuEn')==1 then
+--		sHelpText=1
+		if msg==2 then setglobalint('bMenuEn',0) return 1 end
+		if msg==1 then
+			setglobalint('bMenuBt11Up', 0)
+			setglobalint('bMenuBt11Down', 1)
+			return 1
+		elseif msg==11 then
+			setglobalint('bMenuBt11Up', 1)
+			setglobalint('bMenuBt11Down', 0)
+			myd3dsettext(0,'当前改键信息',getselkeymaps(),255)
+			return 1
+		else
+			UpclearAll()
+			setglobalint('bMenuBt11Up', 1)
+			setglobalint('bMenuBt11Down', 0)
+			return 0
+		end
+	--12
+	elseif x>nBtnx[12] and y>nBtny[12] and x<nBtnx[12]+150 and y<nBtny[12]+20 and getglobalvar('bMenuEn')==1 then
+--		sHelpText=1
+		if msg==2 then setglobalint('bMenuEn',0) return 1 end
+		if msg==1 then
+			setglobalint('bMenuBt12Up', 0)
+			setglobalint('bMenuBt12Down', 1)
+			return 1
+		elseif msg==11 then
+			setglobalint('bMenuBt12Up', 1)
+			setglobalint('bMenuBt12Down', 0)
+			myd3dsettext(0,'当前喊话方案内容',getseltalkwords(),255)
+			return 1
+		else
+			UpclearAll()
+			setglobalint('bMenuBt12Up', 1)
+			setglobalint('bMenuBt12Down', 0)
+			return 0
+		end
+	--13
+	elseif x>nBtnx[13] and y>nBtny[13] and x<nBtnx[13]+150 and y<nBtny[13]+20 and getglobalvar('bMenuEn')==1 then
+--		sHelpText=1
+		if msg==2 then setglobalint('bMenuEn',0) return 1 end
+		if msg==1 then
+			setglobalint('bMenuBt13Up', 0)
+			setglobalint('bMenuBt13Down', 1)
+			return 1
+		elseif msg==11 then
+			setglobalint('bMenuBt13Up', 1)
+			setglobalint('bMenuBt13Down', 0)
+			sendmessage(getwar3window(), 0x0112, 0xF020, 0)
+			setglobalint('bMenuEn',0) 
+			setglobalint('bMenuBtmUp', 0)
+			return 1
+		else
+			UpclearAll()
+			setglobalint('bMenuBt13Up', 1)
+			setglobalint('bMenuBt13Down', 0)
+			return 0
+		end
+	else
+--		sHelpText=1
+		if msg==1 or msg==2 then 
+			setglobalint('bMenuEn',0) 
+			setglobalint('bMenu6ExEn', 0) 
+			setglobalint('bMenu7ExEn', 0) 
+			setglobalint('bMenu9ExEn', 0) 
+			return 0 
+		end
+		setglobalint('bMenuBtmUp', 0)
+		UpclearAll()
+		return 0
+	end
+	return 0
+end
+
+function keyhookfunc(keycode, controlkeycode, downorup)		--快捷键监视
+    if 0==iswar3front() then return 0 end
+    if 1==ischat() then return 0 end
+    if controlkeycode==16 and keycode==119 and downorup==1 and getglobalvar('bMenuBtmUp_hidestate')==0 then
+	setglobalint('bMenuBtmUp_hidestate',1)
+	return 1
+    end
+    if controlkeycode==16 and keycode==119 and downorup==1 and getglobalvar('bMenuBtmUp_hidestate')==1 then
+	setglobalint('bMenuBtmUp_hidestate',0)
+	return 1
+    end
+end

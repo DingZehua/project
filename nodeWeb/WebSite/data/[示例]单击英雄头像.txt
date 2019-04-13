@@ -1,0 +1,50 @@
+--[[
+简介：
+    此脚本作用是把单击英雄头像修改到按键上，默认为空格，可自行修改
+修改位置见脚本正文。
+
+使用说明：
+  运行脚本之后按下修改的键完成单击英雄头像效果
+
+备注：
+①此脚本偶尔会出现鼠标位置错误，需要加上锁鼠函数。
+②欢迎提出宝贵建议，qq:167849866； bbs.myebe.com
+
+                                      作者：╃Ｇ°
+                                                    ]]
+
+--脚本正文：
+
+if getwshscriptversion() < 2 then
+    msgbox('请使用助手2.4版本以上')
+end
+
+--【用户修改处】
+selfkey=32 --空格的键码，可自行修改，如用W则改为87
+--【用户修改处结束】
+
+currentx=0
+currenty=0
+setkeywatch('keyhookfunc')
+
+function keyhookfunc(keycode, controlkey, downorup)
+          currentx,currenty = getcursorpos()
+    if 0==iswar3front() then return 0 end
+    if 1==ischat() then return 0 end
+    if downorup==1 then return 0 end
+    if keycode==selfkey and downorup==0 then
+--        currentx,currenty = getcursorpos()
+        sleep(10)
+        war3w = getwar3window()
+        war3wl,war3wr,war3wt,war3wb = getwindowrect(war3w)
+        herox=war3wl+(war3wr-war3wl)*0.3125
+        heroy=war3wt+(war3wb-war3wt)*0.9
+        setcursorpos(herox, heroy)
+        sleep(20)
+        mousedown(0)
+        mouseup(0)
+        sleep(10)
+        setcursorpos(currentx, currenty)
+    return 1
+    end
+end

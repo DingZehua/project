@@ -1,0 +1,77 @@
+--[[
+简介：
+    适用于真三国无双v3.9d Eagel-14E典韦开火车、熊猫人无限飞，默认按Z键开始触发
+脚本，按鼠标指向工作
+使用说明：
+    默认快捷键为Z，修改位置见脚本正文。游戏中鼠标指向探测过的地图区域使劲按Z即可！
+
+更新：
+[2010年6月28日]
+调整了熊猫人无限飞的模拟操作模式，飞鞋不必指定位置，也不必设置延时，使用更方便。
+[2009年8月22日早]
+重新调整脚本延时时间，在1.2+版本助手的使用下脚本体验将全新改变，完全不会再有迟钝、
+难以控制操作情况的问题。
+[2009年8月28日]
+增加了游戏内角色操作首次提示，支持1.2+版本助手。
+[2010年4月12日]
+删除了一处冗余代码，更改部分文字描述。
+[2010年5月10日]
+更新对应新版本助手的功能函数。
+                                       作者：星夜心雨
+                                                              ]]
+--脚本正文：
+--【用户修改处】
+unitClickKey=90    --默认操作键Z，根据自己的情况可改变
+--【用户修改处结束】
+promptState1=0
+promptState2=0
+message1='你选中了英雄典韦，加W技能后可以按下Z键配合鼠标不断移动（每次可W的范围内）即可连续移动开火车'
+message2='你选中了英雄熊猫人，出专属和飞鞋后，将飞鞋放在物品栏位置1，鼠标指向有\n视野的目标处按多次Z键，即可到达鼠标指向位置，按Z键频率最好大于半秒'
+idm=0
+ridm=0
+idp=0
+ridp=0
+
+setkeywatch('keyhookfunc')
+if getwshscriptversion() < 8 then
+    msgbox('请使用更高版本的助手')
+end
+
+function keyhookfunc(keycode, controlkeycode, downorup)
+    if 0==iswar3front() then return 0 end
+    if 1==ischat() then return 0 end
+    strCurrSelUnit = getcurrentunit()
+    war3w = getwar3window()
+    win3wl,win3wr,win3wt,win3wb = getclientrect(war3w)
+    x=(win3wr-win3wl)*0.0018
+    y=(win3wb-win3wt)*0.66
+    if strCurrSelUnit=='600H' and promptState1==0 then
+        idp,ridp=d3dsettext(idp,ridp,'【助手】', 20000, x,y, "宋体", 0x0000ff, 255, 8, 16, 0, 0, 0, 0,1000, 2000)
+        idm,ridm=d3dsettext(idm,ridm,message1, 20000, 16*4+x,y, "宋体", 0xffffff, 255, 8, 16, 0, 0, 0, 0,1000, 2000)
+        promptState1=1
+    end
+    if strCurrSelUnit=='P00N' and promptState2==0 then 
+        idp,ridp=d3dsettext(idp,ridp,'【助手】', 20000, x,y, "宋体", 0x0000ff, 255, 8, 16, 500, 0, 0, 0,1000, 2000)
+        idm,ridm=d3dsettext(idm,ridm,message2, 20000, 16*4+x,y, "宋体", 0xffffff, 255, 8, 16, 500, 0, 0, 0,1000, 2000)
+        promptState2=1
+    end
+--[[
+以下为选中典韦的操作脚本，当按下Z(90)键鼠标移动到可W的范围内，开火车就一边按
+Z键接着鼠标一直向目标方向移动，鼠标移动的位置和上个移动的位置必须是可W的距离，
+否则会停下。注意Y键的按键和鼠标移动的配合]]
+    if strCurrSelUnit=='600H' and keycode==unitClickKey and downorup==0 then    --600H为典韦ID
+        keypress(87)
+        sleep(50)
+        mouseclick(0)
+        sleep(50)
+        keypress(83)
+        return 1
+    end 
+--[[
+以下为选中熊猫人的操作脚本，鼠标指向有视野的目标处按Z(90)键即可，按Z键频率最好
+大于半秒，实际中主要根据自己的网络状况决定，要注意的是你先必须出专属和飞鞋]]
+    if strCurrSelUnit=='P00N'and keycode==unitClickKey and downorup==0 then    --P00N为熊猫人ID
+        runkeys('E 延时1ms S 延时1ms 使用物品csed 延时1ms 左键')
+        return 1
+    end
+end 

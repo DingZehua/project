@@ -1,0 +1,14 @@
+--这个脚本为自动使用Dota秘法戒指而编写
+--请将秘法戒指放在第一个包裹栏内
+--也可以设置在其他包裹栏，这需要修改下面的键码103
+
+--设置定时器，31秒执行一次func
+settimer(31000, 'func')
+
+function func()
+    --判断魔兽窗口是否在最前端
+    if 1 == iswar3front() then
+        keydown(103) --按下Num7
+        keyup(103)   --放开Num7
+    end
+end

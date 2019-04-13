@@ -1,0 +1,72 @@
+真正激活nero8 体验全功能
+
+nero8，无疑是当今最优秀的刻录软件，但大多朋友下载的所谓免费版或是铺天盖地的序列号其实都是只能安装，而不能激活所有功能，对于一个安装后占地达2G的大型软件，多数功能被限制，安装还有什么意义呢？精简版倒是控制了空间占用，可代价是多数功能的丧失，以及在稳定性方面的一些诟病。此外，nero序列号不正确往往刻坏盘其实只是传说，nero检查序列号真伪，但并不通知你，也不锁死你的软件功能，刻坏盘是因为软件并没有全功能激活。
+现给大家奉上能够实现全功能完美激活的方法，希望对大家有帮助，当然，安装前，一定要看看自己的硬盘空间是否够大，最新的nero8.3.13.0版本，完全安装后，占用接近2.4G的硬盘空间。
+下载完成后，安装软件（不要担心有插件的提示，这不是病毒！Nero软件***着各种各样的插件！），
+①输入如下试用序列号：
+　 　 　 1K22-1867-0795-66M4-5339-5913-56EX
+　 　 　 直至软件安装完毕，并重启一下系统！
+　 　 　 【注意】软件安装完毕后，不要运行桌面上的Nero StartSmart！！
+　 　 　 ②进入开始菜单，所有程序，找到nero 8下的子文件夹Nero Toolkit，
+双击打开Nero ControlCenter。当提示是否检查软件更新时，点“否”。
+　 　 　 ③点左侧的“许可证”选项，会看到目前只有一组序列号，就是nero 8的
+注册序列号（就是你安装时输入的那个）。记住它,做完下面的动作后,将它“删除”！
+　 　 　 　 （“删除”选项在右下角处，或者最后把它删除也行！）
+　 　 　 然后，点击右下方的“添加”按钮，输入
+“5C0X-0000-1911-0000-4006-5519-E333”激活Nero 8 Ultra Edition HD功能，
+这是桌面上会增加
+　 　 　 一个“Nero Home”的图标。
+　 　 　 添加输入“4E14-XAME-982M-KM89-421A-0K7K-6M9X”激活Nero 8 Activation功能；
+　 　 　 添加输入“5E12-9EK2-991A-X7E6-MEM0-MA4E-7917”激活SecurDisc Viewer Activation功能。
+　 　 　 
+　 　 　 至此，您已经永久激活您的Nero 8 Ultra Edition HD！
+　 　 　 ④先不要关闭Nero ControlCenter，再次点左侧的“更新”选项，去掉下方的
+“每隔30天检查一次更新”前面的“√”，点“确定”退出
+　 　 　 Nero ControlCenter。
+　 　 　 ⑤找到安装路径：
+　 　 　 C:\Program Files\Common Files\Nero\Shared\NL3\NeroPatentActivation.exe 
+　 　 　 请将NeroPatentActivation.exe删除或者重命名为：NeroPatentActivation.exe.bak 
+　 　 　 ⑥开始体验您的Nero 8 Ultra Edition HD吧！
+
+
+NERO9.2.6.0试用安装序列号和破解
+
+试用序列号:8M01-249K-1T0E-3A1A-C7AA-MUZ3-8EL4-2U9W
+注册教程：
+用试用序列号安装，装完后打开注册机删除已有的序列号，再算号，加进去。
+安装后打开注册机，点Remove all serials，就是移除所有序列号的意思，上面有Product，选一个，点Generate(生成）就生成一个序列号了，Add to white-list(加入白名单）就是添加序列号。就这么点几下。
+nero 9.0 HD用nero 9.0 HD的激活号就可以，并不是像某些人说的nero 9.0非得用nero9.0 HD的激活号才行。
+事实上nero 9完全版只需要两个插件，分别是DTS Plug-in和Blu-ray Disc Authoring Plug-in。不过很多情况下有些人由于个人原因导致一些问题反过来说注册机有问题，建议把全部插件的序列号都加上。
+有人会问为什么nero move it,nero back it up,nero media home的序列号加不进去，这个问题自己到官网看一下,它们都是nero公司的软件，但是跟nero 9无关。这个注册机是nero全部产品的注册机。
+有人问需不需要到官网验证，序列号是可用的但不代表是合法的，用注册机算出来的号到官网是百分之百会被验证成盗版的。
+在nero 8时代还有个说法，现在也还有人提。说输入几个命令，如果显示OK，就代表通过验证了，那只是检测本机上的nero的序列号的，和网络无关，和验证更无关。
+
+全插件包括：
+DTS Plug-in
+Blu-ray Disc Authoring Plug-in
+mp3Pro Plug-in
+SecurDisc Viewer
+Grace Note Plug-in
+Blu-ray Video Plug-in
+Blu-ray/HD DVD Plug-in
+Nero In-CD Reader
+有激活号的插件有：
+Grace Note Plug-in
+Blu-ray Video Plug-in
+Blu-ray Disc Authoring Plug-in
+
+所以建议有问题的使用全插件，要加进去的序列号包括：
+nero 9 HD
+Activation(nero 9 HD)
+DTS Plug-in
+Blu-ray Disc Authoring Plug-in
+Activation(Blu-ray Disc Authoring Plug-in)
+mp3Pro Plug-in
+SecurDisc Viewer
+Grace Note Plug-in
+Activation(Grace Note Plug-in)
+Blu-ray Video Plug-in
+Activation( Blu-ray Video Plug-in)
+Blu-ray/HD DVD Plug-in
+Nero In-CD Reader
+这样全部加上，就不会有什么问题了。写到这个份上，够详细了吧。要是还有人问怎么注册我就彻底无语了。 

@@ -1,0 +1,22 @@
+***************************
+安装方法--for autocad2004cn
+***************************
+
+sn:000-00000000 or 400-12345678
+
+1,启动setup.exe，选择install完成安装
+
+2,双击adeskcn.reg文件进行注册
+
+3,将LICPATH.LIC文件拷贝到Acad2004的安装目录，如C:\Program Files\AutoCAD 2004
+
+4,启动AutoCAD 2004，OK！
+
+
+如果要重新注册：
+****************
+
+删除以下这个注册表项，即可重新注册了~~
+
+[HKEY_LOCAL_MACHINE\Software\Autodesk\AutoCAD\R16.0\ACAD-201:804\AdLM]
+"Type"=dword:00000019

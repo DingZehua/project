@@ -392,13 +392,12 @@ var	namespace = function()
         }
         this.ele_delete(el);
       },
-      'ajax' : function(data,url,backcall,sendType,dataName,async){
+      'ajax' : function(data,url,callback,sendType,dataName,async){
         if(!url){return;}
         var sendType = sendType ? sendType.toUpperCase() : 'GET';
         var async = async || true;
-        var backcall = backcall || function(){};
+        var callback = callback || function(){};
         var xmlhttp = null;
-      
         if(window.XMLHttpRequest){ xmlhttp = new XMLHttpRequest(); }
         else { xmlhttp = new ActiveXObject('Microsolft.XMLHTTP'); }
       
@@ -420,7 +419,6 @@ var	namespace = function()
           }
           sendData[0] = '';
         }
-        
         if(sendType === 'GET'){
           if(url.indexOf('?') < 0){ url += '?' + sendData; }
           else{ url += '&' + sendData; }
@@ -428,7 +426,8 @@ var	namespace = function()
       
         xmlhttp.open(sendType,url,async);
         if(sendType === 'POST') {
-          xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+          xmlhttp.setRequestHeader('accept','text/appliction/json');
+          xmlhttp.repsonseType = 'json';
         }
         
         if(sendType === 'POST') xmlhttp.send(sendData);
@@ -440,7 +439,7 @@ var	namespace = function()
               throw('url length size exceed limit');
             }
             else if(xmlhttp.status === 200){
-              backcall instanceof Function ? backcall.call(xmlhttp,xmlhttp.responseText) : '';
+              callback instanceof Function ? callback.call(xmlhttp,xmlhttp.responseText) : '';
             }
           }
         }

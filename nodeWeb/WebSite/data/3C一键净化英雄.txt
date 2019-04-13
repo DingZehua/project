@@ -1,0 +1,149 @@
+--[[
+简介：
+    澄海3C一键净化英雄脚本，该脚本可实现一键净化英雄，自动搜索带净化权杖的英雄并使用到脚本已指定英雄身上。
+
+用法：	按默认设置可以使用Z键启动自动一键净化操作。
+	如需切换净化对象英雄，可选择该英雄后使用Ctrl+`快捷键即可改变以后净化对象。
+	是否返回执行操作前的当前英雄设置建议不要启用，以减少一键净化操作所需时间！
+
+注意：
+       1. 一键净化仅支持澄海3C 5个及其以下英雄，且存在净化权杖道具。该脚本需要所控英雄为自己的英雄。
+       2. 使用一键净化最好英雄全部在净化权杖的释放范围内，这样可以立即达到净化效果。
+       3. 一键净化在5个英雄下，无网络延迟(很小)时执行净化虽然对于操作者的响应时间来说应当是已经很快了，
+但是相对CPU的操作时间是相当长的！因此在执行一键净化时请勿进行有关切换选择英雄的任何操作，否则将会中断一键净化操作。
+       4. 延时时间视具体网络情况设置，不可设置过多，否则将直接导致一键净化过程所需时间直接增加。同时更应注意第3点。
+
+                                       作者：星夜心雨
+                                       			]]
+
+--【用户修改处】
+ClickKey = 90		--默认操作键Z键，根据自己的情况可改变
+hDestID = 'hctO'	--目标英雄(自己的)，默认牛头人
+sRes = 'shsw'		--使用物品ID(可用于己方有效可用道具ID，如净化权杖)
+isReturnCur = false	--是否返回执行操作前的当前英雄
+tSleep = 10		--(单位ms)一键净化过程延时时间，单机模式默认10ms，视网络情况适当增加
+--【用户修改处结束】
+
+function keypressEx(keycode)
+    hWar3 = getwar3window()
+    sendmessage(hWar3, 256, keycode, 0)
+    sleep(10)
+    sendmessage(hWar3, 257, keycode, 0)
+end
+
+function hasRes(hHD)
+    hasPurif_=false
+    for i=0,5,1 do
+        gHD,gID,gNUM= getunititem(hHD,i)
+        if gID==sRes and gNUM>0 then
+            hasPurif_ = true
+        end
+    end
+    return hasPurif_
+end
+
+function search(heroID)
+    distHero = nil
+    haResHero = 0
+    keypressEx(112)
+    sleep(tSleep)
+    hnID,hnHD = getcurrentunit()
+    if hID==heroID then
+        distHero = 'F1'
+    end
+    if hasRes(hnHD) then
+        haResHero =  112
+    end  
+    for iPos=1,4,1 do
+        hoID = hnID
+        keypressEx(112+iPos)
+	iTick = gettickcount()
+	while true do
+	    hnID,hnHD = getcurrentunit()
+	    if hnID~=hoID or (gettickcount()-iTick)>tSleep then
+		break
+	    end
+	end
+	if hnID==hoID then
+	    break
+	end
+        iPos = iPos + 1
+        if hnID==heroID then
+            distHero = 'F'..iPos 
+        end
+        if hasRes(hnHD) then
+            haResHero =  112+iPos-1
+        end
+    end
+    return distHero,haResHero
+end
+
+function searchPosition(heroID)
+    keypressEx(112)
+    sleep(tSleep)
+    hnID,hnHD = getcurrentunit()
+    if hnID==heroID then
+        return 'F1'
+    end
+    for iPos=1,4,1 do
+        hoID = hnID
+        keypressEx(112+iPos)
+	iTick = gettickcount()
+	while true do
+	    hnID,hnHD = getcurrentunit()
+	    if hnID~=hoID or (gettickcount()-iTick)>tSleep then
+		break
+	    end
+	end
+	if hnID==hoID then
+	    break
+	end
+        iPos = iPos + 1
+        if hnID==heroID then
+            return 'F'..iPos 
+        end            
+    end
+    return nil
+end
+
+setkeywatch('keyhookfunc')
+
+function keyhookfunc(keycode, controlkey, downorup)
+    if 0==iswar3front() then return 0 end
+    if 1==ischat() then return 0 end
+    if keycode==192 and 16==controlkey then 
+        hID,hHD = getcurrentunit()
+	if hID~=nil and hID~='' then
+	    hDestID = hID
+	end
+	return 1
+    end
+    if keycode==ClickKey and downorup==0 then
+	hoID = ''
+	hoHD = ''
+	hnID = ''
+	hnHD = ''
+	thisdistH = ''
+	thisHaRes = 0
+        hcurID, hcurHD = getcurrentunit()
+        thisdistH, thisHaRes = search(hDestID)
+	if thisdistH~= nil then
+            if thisHaRes~=0 then
+	        sleep(1)
+		keypressEx(thisHaRes)
+		sleep(tSleep)
+                runkeys('使用物品'..sRes..' 左击英雄头像'..thisdistH)
+            end
+	    if isReturnCur then
+		sleep(tSleep)
+		hcerHero = searchPosition(hcurID)
+		if hcerHero~=nil then
+		    sleep(tSleep)
+		    runkeys('左击英雄头像'..hcerHero..' 左击英雄头像'..hcerHero)
+		end
+	    end
+	end
+        return 1
+    end
+    return 0
+end
