@@ -4,7 +4,7 @@ let url = require('url');
 let lib_base = require('./includes/lib_base');
 
 let router = (function(args) {
-  let {request : req, response : res,sql,GLOBALS,config} = args;
+  let {request : req, response : res,sql,GLOBALS,config,sessionSet} = args;
   let defaultPage = config.defaultPage.root;
   let setCookie = lib_base.setCookies(req);
 
@@ -19,11 +19,23 @@ let router = (function(args) {
     let [contentType = null,boundary = null] = (req.headers.contentType && req.headers.contentType.split('; ')) || [];
 
     // SESSION COOKIES GET POST
-    let fetchCookies = lib_base.fetchCookies;
-    let fetchGETData = lib_base.fetchGETData;
+    
+
+    //const SESSION = lib_base.
+    const COOKIES = lib_base.fetchCookies(req);
+    const GET = lib_base.fetchGETData(urlObj.query);
     let fetchPOSTData = lib_base.fetchPOSTDataCurring(req,contentType,boundary);
     let readPage = lib_base.readPage;
     let fileStat = lib_base.fileStat;
+    // TODO:判断SESS_ID
+    let SESS_ID = null;
+    if(!COOKIES.SESS_ID) {
+      SESS_ID = lib_base.buildSession_id();
+    } else {
+      SESS_ID = COOKIES.SESS_ID;
+    }
+
+    const SESSION = lib_base.buildSession(SESS_ID,sessionSet,GLOBALS.curTIME);
 
     if(req.method === 'GET' || req.method === 'POST') {
       if(!contentType) {
@@ -54,7 +66,6 @@ let router = (function(args) {
       };;
     }
 
-    
     let data = null;
     let status = 200;
 
@@ -75,22 +86,24 @@ let router = (function(args) {
       ({script,suffix} = splitFileName(defaultPage));
     }
 
-
+    // TODO:对非网页进行操作
     let moduleName = `${GLOBALS.PHYSICAL_ROOT}\\${paths.join('\\')}\\${script}`;
     let fullFileName = moduleName + ('.' + suffix || '');
     // 查看后缀名是不是后台语言后缀
+    // 如果是程序文件，优先处理，但是访问不到则访问对应文件。
     if(suffix && fileType.some((v) => v === suffix) || !suffix) {
       try {
         // 加载文档.
         data = await require(moduleName)({
             fetchPOSTData:fetchPOSTData,
-            GET : fetchGETData(urlObj.query),
-            COOKIES : fetchCookies(req),
+            GET,
+            COOKIES,
             sql,
             response : res,
             request : req,
             GLOBALS,
-            setCookie
+            setCookie,
+            SESSION
         });
         status = 200;
       } catch(e) {
@@ -125,8 +138,10 @@ let router = (function(args) {
       contentType = 'text/plain';
     }
 
-    // data模板操作。
     
+
+    setCookie.set({SESS_ID},config.session_expired);
+    // TODO:data模板操作。
     return {data,status,contentType,cookies : setCookie._build()};
   })();
   

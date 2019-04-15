@@ -12,9 +12,9 @@ config.path = {
   mobile : '/terminal/mobile',
   server : '.'
 }
-// 如果要访问根目录下的程序，请不要加上后缀名。
+// 如果要访问目录下的程序，请不要加上后缀名。
 config.access = {
-  allow : ['^/js/base.js$','^/js/structor.js$','^/js/base.js$','^/js/base.js$','^/uploadFile',
+  allow : ['^/js/base.js$','^/js/structor.js$','^/js/base.js$','^/uploadFile',
             '^/js/dom.js$','^/js/myjs1.4.js$','^/' + config.path.pc + '/','^/upload/','^/test'],
   deny  : ['^/server.js$','^/$']
 }
@@ -29,6 +29,8 @@ config.defaultPage = {
 }
 
 config.fileType = ['html','htm','php','jsp','asp','aspx'];
+
+config.session_expired = 60 * 15;
 /*
 config.contentType = [
   'appliction/x-www-urlencoded',
@@ -43,5 +45,8 @@ config.accept = [
   'image/'
 ];
 */
+
+Object.freeze(config);
+
 try{(module && (module.exports = config));}
 catch(e){}

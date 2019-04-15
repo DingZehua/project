@@ -3,6 +3,7 @@ let lib_base = (function() {
   let fs = require('fs');
   let queryString = require('querystring');
   let lib_base = {};
+  let md5 = require('md5');
 
   // 加载文件.
   function readPage(fileName,encode) {
@@ -83,9 +84,11 @@ let lib_base = (function() {
 
   //设置cookie
   let setCookies = function(req) {
+    // 自己设定的cookies
     let cookies = {};
     let count = 0;
-    let COOKIES = fetchCookies(req);
+    // 远程客户端发送过来的cookies
+    let clientCookies = fetchCookies(req);
     return {
       set : function(obj,second,attr = []) {
         if(!obj) return false;
@@ -107,11 +110,15 @@ let lib_base = (function() {
       keys() {
         return Object.keys(cookies);
       },
+      clientKeys() {
+        return Object.keys(clientCookies);
+      },
       _build() {
         return this.keys().map((key) => {
-          return `${key}=${cookies[key].value};` + cookies[key].attr.join(';');
+          return `${key}=${cookies[key].value};${cookies[key].attr.join(';')}`;
         }).join(';');
       },
+      // 删除远程客户端cookies
       removeClient(key) {
         if(cookies.hasOWnProperty(key)) {
           cookies[key].attr = ['Max-Age=0'];
@@ -120,16 +127,73 @@ let lib_base = (function() {
         }
       },
       removeAllClient() {
-        new Set([...Object.keys(cookies),...Object.keys(COOKIES)]).forEach((key) => {
+        this.allCookieKeys().forEach((key) => {
           this.removeClient(key);
         },this);
+      },
+      allCookieKeys() {
+        return Array.from(new Set([...this.keys(),...this.clientKeys()]));
+      },
+      has(hasKey) {
+        return this.keys().some( (key) => key === hasKey);
+      },
+      hasAll(hasKey) {
+        return this.allCookieKeys().some( (key) => key === hasKey);
       }
     }
-
-
   };
 
+  function deepDelete(obj){
+    for(var key in obj){
+      if(typeof obj[key] !== 'string' && 
+        !(obj[key] instanceof String) && 
+        obj.hasOwnProperty(key)){
+        deepDelete(obj[key]);
+      }  
+    }
+    for(var key in obj){
+      if(obj.hasOwnProperty(key)) {
+        delete obj[key];
+      }
+    }
+  }
 
+  function buildSession_id() {
+    return md5(md5(Math.random().toString()));
+  }
+
+  // 一旦调用，就算是注册session.
+  function buildSession(SESS_ID,sessionSet,curTime) {
+    let Session = sessionSet.constructor;
+    // 如果session过期了，则销毁.
+    if(Session.expired(SESS_ID,sessionSet,curTime) === false) {
+      sessionSet.destroy(SESS_ID);
+    }
+    return new Proxy(sessionSet,{
+      set(t,prop,value,receiver) {
+        if(Reflect.get(t,prop,receiver)) {
+          throw '不能定义内部属性名';
+        }
+        if(!t.userData[SESS_ID]) {
+          t.add(SESS_ID);
+        }
+        return Reflect.set(t.userData[SESS_ID].data,prop,value,t.userData[SESS_ID].data);
+      },
+      get(t,prop,receiver) {
+        if(Reflect.get(t,prop,receiver)) {
+          if(typeof t[prop] === 'function') {
+            return function() {
+              return t[prop].apply(t,[SESS_ID,...arguments]);
+            }
+          } else {
+            return t[prop];
+          }
+        }
+        if(!t.isExist(SESS_ID)) { t.add(SESS_ID); }
+        return Reflect.get(t.userData[SESS_ID].data,prop,t.userData[SESS_ID].data);
+      }
+    });
+  }
 
   lib_base.readPage = readPage;
   lib_base.fileStat = fileStat;
@@ -138,6 +202,9 @@ let lib_base = (function() {
   lib_base.fetchGETData = fetchGETData;
   lib_base.parseQueryString = parseQueryString;
   lib_base.setCookies = setCookies;
+  lib_base.deepDelete = deepDelete;
+  lib_base.buildSession_id = buildSession_id;
+  lib_base.buildSession = buildSession;
 
   return lib_base;
 }());
