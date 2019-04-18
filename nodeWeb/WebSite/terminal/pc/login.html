@@ -18,10 +18,11 @@
 </script>
 -->
 </head>
-<body>                      
-<form action='/login.html?temp=asdfasdf' method='GET' enctype="application/x-www-form-urlencoded">
-<soan>用户名</soan><input type='text' name='userName'/>
-<span>密码</span><input type='password' name = 'password'/>
+<body>    
+<form action='/login.html?temp=asdfasdf' method='POST' enctype="multipart/form-data">
+<input type="file" name='upload' multiple='multipart' />
+  <span>用户名</span> : <input type='text' name='userName'/>
+  <span>密码</span>   : <input type="password" name='password'>
 <input type="button" value="提交" onclick="document.forms[0].submit();" />
 </form>
 </body>

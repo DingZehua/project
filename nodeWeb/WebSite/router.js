@@ -1,4 +1,3 @@
-let fileType = ['html','htm','php','jsp','asp','aspx'];
 let rewrite = require('./includes/lib_access');
 let url = require('url');
 let lib_base = require('./includes/lib_base');
@@ -15,9 +14,8 @@ let router = (function(args) {
     // 路径重写
     let pathName = rewrite.rewritePath(urlObj.pathname);
 
-    let accept = (req.headers.accept && req.headers.accept.split(',')[0]) || 'text/plain';
-    let [contentType = null,boundary = null] = (req.headers.contentType && req.headers.contentType.split('; ')) || [];
-
+    let accept = (req.headers.accept && req.headers.accept.split(',')[0]) || config.contentType.plain;
+    let [contentType = null,boundary = null] = (req.headers['content-type'] && req.headers['content-type'].split('; ')) || [];
     // SESSION COOKIES GET POST
     const COOKIES = lib_base.fetchCookies(req);
     const GET = lib_base.fetchGETData(urlObj.query);
@@ -34,45 +32,33 @@ let router = (function(args) {
 
     const SESSION = lib_base.buildSession(SESS_ID,sessionSet,GLOBALS.curTIME,config.session_expired);
 
-    if(pathName.search('login') > -1) {
-      console.log(sessionSet);
-    }
-
     // 取得访问方法和accept.
     if(req.method === 'GET' || req.method === 'POST') {
       if(!contentType) {
         // 处理普通访问
-        if(accept === '*/*') contentType = 'text/html';
+        if(accept === config.contentType.unknow) contentType = config.contentType.html;
         else { contentType = accept; }
       } else {
         // AJAX
-        if(accept === '*/*' || accept === 'appliction/json') {
-          contentType = 'appliction/json';
-          // 表单访问
-        } else {
-          if(contentType === 'multipart/form-data') {
-            return {
-              status : 404,
-              page : '404 - 暂不支持文件上传',
-              contentType : 'text/plain'
-            };
-          }
-          contentType = 'text/html';
+        if(accept === config.contentType.unknow || accept === config.contentType.json) {
+          contentType = config.contentType.json;
         }
       }
     } else {
       return {
         status : 404,
         page : '404 - 不支持此方法的调用',
-        contentType : 'text/plain'
+        contentType : config.contentType.plain
       };;
     }
-    
+
     let data = null;
     let status = 200;
     let paths = [];
     let fileName;
     let script,suffix;
+    let generalFileName = null;
+
     if(pathName !== '/') {
       ([,...paths] = pathName.split('/'));
       fileName = paths.pop();
@@ -92,7 +78,7 @@ let router = (function(args) {
     let fullFileName = moduleName + ('.' + suffix || '');
     // 查看后缀名是不是后台语言后缀
     // 如果是程序文件，优先处理，但是访问不到则访问对应文件。
-    if(suffix && fileType.some((v) => v === suffix) || !suffix) {
+    if(suffix && config.fileType.some((v) => v === suffix) || !suffix) {
       try {
         // 加载文档.
         data = await require(moduleName)({
@@ -106,7 +92,6 @@ let router = (function(args) {
             setCookie,
             SESSION
         });
-        status = 200;
       } catch(e) {
         if(e instanceof Error && 
           e.message.search('Cannot find module') > -1) {
@@ -115,15 +100,16 @@ let router = (function(args) {
           if(err ||!stat.isFile()) {
             data = '404 - 访问丢失了';
             status = 404;
-            contentType = 'text/plain';
+            contentType = config.contentType.plain;
           } else {
-            data = await readPage(fullFileName);
+            // 处理非程序文件
+            generalFileName = fullFileName;
           }
           // 如果脚本没有处理上传文件的程序，那么则抛出的错误。
         } else if(e === Symbol.for('POST_EXCEPTION')) {
-          data = '404 - 该站点不支持文件上传';
+          data = '404 - 该页面不支持文件上传';
           status = 404;
-          contentType = 'text/plain';
+          contentType = config.contentType.plain;
         } else {
           throw (e);
         }
@@ -134,16 +120,20 @@ let router = (function(args) {
         data = '404 - 访问丢失了';
         status = 404;
       } else {
-        data = await readPage(fullFileName);
+        // 处理非程序文件
+        generalFileName = fullFileName;
       }
-      contentType = 'text/plain';
+      contentType = config.contentType.plain;
     }
-    SESSION.userName = 'test';
-    data = JSON.stringify(GET);
+
+    //如果是表单提交那么则回成网页模式
+    if(config.formSubmitType.some((type) => { return type === contentType; })) {
+      contentType = config.contentType.html;
+    }
 
     setCookie.set({SESS_ID},config.session_expired);
     // TODO:data模板操作。
-    return {data,status,contentType,cookies : setCookie._build()};
+    return {data,status,contentType,cookies : setCookie._build(),generalFileName};
   })();
   
   function splitFileName(fileName) {

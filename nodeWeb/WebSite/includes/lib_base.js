@@ -4,6 +4,7 @@ let lib_base = (function() {
   let queryString = require('querystring');
   let lib_base = {};
   let md5 = require('md5');
+  let config = require('../config');
 
   // 加载文件.
   function readPage(fileName,encode) {
@@ -31,24 +32,78 @@ let lib_base = (function() {
     return leftParital(function(getFile) {
       let post = '';
       let files = [];
+      
       // POST检测
       if(!getFile) {
-        if(contentType === 'multipart/from-data') {
-          throw Symbol.for('POST_EXCEPTION')
+        if(contentType === config.formSubmitType.mul) {
+          throw Symbol.for('POST_EXCEPTION');
         }
         req.on('data',(chunk) => {
           post += chunk;
         });
       } else {
-        // TODO:获取文件接口
+        req.on('data',(chunk) => {
+          post += chunk;
+        });
+        // 处理文件和post数据
+        if(contentType === config.formSubmitType.mul) {
+          ([,boundary] = boundary.split('boundary='));
+          req.setEncoding('binary');
+        }
       }
       return new MyPromise(function(resolve) {
         req.on('end',() => {
-          if(!getFile)  resolve(queryString.parse(post));
-          else resolve({post,files});
+          // 在这里出错，将会在全局出错。
+          resolve();
         });
+      }).then(() => {
+        if(!getFile) return queryString.parse(post);
+          else {
+            if(contentType) {
+              console.log(dataSplit(post,boundary));
+            }
+            return {POST:post,files};
+          }
       });
-    })
+    });
+
+    function dataSplit(postdata,boundary) {
+      let dataChunks = postdata.toString().split(`--${boundary}`);
+      let dataList = {post:{},files:[]};
+      //祛除掉收尾，如果是空数组，那么表示没有传数据.
+      dataChunks.splice(-1);
+      dataChunks.splice(0,1);
+      dataChunks.forEach((chunk) => {
+        let [attri,data] = chunk.split('\r\n\r\n');
+        attri = attri.slice(2);
+        let [formAttri,contentType = null] = attri.split('\r\n');
+        // 获得表单属性
+        let [,name,fileName = null] = formAttri.split('; ');
+        // 获得表单key/value
+        if(!contentType) {
+          // 对文本进行转换
+          dataList.post[Buffer.from(name.slice(6,-1),'binary').toString('utf-8')] = Buffer.from(data.slice(0,-2),'binary').toString('utf-8'); 
+        } else {
+          /* 取得文件集合 */
+          let fileType = contentType.split(': ')[1];
+          fileName = fileName.slice(10,-1);
+          if(fileName !== '' && fileType !== config.contentType.octet) {
+            if(fileType === config.contentType.plain) {
+              data = Buffer.from(data,'binary').toString('utf-8');
+            }
+            // 加入文件集合
+            // 如果是文件，不用剔除最后两个字符.
+            dataList.files.push({
+              fileName : fileName.split('\\').pop(),
+              data,
+              length : data.length
+            });
+          }
+        }
+      })
+      return dataList;
+    }
+
   };
 
   // 获取Cookeie
@@ -58,7 +113,7 @@ let lib_base = (function() {
       var parts = Cookie.split('=');
       Cookies[ parts[ 0 ].trim() ] = ( parts[ 1 ] || '' ).trim();
     });
-    return Cookies || {};
+    return Cookies;
   }
 
   // 获得GET

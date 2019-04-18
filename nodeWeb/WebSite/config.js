@@ -32,19 +32,30 @@ config.fileType = ['html','htm','php','jsp','asp','aspx'];
 
 // 以秒为单位.session持续时间.
 config.session_expired = 0.1;
-/*
-config.contentType = [
-  'appliction/x-www-urlencoded',
-  'multipart/from-data'
+
+config.formSubmitType = [
+  'application/x-www-form-urlencoded',
+  'multipart/form-data'
 ];
-config.accept = [
+config.formSubmitType['xwww'] = 'application/x-www-form-urlencoded';
+config.formSubmitType.mul = 'multipart/form-data';
+config.contentType = [
   'text/html',
   'text/css',
   'text/plain',
   'appliction/javascript',
   'appliction/json',
-  'image/'
+  'application/octet-stream',
+  '*/*'
 ];
+config.contentType.html = 'text/html';
+config.contentType.css = 'text/css';
+config.contentType.plain = 'text/plain';
+config.contentType.script = 'appliction/javascript';
+config.contentType.json = 'appliction/json';
+config.contentType.unknow = '*/*';
+config.contentType.octet = 'application/octet-stream';
+/*
 */
 
 Object.freeze(config);

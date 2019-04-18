@@ -426,7 +426,7 @@ var	namespace = function()
       
         xmlhttp.open(sendType,url,async);
         if(sendType === 'POST') {
-          xmlhttp.setRequestHeader('accept','text/appliction/json');
+          xmlhttp.setRequestHeader('accept','appliction/json');
           xmlhttp.repsonseType = 'json';
         }
         

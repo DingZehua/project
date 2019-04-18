@@ -38,18 +38,13 @@ class Session {
     const self = this;
     const sessEntries = Object.entries(this.userData);
     let takeLength = sessEntries.length;
-    console.log(takeLength);
-    
-    console.log('start clear');
 
     const clearTake = () => {
       let mill = new Date().getMilliseconds();
       while(takeLength) {
         let [SESS_ID,{expired}] = sessEntries[--takeLength];
         if(expired < time) {
-          console.log('at cleaning take:' + SESS_ID);
           self.destroy(SESS_ID);
-          console.log('clear end');
         }
 
         if(new Date().getMilliseconds() - mill > 25) {
