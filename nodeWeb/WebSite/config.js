@@ -30,7 +30,8 @@ config.defaultPage = {
 
 config.fileType = ['html','htm','php','jsp','asp','aspx'];
 
-config.session_expired = 60 * 15;
+// 以秒为单位.session持续时间.
+config.session_expired = 0.1;
 /*
 config.contentType = [
   'appliction/x-www-urlencoded',

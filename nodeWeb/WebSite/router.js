@@ -15,13 +15,10 @@ let router = (function(args) {
     // 路径重写
     let pathName = rewrite.rewritePath(urlObj.pathname);
 
-    let accept = req.headers.accept.split(',')[0];
+    let accept = (req.headers.accept && req.headers.accept.split(',')[0]) || 'text/plain';
     let [contentType = null,boundary = null] = (req.headers.contentType && req.headers.contentType.split('; ')) || [];
 
     // SESSION COOKIES GET POST
-    
-
-    //const SESSION = lib_base.
     const COOKIES = lib_base.fetchCookies(req);
     const GET = lib_base.fetchGETData(urlObj.query);
     let fetchPOSTData = lib_base.fetchPOSTDataCurring(req,contentType,boundary);
@@ -35,8 +32,13 @@ let router = (function(args) {
       SESS_ID = COOKIES.SESS_ID;
     }
 
-    const SESSION = lib_base.buildSession(SESS_ID,sessionSet,GLOBALS.curTIME);
+    const SESSION = lib_base.buildSession(SESS_ID,sessionSet,GLOBALS.curTIME,config.session_expired);
 
+    if(pathName.search('login') > -1) {
+      console.log(sessionSet);
+    }
+
+    // 取得访问方法和accept.
     if(req.method === 'GET' || req.method === 'POST') {
       if(!contentType) {
         // 处理普通访问
@@ -65,10 +67,9 @@ let router = (function(args) {
         contentType : 'text/plain'
       };;
     }
-
+    
     let data = null;
     let status = 200;
-
     let paths = [];
     let fileName;
     let script,suffix;
@@ -137,8 +138,8 @@ let router = (function(args) {
       }
       contentType = 'text/plain';
     }
-
-    
+    SESSION.userName = 'test';
+    data = JSON.stringify(GET);
 
     setCookie.set({SESS_ID},config.session_expired);
     // TODO:data模板操作。

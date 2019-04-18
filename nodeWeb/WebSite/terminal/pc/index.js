@@ -6,11 +6,9 @@ let index = (function(args){
   let fileStat = lib_base.fileStat;
   return (async function(){
 
-    if(!SESSION.userName) { SESSION.userName = 'ZhangSan'; }
+    if(!SESSION.userName) { SESSION.userName = 'ZhangSan'; console.log('set');}
     if(SESSION.isExist()) {
       console.log(SESSION.userName);
-      SESSION.destroy();
-      console.log(SESSION.isExist());
     }
     return await readPage(__dirname + '\\index.html');
   }());

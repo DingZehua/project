@@ -15,6 +15,8 @@ let sql = new mysqlDB(mysqlConfig);
 
 // SESSION
 const sessionSet = new (require('./session'))(config.session_expired);
+const Session = sessionSet.constructor;
+const sessionClearTake = Session.clearExpired(sessionSet);
 
 // 得到请求。
 function main(req,res) {
@@ -22,8 +24,10 @@ function main(req,res) {
   let {...GLOBALS} = require('./constant').time;
   GLOBALS.PHYSICAL_ROOT = process.cwd();          // 物理路径
   GLOBALS.curTIME = new Date().getTime();
+  if(parseInt((Math.random() * 10)) === 1) {
+    sessionClearTake.next(GLOBALS.curTIME);
+  }
 
-  
   async function response(request,response,sql,GLOBALS,config,sessionSet) {
     let {data,status,contentType,cookies} = await require('./router')({
       request,
@@ -47,9 +51,11 @@ function main(req,res) {
     res.end('404');
   });
 };
-// TODO
+
 /** 
- * 1.SESSION怎么销毁最有效率.
+ * TODO:
+ * --1.SESSION怎么销毁最有效率.
  * 2.非程序文件或找不到对应的处理程序的请求用pipe管道.
  * 3.文件下载功能.
+ * 4.文件读取是瓶颈.
  */

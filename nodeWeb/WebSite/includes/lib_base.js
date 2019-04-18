@@ -163,12 +163,15 @@ let lib_base = (function() {
   }
 
   // 一旦调用，就算是注册session.
-  function buildSession(SESS_ID,sessionSet,curTime) {
-    let Session = sessionSet.constructor;
-    // 如果session过期了，则销毁.
-    if(Session.expired(SESS_ID,sessionSet,curTime) === false) {
-      sessionSet.destroy(SESS_ID);
-    }
+  function buildSession(SESS_ID,sessionSet,curTime,lifeTime) {
+    // 一旦过期则销毁，不过期则续期.
+    if(sessionSet.has(SESS_ID)) {
+      if(sessionSet.userData[SESS_ID].expired > curTime) {
+        sessionSet.userData[SESS_ID].expired = curTime + lifeTime * 1000;
+      } else {
+        sessionSet.destror(SESS_ID);
+      }
+    } 
     return new Proxy(sessionSet,{
       set(t,prop,value,receiver) {
         if(Reflect.get(t,prop,receiver)) {
@@ -205,6 +208,7 @@ let lib_base = (function() {
   lib_base.deepDelete = deepDelete;
   lib_base.buildSession_id = buildSession_id;
   lib_base.buildSession = buildSession;
+  lib_base.md5 = md5;
 
   return lib_base;
 }());
