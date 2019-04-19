@@ -5,7 +5,7 @@ let page = (function(args){
   let readPage = lib_base.readPage;
   let fileStat = lib_base.fileStat;
   return (async function(){
-    let POST = await fetchPOSTData(true);
+    let POST = await fetchPOSTData();
     return await readPage(__dirname + '\\login.html');
   }());
 })

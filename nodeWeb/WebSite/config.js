@@ -15,7 +15,7 @@ config.path = {
 // 如果要访问目录下的程序，请不要加上后缀名。
 config.access = {
   allow : ['^/js/base.js$','^/js/structor.js$','^/js/base.js$','^/uploadFile',
-            '^/js/dom.js$','^/js/myjs1.4.js$','^/' + config.path.pc + '/','^/upload/','^/test'],
+            '^/js/dom.js$','^/js/myjs1.4.js$','^' + config.path.pc + '/','^/upload/','^/test'],
   deny  : ['^/server.js$','^/$']
 }
 config[Symbol.for('server')] = {
@@ -29,9 +29,10 @@ config.defaultPage = {
 }
 
 config.fileType = ['html','htm','php','jsp','asp','aspx'];
-
+// Session生存时间不能过于太短，不然token会造成无限成定向.
+// 安全阈值不能低于1分钟。
 // 以秒为单位.session持续时间.
-config.session_expired = 0.1;
+config.session_expired = 60 * 15;
 
 config.formSubmitType = [
   'application/x-www-form-urlencoded',

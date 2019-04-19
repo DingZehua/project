@@ -19,6 +19,9 @@ const sessionSet = new (require('./session'))(config.session_expired);
 const Session = sessionSet.constructor;
 const sessionClearTake = Session.clearExpired(sessionSet);
 
+// token
+const tokens = require('./includes/lib_base').createToken(sessionSet);
+
 // 得到请求。
 function main(req,res) {
 
@@ -29,20 +32,18 @@ function main(req,res) {
     sessionClearTake.next(GLOBALS.curTIME);
   }
 
-  async function response(request,response,sql,GLOBALS,config,sessionSet) {
-    let {data,status,contentType,cookies,generalFileName} = await require('./router')({
+  async function response(request,response,sql,GLOBALS,config,sessionSet,tokens) {
+    let {data,status,header,generalFileName} = await require('./router')({
       request,
       response,
       sql,
       GLOBALS,
       config,
       sessionSet,
+      tokens
     });
     
-    res.writeHead(status,{
-      "content-type":`${contentType};charset=utf-8`,
-      'Set-Cookie': cookies
-    });
+    res.writeHead(status,header);
     if(data !== null) {
       res.write(data);
       res.end();
@@ -52,7 +53,7 @@ function main(req,res) {
     }
     
   }
-  response(req,res,sql,GLOBALS,config,sessionSet).catch((err) => {
+  response(req,res,sql,GLOBALS,config,sessionSet,tokens).catch((err) => {
     log(err);
     res.writeHead(404);
     res.end('404');

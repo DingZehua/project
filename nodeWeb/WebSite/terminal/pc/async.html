@@ -1,0 +1,24 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+<meta http-quive='content-type' charset='utf-8'>
+<style></style>
+<script>
+  let g = null;
+  async function * asyncGen() {
+    yield * childs(g);
+    console.log('parent')
+  }
+  async function * childs(g) {
+    g.return();
+    console.log('run to');
+  }
+
+  g = asyncGen();
+  g.next();
+</script>
+</head>
+<body>
+
+</body>
+</html>

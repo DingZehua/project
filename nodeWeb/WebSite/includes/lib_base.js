@@ -253,6 +253,63 @@ let lib_base = (function() {
     });
   }
 
+  function createToken(sessionSet) {
+    // Session生存时间不能过于太短，不然会造成无限成定向.
+    return function(SESS_ID,token = Symbol(),url,GET){
+      // 用重定向放在url里面。
+      return {
+        isExist() {
+          if(!sessionSet.has(SESS_ID)){
+            return false;
+          } else {
+            if(!sessionSet.userData[SESS_ID].tokens) {
+              sessionSet.userData[SESS_ID].tokens = [];
+              return false;
+            } else {
+              return sessionSet.userData[SESS_ID].tokens.includes(token);
+            }
+          };
+        },
+        destror () {
+          if(this.isExist()) {
+            tokens[SESS_ID].splice(tokens[SESS_ID].indexOf(token),1);
+            return true;
+          } else {
+            return false;
+          }
+        },
+        create(tokenStr = md5(Math.random())) {
+          if(typeof tokenStr !== 'string') {
+            throw 'token必须是字符串';
+          }
+          if(!sessionSet.has(SESS_ID)) {
+            sessionSet.add(SESS_ID);
+            sessionSet.userData[SESS_ID].tokens = [];
+          }
+          sessionSet.userData[SESS_ID].tokens.push(tokenStr);
+          token = tokenStr;
+          return token;
+        },
+        revisit() {
+          GET.token = token;
+          throw {
+            url : (url || '/') + queryStringify(GET),
+            status : 302,
+            [Symbol.for('REDIRECT')] : true
+          };
+        },
+        get(){
+          return !this.isExist() ? null : token;
+        }
+      };
+    };
+  }
+  
+  function queryStringify(obj) {
+    if(!obj) return '';
+    return Object.entries(obj).reduce((str,[key,value]) => `${str}${key}=${value}&`,'?').trim('&');
+  }
+
   lib_base.readPage = readPage;
   lib_base.fileStat = fileStat;
   lib_base.fetchPOSTDataCurring = fetchPOSTDataCurring;
@@ -264,6 +321,8 @@ let lib_base = (function() {
   lib_base.buildSession_id = buildSession_id;
   lib_base.buildSession = buildSession;
   lib_base.md5 = md5;
+  lib_base.queryStringify = queryStringify;
+  lib_base.createToken = createToken;
 
   return lib_base;
 }());

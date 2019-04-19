@@ -3,7 +3,7 @@ let url = require('url');
 let lib_base = require('./includes/lib_base');
 
 let router = (function(args) {
-  let {request : req, response : res,sql,GLOBALS,config,sessionSet} = args;
+  let {request : req, response : res,sql,GLOBALS,config,sessionSet,tokens} = args;
   let defaultPage = config.defaultPage.root;
   let setCookie = lib_base.setCookies(req);
 
@@ -58,6 +58,7 @@ let router = (function(args) {
     let fileName;
     let script,suffix;
     let generalFileName = null;
+    let header = {};
 
     if(pathName !== '/') {
       ([,...paths] = pathName.split('/'));
@@ -72,6 +73,7 @@ let router = (function(args) {
     } else {
       ({script,suffix} = splitFileName(defaultPage));
     }
+
 
     // TODO:对非网页进行操作
     let moduleName = `${GLOBALS.PHYSICAL_ROOT}\\${paths.join('\\')}\\${script}`;
@@ -90,7 +92,8 @@ let router = (function(args) {
             request : req,
             GLOBALS,
             setCookie,
-            SESSION
+            SESSION,
+            token : tokens(SESS_ID,GET.token,urlObj.pathname,GET)
         });
       } catch(e) {
         if(e instanceof Error && 
@@ -110,6 +113,10 @@ let router = (function(args) {
           data = '404 - 该页面不支持文件上传';
           status = 404;
           contentType = config.contentType.plain;
+        } else if(e && e[Symbol.for('REDIRECT')]) {
+          data = '重定向中...';
+          status = e.status;
+          header['Location'] = e.url;
         } else {
           throw (e);
         }
@@ -132,8 +139,11 @@ let router = (function(args) {
     }
 
     setCookie.set({SESS_ID},config.session_expired);
+    header['set-Cookie'] = setCookie._build();
+    header['content-type'] = contentType + ';charset=utf-8;';
+
     // TODO:data模板操作。
-    return {data,status,contentType,cookies : setCookie._build(),generalFileName};
+    return {data,status,header,generalFileName};
   })();
   
   function splitFileName(fileName) {
