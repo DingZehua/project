@@ -50,6 +50,201 @@ let thunkify = function(fn) {
   }
 };
 
+
+function createToken(token_number = 200,expired = 5 * 60) {
+    let tokens = {};
+    let count = Symbol('count');
+    let destror = Symbol('destroy');
+    let canCreate = Symbol('canCreate');
+
+    tokens[count] = 0;
+    expired *= 1000;
+    tokens[destror] = function(SESS_ID) {
+      if(this.hasOwnProperty(SESS_ID)) {
+        deepDelete(this[SESS_ID]);
+        delete this[SESS_ID];
+      }
+      return true;
+    }
+
+    tokens[canCreate] = function() {
+      return this[count] < token_number;
+    }
+
+
+    let waitQueue = [];
+    let intervalClearTime = 50;
+
+    function clearToken() { 
+      let runging = false;
+      let time = null;
+      let clearG = (function * (){
+        yield runging;
+        while(1) {
+          if(!runging) {
+            time = yield;
+            //在这里加一个yield如果可以执行，那么会执行到这里。
+            //这里往下执行
+            runging = true;
+            let SESS_IDs = Object.keys(tokens);
+            clearTake(
+            // 清理过期token.
+            function(i) {
+              console.log(i,SESS_IDs.length);
+              let SESS_ID = (SESS_IDs[i]);
+              if(tokens[SESS_ID].expired < time) {
+                tokens[destror](SESS_ID);
+              }
+            },
+            // 通知消息队列
+            function() {
+              let len = tokens[count];
+              // 可以创建token的用户。
+              while(len < token_number) {
+                if(!waitQueue.length) {
+                  break;
+                }
+                setTimeout(waitQueue.shift(),0,true);
+                len++;
+              }
+              // 保证token不超出范围，清理多余剩余的队列，并下发失败的通知.
+              while(waitQueue.length) {
+                if(!waitQueue.length) {
+                  break;
+                }
+                setTimeout(waitQueue.shift(),0,false);
+              }
+              runging = false;
+            },SESS_IDs.length);
+          } else {
+            yield;
+          }
+        }
+      }());
+      clearG.next();
+      return clearG;
+      function clearTake(clearMethod,callback,length,i = 0) {
+        let m = new Date().getMilliseconds();
+        do {
+          clearMethod(i);
+          i++;
+        }while(new Date().getMilliseconds() - m < 25 && i < length);
+        // 切割任务，以防止阻塞执行堆栈.
+        if(i < length) {
+          setTimeout(clearTake,0,clearMethod,callback,length,i);
+        } else {
+          callback();
+        }
+      }
+    }
+
+    const clearTokenGen = clearToken();
+
+    return function(SESS_ID,token = Symbol(),url,GET,time){
+      // 用重定向放在url里面。
+      return {
+        // 只有token一致且不过期才能使用.
+        isExist() {
+          if(!tokens.hasOwnProperty(SESS_ID)) {
+            return false;
+          }
+          // 防止伪造token
+          if(tokens[SESS_ID].token === token){
+            if(tokens[SESS_ID].expired > time) {
+              tokens[SESS_ID].expired = time + expired;
+              return true;
+            } else {
+              this.destror();
+            }
+          }
+          return false;
+        },
+        canCreate() {
+          return tokens[count] < token_number;
+        },
+        destror () {
+          tokens[destror](SESS_ID);
+          tokens[count]--;
+          return true;
+        },
+        /**
+         * @param  {String} token
+         * @return {Boolean} boolean
+         */
+        create() {
+          if(this.isExist()) {
+            return true;
+          }
+          if(!this.canCreate()) return false;
+          tokens[SESS_ID] = {
+            expired : new Date().getTime() + expired,
+            token   : md5(Math.random()) 
+          };
+          tokens[count]++;
+          token = tokens[SESS_ID].token;
+          return true;
+        },
+        revisit() {
+          GET.token = token;
+          throw {
+            url : (url || '/') + queryStringify(GET),
+            status : 302,
+            [Symbol.for('REDIRECT')] : true
+          };
+        },
+        get(){
+          return !this.isExist() ? null : token;
+        },
+        /**
+         * @param {String} token
+         * @return {Promise} Promise
+         */
+        async mustCreate(count = 3) {
+          if(this.create()) return true;
+          // 尝试获取token.
+          let self = this;
+          let i = 0;
+          function next() {
+            return new MyPromise((resolve) => {
+              if(i < count) {
+                waitQueue.push(function(res){
+                  if(res) {
+                    resolve(self.create());
+                  } else {
+                    resolve(next());
+                  };
+                  i++;
+                });
+                // 用队列来清理.
+                // 如果有1000个位置，有500个过期，切割任务需要10次，每次50个，
+                // 那么在清理完最后一个任务的时候之前，只有空闲的就领取掉，没有的就加入等待队列，最后只有前50个领取了token后面的全部给遗弃掉了。
+                // 清理函数
+                // 这里用setTimeout出现了一个问题，因为不是立即执行，
+                // 需要排到事件循环中队列之后，执行一次清理并不需要切割任务，
+                // 所以每次执行完之后都能往下继续执行runing在每次执行完之后都设置为false,
+                // 也就没有起到，在切割任务中阻止其他任务的执行。
+                // 清理任务不在运行，才可清理.
+                if(!clearTokenGen.next().value) {
+                  if(count - i === count) {
+                    clearTokenGen.next(time,0);
+                  } else {
+                    clearTokenGen.next(new Date().getTime(),intervalClearTime);
+                  }
+                } else {
+                  // 忽略这次执行.
+                  clearTokenGen.next();
+                }
+              } else {
+                resolve(false);
+              }
+            });
+          }
+          return next();
+        }
+      };
+    };
+  }
+
 function next(err,data) {
   // 获取下一步命令，注入数据。
   let result = g.next(data);

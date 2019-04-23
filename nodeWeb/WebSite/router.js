@@ -74,7 +74,6 @@ let router = (function(args) {
       ({script,suffix} = splitFileName(defaultPage));
     }
 
-
     // TODO:对非网页进行操作
     let moduleName = `${GLOBALS.PHYSICAL_ROOT}\\${paths.join('\\')}\\${script}`;
     let fullFileName = moduleName + ('.' + suffix || '');
@@ -93,7 +92,7 @@ let router = (function(args) {
             GLOBALS,
             setCookie,
             SESSION,
-            token : tokens(SESS_ID,GET.token,urlObj.pathname,GET)
+            token : tokens(SESS_ID,GET.token,urlObj.pathname,GET,GLOBALS.curTIME),
         });
       } catch(e) {
         if(e instanceof Error && 
@@ -132,12 +131,11 @@ let router = (function(args) {
       }
       contentType = config.contentType.plain;
     }
-
     //如果是表单提交那么则回成网页模式
     if(config.formSubmitType.some((type) => { return type === contentType; })) {
       contentType = config.contentType.html;
     }
-
+    
     setCookie.set({SESS_ID},config.session_expired);
     header['set-Cookie'] = setCookie._build();
     header['content-type'] = contentType + ';charset=utf-8;';

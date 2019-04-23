@@ -15,7 +15,7 @@ config.path = {
 // 如果要访问目录下的程序，请不要加上后缀名。
 config.access = {
   allow : ['^/js/base.js$','^/js/structor.js$','^/js/base.js$','^/uploadFile',
-            '^/js/dom.js$','^/js/myjs1.4.js$','^' + config.path.pc + '/','^/upload/','^/test'],
+            '^/js/dom.js$','^/js/myjs1.4.js$','^' + config.path.pc + '/?','^/upload/','^/test'],
   deny  : ['^/server.js$','^/$']
 }
 config[Symbol.for('server')] = {
@@ -56,8 +56,10 @@ config.contentType.script = 'appliction/javascript';
 config.contentType.json = 'appliction/json';
 config.contentType.unknow = '*/*';
 config.contentType.octet = 'application/octet-stream';
-/*
-*/
+
+config.token_expired = 60 * 5;
+config.token_number = 2000;
+
 
 Object.freeze(config);
 

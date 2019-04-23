@@ -249,46 +249,202 @@ let lib_base = (function() {
         }
         if(!t.isExist(SESS_ID)) { t.add(SESS_ID); }
         return Reflect.get(t.userData[SESS_ID].data,prop,t.userData[SESS_ID].data);
+      },
+      deleteProperty(t,p) {
+        if(!t.has(SESS_ID)) return false;
+        return Reflect.deleteProperty(t.userData[sessionSet],p);
+      },
+      defineProperty(t,p,attr) {
+        if(!t.has(SESS_ID)) throw 'session未创建';
+        return Reflect.defineProperty(t.userData[SESS_ID],p,attr);
+      },
+      has(t,p) {
+        if(!t.has(SESS_ID)) return false;
+        return Reflect.has(t.userData[SESS_ID],p);
+      },
+      isExtensible(t) {
+        if(!t.has(SESS_ID)) throw 'session未创建';
+        return Reflect.isExtensible(t.userData[SESS_ID]);
+      },
+      getOwnPropertyDescriptor(t,p) {
+        if(!t.has(SESS_ID)) throw 'session未创建';
+        return Reflect.getOwnPropertyDescriptor(t.userData[SESS_ID],p);
+      },
+      getPrototypeOf(t){
+        if(!t.has(SESS_ID)) throw 'session未创建';
+        return Reflect.getPrototypeOf(t.userData[SESS_ID]);
+      },
+      ownKeys(t) {
+        if(!t.has(SESS_ID)) throw 'session未创建';
+        return Reflect.ownKeys(t.userData[SESS_ID]);
+      },
+      preventExtensions(t) {
+        if(!t.has(SESS_ID)) throw 'session未创建';
+        Object.preventExtensions(t.userData[SESS_ID]);
+        return true;
+      },
+      setPrototypeOf(t,v) {
+        if(!t.has(SESS_ID)) throw 'session未创建';
+        if(Reflect.isExtensible(t.userData[SESS_ID])) {
+          throw '对象不可拓展';
+        } else {
+          return Reflect.setPrototypeOf(t,v);
+        }
       }
     });
   }
 
-  function createToken(sessionSet) {
-    // Session生存时间不能过于太短，不然会造成无限成定向.
-    return function(SESS_ID,token = Symbol(),url,GET){
+  function createToken(token_number = 200,expired = 5 * 60) {
+    if(!token_number) {
+      throw 'token_number 不能为空或为0';
+    }
+    let tokens = {};
+    let count = Symbol('count');
+    let destror = Symbol('destroy');
+    let canCreate = Symbol('canCreate');
+    
+    tokens[count] = 0;
+    expired *= 1000;
+    tokens[destror] = function(SESS_ID) {
+      if(this.hasOwnProperty(SESS_ID)) {
+        deepDelete(this[SESS_ID]);
+        delete this[SESS_ID];
+      }
+      return true;
+    }
+
+    tokens[canCreate] = function() {
+      return this[count] < token_number;
+    }
+
+
+    let waitQueue = [];
+    let intervalClearTime = 50;
+
+    function clearToken() { 
+      let runging = false;
+      let clearG = (function * (){
+        while(1) {
+          yield runging;
+          if(!runging) {
+            let {time,delay} = yield;
+            //在这里加一个yield如果可以执行，那么会执行到这里。
+            //这里往下执行
+            runging = true;
+            let SESS_IDs = Object.keys(tokens);
+            let tokenlen = SESS_IDs.length
+            
+            if(tokenlen < token_number) {
+              allocate();
+            }
+
+            if(delay !== undefined) {
+              setTimeout(bound,delay);
+            } else {
+              bound();
+            }
+
+            function bound() {
+              clearTake(
+                // 清理过期token.
+                function(i) {
+                  console.log(i,SESS_IDs.length);
+                  let SESS_ID = (SESS_IDs[i]);
+                  if(tokens[SESS_ID].expired < time) {
+                    tokens[destror](SESS_ID);
+                    tokenlen--;
+                  }
+                },
+                allocate,SESS_IDs.length);
+            }
+
+            // 通知消息队列
+            function allocate() {
+              // 可以创建token的用户。
+              tokens[count] = tokenlen;
+              while(tokenlen < token_number) {
+                if(!waitQueue.length) {
+                  break;
+                }
+                setTimeout(waitQueue.shift(),0,true);
+                tokens[count]++;
+              }
+              // 保证token不超出范围，清理多余剩余的队列，并下发失败的通知.
+              while(waitQueue.length) {
+                if(!waitQueue.length) {
+                  break;
+                }
+                setTimeout(waitQueue.shift(),0,false);
+              }
+              runging = false;
+            }
+          } else {
+            yield;
+          }
+        }
+      }());
+      clearG.next();
+      return clearG;
+      function clearTake(clearMethod,callback,length,i = 0) {
+        let m = new Date().getMilliseconds();
+        do {
+          clearMethod(i);
+          i++;
+        }while(new Date().getMilliseconds() - m < 25 && i < length);
+        // 切割任务，以防止阻塞执行堆栈.
+        if(i < length) {
+          setTimeout(clearTake,0,clearMethod,callback,length,i);
+        } else {
+          callback();
+        }
+      }
+    }
+
+    const clearTokenGen = clearToken();
+
+    return function(SESS_ID,token = Symbol(),url,GET,time){
       // 用重定向放在url里面。
       return {
+        // 只有token一致且不过期才能使用.
         isExist() {
-          if(!sessionSet.has(SESS_ID)){
+          if(!tokens.hasOwnProperty(SESS_ID)) {
             return false;
-          } else {
-            if(!sessionSet.userData[SESS_ID].tokens) {
-              sessionSet.userData[SESS_ID].tokens = [];
-              return false;
+          }
+          // 防止伪造token
+          if(tokens[SESS_ID].token === token){
+            if(tokens[SESS_ID].expired > time) {
+              tokens[SESS_ID].expired = time + expired;
+              return true;
             } else {
-              return sessionSet.userData[SESS_ID].tokens.includes(token);
+              this.destror();
             }
-          };
+          }
+          return false;
+        },
+        canCreate() {
+          return tokens[count] < token_number;
         },
         destror () {
-          if(this.isExist()) {
-            tokens[SESS_ID].splice(tokens[SESS_ID].indexOf(token),1);
-            return true;
-          } else {
-            return false;
-          }
+          tokens[destror](SESS_ID);
+          tokens[count]--;
+          return true;
         },
-        create(tokenStr = md5(Math.random())) {
-          if(typeof tokenStr !== 'string') {
-            throw 'token必须是字符串';
+        /**
+         * @param  {String} token
+         * @return {Boolean} boolean
+         */
+        create() {
+          if(this.isExist()) {
+            return true;
           }
-          if(!sessionSet.has(SESS_ID)) {
-            sessionSet.add(SESS_ID);
-            sessionSet.userData[SESS_ID].tokens = [];
-          }
-          sessionSet.userData[SESS_ID].tokens.push(tokenStr);
-          token = tokenStr;
-          return token;
+          if(!this.canCreate()) return false;
+          tokens[SESS_ID] = {
+            expired : new Date().getTime() + expired,
+            token   : md5(Math.random()) 
+          };
+          tokens[count]++;
+          token = tokens[SESS_ID].token;
+          return true;
         },
         revisit() {
           GET.token = token;
@@ -300,6 +456,44 @@ let lib_base = (function() {
         },
         get(){
           return !this.isExist() ? null : token;
+        },
+        /**
+         * @param {String} token
+         * @return {Promise} Promise
+         */
+        async mustCreate(count = 3) {
+          if(this.create()) return true;
+          // 尝试获取token.
+          let self = this;
+          let i = 0;
+          function next() {
+            return new MyPromise((resolve) => {
+              if(i < count) {
+                waitQueue.push(function(res) { 
+                  i++;
+                  if(res) {
+                    resolve(self.create());
+                  } else {
+                    resolve(next());
+                  };
+                });
+                // 清理任务不在运行，才可清理.
+                if(!clearTokenGen.next().value) {
+                  if(count - i === count) {
+                    clearTokenGen.next({time});
+                  } else {
+                    clearTokenGen.next(new Date().getTime(),{time,delay : intervalClearTime * i});
+                  }
+                } else {
+                  // 忽略这次执行.
+                  clearTokenGen.next();
+                }
+              } else {
+                resolve(false);
+              }
+            });
+          }
+          return next();
         }
       };
     };
@@ -307,9 +501,8 @@ let lib_base = (function() {
   
   function queryStringify(obj) {
     if(!obj) return '';
-    return Object.entries(obj).reduce((str,[key,value]) => `${str}${key}=${value}&`,'?').trim('&');
+    return Object.entries(obj).reduce((str,[key,value]) => `${str}${key}=${value}&`,'?').slice(0,-1);
   }
-
   lib_base.readPage = readPage;
   lib_base.fileStat = fileStat;
   lib_base.fetchPOSTDataCurring = fetchPOSTDataCurring;
