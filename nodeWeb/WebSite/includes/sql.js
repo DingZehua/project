@@ -4,7 +4,10 @@ let sql = {};
 class mysqlDB  {
   constructor (config) {
     this.con = mysql.createConnection(config);
-    this.con.connect(function(){console.log('start mysql');});
+    this.con.connect((err) => {
+      if(err) { console.log(err); } 
+      else { console.log('mysql start success.'); }
+    });
     this._queryThunk = thunkify(this.con.query);
     this._end = thunkify(this.con.end);
   }

@@ -1,0 +1,4 @@
+[用户名]:path : 
+;C:\Users\Administrator\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Administrator\AppData\Roaming\npm
+
+系统路径:安装路径

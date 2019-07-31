@@ -13,8 +13,123 @@
                 <span>用户名</span>:<span><%= user.user_name%></span>
                 <span>email</span>:<span><%= user.email%></span>
             </li>
-        <%}%> 
-        <script>
-        </script>
-    </body> 
+        <%}%>
+<script  type="text/javascript">
+  const fibonacci = function (n) {
+    if(arguments.callee[n] !== undefined) return arguments.callee[n];
+    if(n === 1) return 1;
+    if(n === 0) return 0;
+    arguments.callee[n] = fibonacci(n - 1) + fibonacci(n - 2);
+    return arguments.callee[n];
+  }
+
+  const fib2 = function(n) {
+    if(n <= 1) return n;
+    const memo_1 = 1;
+    const memo_0 = 0;
+
+    let sum = [0,1];
+
+    for(let i = 2; i <= n; i++) {
+      sum[i] = sum[i - 1] + sum[i - 2];
+    }
+    
+    return sum[n];
+  }
+
+  const fib3 = function(n) {
+    if(n <= 1) return n;
+    let memo_1 = 1;
+    let memo_0 = 0;
+    let result = 0;
+
+    for(let i = 2; i <= n;i++) {
+      result = memo_1 + memo_0;
+      memo_0 = memo_1;
+      memo_1 = result;
+    }
+
+    return result;
+  } 
+
+  const price = [1,5,8,9,10];
+
+  function cut(p = [],n) {
+    if(n === 0) { return  0;}
+    
+    let result = 0;
+
+    for(let i = 1; i <= n; i++) {
+      result = Math.max(result,p[i - 1] + cut(p,n - i));
+    }
+
+    return result;
+  }
+
+  function cutMemo(p,n) {
+    // arguments 解构赋值没有callee对象。
+    let result = 0;
+    if(arguments.callee[n] !== undefined) return arguments.callee[n];
+    if(n === 0) result = 0;
+
+    for(let i = 1;i <= n; i++){
+      result = Math.max(result,p[i - 1] + cutMemo(p,n - i));
+    }
+
+    arguments.callee[n] = result;
+
+    return result;
+  }
+
+  const bottom_up_cut = (p = []) => {
+    const result = Array.of(...p,0).map(()=>{return 0;});
+    for(let i = 1; i <= p.length; i++) {
+      let max_value = 0;
+      for(let j = 1; j <= i; j++)
+          max_value = Math.max(max_value,p[j - 1] + result[i - j]);
+      result[i] = max_value;
+    }
+    return result;
+  }
+
+  const p = [1,5,8,9,10];
+
+
+  // 广度算法.
+  function deepCopy(obj) {
+    var newObj = {},
+        srcQueue = [obj], srcVisitedQueue = [],
+        copyQueue = [newObj], copyVisitedQueue = [];
+
+    while (srcQueue.length > 0) {
+        var currentSrcElement = srcQueue.shift(),
+            currentCopyElement = copyQueue.shift();
+
+        srcVisitedQueue.push(currentSrcElement);
+        copyVisitedQueue.push(currentCopyElement);
+
+        for (var key in currentSrcElement) {
+            if (typeof currentSrcElement[key] !== 'object') {
+                currentCopyElement[key] = currentSrcElement[key];
+            } else {
+                // 有环的情况。查找是否存在指向环对象的存在.
+                var index = srcVisitedQueue.indexOf(currentSrcElement[key]);
+                if (index >= 0) {
+                  // 同步源对象的相同操作。
+                  // 将指针指向自己。
+                    currentCopyElement[key] = copyVisitedQueue[index];
+                } else {
+                    srcQueue.push(currentSrcElement[key]);
+                    currentCopyElement[key] = {};
+                    copyQueue.push(currentCopyElement[key]);
+                }
+            }
+        }
+    }
+
+    return newObj;
+  }
+
+</script>
+</body> 
 </html>

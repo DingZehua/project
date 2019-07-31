@@ -813,32 +813,20 @@ collections.base = (function(){
           );
         }
         catch(e) {
-          this.status = REJECTED;
-          clearTimeout(out);
-          setTimeout((function(err){
-            this.pcall(err);
-          }).bind(this),0,e);
+          if(this.status === PENDING) {
+            this.status = REJECTED;
+            clearTimeout(out);
+            setTimeout((function(err){
+              this.pcall(err);
+            }).bind(this),0,e);
+          }
         }
       }
       then(resolve,reject,parent,index) {
         this.queue[REJECTED].push(!isFun(reject) ? null : reject);
         this.queue[FULFILLED].push(!isFun(resolve) ? null : resolve);
-        //保留本层的参数，给child使用。
-        let last = this.queue[REJECTED].length - 1;
-        this.childs.inherit.push(null);
-        // 如果有父对象，那么更新状态，如果有子对象，那么也会更新到本对象的子对象。
-        if(parent && parent.childs.inherit[index] === null) {
-          // 如果继承对象没有执行这个方法，那么则不加进队列
-          parent.childs.inherit[index] = this;
-          this.status = parent.status;
-        }
         let child = new Prom(function(){});
-        let self = this;
-        child.then = (function(){
-          return (function(resolve,reject) {
-            return Prom.prototype.then.apply(this,[resolve,reject,self,last]);
-          }).bind(child)
-        }());
+        this.childs.inherit.push(child);
         return child;
       }
       catch(reject) {
@@ -904,7 +892,11 @@ collections.base = (function(){
                 throw(this.value);
               }
             }
-            value = (isFun(method) && method(this.value)) || this.value;
+
+            if(isFun(method)) {
+              value = method(this.value);
+            }
+
             if(child){
               child.value = value;
               child.status = FULFILLED;
@@ -993,7 +985,7 @@ collections.base = (function(){
           let val = {};
           let unInitVal = val;
           if(!Array.from(ps).length) {
-            s([]);
+            resolve([]);
             return;
           }
           for(let [i,p] of ps.entries()) {
@@ -1021,7 +1013,7 @@ collections.base = (function(){
     
       return new MyPromise(function(resolve,reject) {
         if(typeof gen === 'function') gen = gen.apply(cxt,args);
-        if(!gen || typeof gen.next !== 'function') resolve(gen);
+        if(!gen || typeof gen.next !== 'function') return resolve(gen);
         success();
         function success(res) {
           let ret;
@@ -1052,9 +1044,9 @@ collections.base = (function(){
           if(value && isPromise(value)) value.then(success,failed); // 处理异步函数处理的结果
           else {
             failed(new TypeError(`
-            传递给co函数的值不能是原始值,value : ${ret.value}
-          `));
-        }
+              传递给co函数的值不能是原始值,value : ${ret.value}
+            `));
+          }
         }
       });
     
@@ -1218,6 +1210,39 @@ collections.base = (function(){
   hideAttr(Function.prototype);
   hideAttr(Object.prototype);
 
+  const deepCopy = (oldHead) => {
+    let newHead = {},
+        oldVistedQueue = [],waitOldQueue = [],
+        newVistedQueue = [],waitNewQueue = [];
+  
+    waitOldQueue.push(oldHead);
+    waitNewQueue.push(newHead);
+  
+    while(waitNewQueue.length > 0) {
+      let currentOldElement = waitOldQueue.shift(),
+          currentNewElement = waitNewQueue.shift();
+      
+      oldVistedQueue.push(currentOldElement),
+      newVistedQueue.push(currentNewElement);
+      
+      for(let key in currentOldElement) {
+        if(typeof currentOldElement[key] !== 'object') {
+          currentNewElement[key] = currentOldElement[key];
+        } else {
+          let index = oldVistedQueue.indexOf(currentOldElement[key]);
+          if(index > -1) {
+            currentNewElement[key] = newVistedQueue[index];
+          } else {
+            waitOldQueue.push(currentOldElement[key]);
+            waitNewQueue.push(currentNewElement[key] = {});
+          }
+        }
+      }
+    }
+  
+    return newHead;
+  }
+
   base.enumerable = enumerable;
   base.enumerableTree = enumerableTree;
   base.Range = Range;
@@ -1262,6 +1287,7 @@ collections.base = (function(){
   base.method.log = log;
   base.method.co = co;
   base.method.thunkify = thunkify = thunkify;
+  base.method.deepCopy = deepCopy;
 
   base.CONST = {};
   base.CONST.ERR_ = ERR_;

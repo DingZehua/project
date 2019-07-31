@@ -7,6 +7,12 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "client",
+      "program": "${workspaceFolder}/client.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "webSite",
       "program": "${workspaceFolder}/server.js"
     },

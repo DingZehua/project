@@ -82,3 +82,20 @@ class Session {
 try{(module && (module.exports = Session));}
 catch(e){}
 
+const r = (function() {
+  let g = (function *() {
+    let args = null;
+    let result = null
+    while(1) {
+      args = yield result;
+      result = Math.max.apply(Math,args);
+    }
+  }());
+
+  g.next();
+
+  g.result = (args) => {
+    return g.next(args).value;
+  }
+  return g;
+}());

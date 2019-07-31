@@ -21,13 +21,15 @@ const sessionClearTake = Session.clearExpired(sessionSet);
 
 // token
 const tokens = require('./includes/lib_base').createToken(config.token_number,config.token_expired);
-let access_count = 0;
+
+// 捕捉意外.
+
+process.on('uncaughtException',(err) => {
+  console.log('global Error:',err);
+})
 
 // 得到请求。
 function main(req,res) {
-
-  console.log(++access_count);
-
   let {...GLOBALS} = require('./constant').time;
   GLOBALS.PHYSICAL_ROOT = process.cwd();          // 物理路径
   GLOBALS.curTIME = new Date().getTime();
@@ -45,7 +47,7 @@ function main(req,res) {
       sessionSet,
       tokens
     });
-    
+
     res.writeHead(status,header);
     if(data !== null) {
       res.write(data);

@@ -17,7 +17,7 @@ let index = (function(args){
     }
     return await readPage(__dirname + '\\index.html');
   }());
-})
+});
 
 try{(module && (module.exports = index));}
 catch(e){}
