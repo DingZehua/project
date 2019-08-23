@@ -5,6 +5,7 @@ let log = console.log.bind(console.log);
 let {[Symbol.for('server')] : serverConfig,mysql : mysqlConfig} = config;
 let fs = require('fs');
 
+
 // 创建服务器
 let server = http.createServer();
 server.on('request',main);
@@ -22,7 +23,7 @@ const sessionClearTake = Session.clearExpired(sessionSet);
 // token
 const tokens = require('./includes/lib_base').createToken(config.token_number,config.token_expired);
 
-// 捕捉意外.
+// 捕捉全局错误.
 
 process.on('uncaughtException',(err) => {
   console.log('global Error:',err);
@@ -59,7 +60,7 @@ function main(req,res) {
     
   }
   response(req,res,sql,GLOBALS,config,sessionSet,tokens).catch((err) => {
-    log(err);
+    log('error:',err);
     res.writeHead(404);
     res.end('404');
   });

@@ -21,7 +21,7 @@ collections.base = (function(){
     }
   }
 
-  var heapSort = (function(){
+  var heapSort = (function() {
     var ascend = function(a,b){
       return a < b;
     }
@@ -408,7 +408,7 @@ collections.base = (function(){
           for (var i = 0; i < this.values.length; i++){
             f.call(c,this.values[i]);
           } 
-        }
+        } 
         hideAttr(enumerableHead,'parent','root','foreach');
         set(nameToValues);
       },
@@ -822,7 +822,7 @@ collections.base = (function(){
           }
         }
       }
-      then(resolve,reject,parent,index) {
+      then(resolve,reject) {
         this.queue[REJECTED].push(!isFun(reject) ? null : reject);
         this.queue[FULFILLED].push(!isFun(resolve) ? null : resolve);
         let child = new Prom(function(){});
@@ -862,6 +862,7 @@ collections.base = (function(){
             param.childs.indirect.push(this);
           }
         } else if(param && typeof param.then === 'function') {
+          // 处理其他Promise对象.
           param.then((res)=> {
             this.status = FULFILLED;
             this.value = res;
@@ -1134,9 +1135,9 @@ collections.base = (function(){
           if(value && isPromise(value)) promises.push(defer.call(this,results,value,keys[i]));
           else { results[keys[i]] = obj[keys[i]]; }
         }
-        return MyPromise.all(promises.then(function() {
+        return MyPromise.all(promises).then(function() {
           return results;
-        }));
+        });
       }
       /**
        * 
@@ -1166,7 +1167,7 @@ collections.base = (function(){
           else { resultMaps[i] = v; }
           i++;
         });
-        return MyPromise.all().then(function() {
+        return MyPromise.all(promises).then(function() {
           let m = new Map();
           let i = 0;
           obj.forEach(function(v,key){
@@ -1210,17 +1211,16 @@ collections.base = (function(){
   hideAttr(Function.prototype);
   hideAttr(Object.prototype);
 
-  const deepCopy = (oldHead) => {
-    let newHead = {},
-        oldVistedQueue = [],waitOldQueue = [],
-        newVistedQueue = [],waitNewQueue = [];
+  const deepCopy = (oldHead,newHead = {}) => {
+    let oldVistedQueue = [],oldWaitQueue = [],
+        newVistedQueue = [],newWaitQueue = [];
   
-    waitOldQueue.push(oldHead);
-    waitNewQueue.push(newHead);
+    oldWaitQueue.push(oldHead);
+    newWaitQueue.push(newHead);
   
-    while(waitNewQueue.length > 0) {
-      let currentOldElement = waitOldQueue.shift(),
-          currentNewElement = waitNewQueue.shift();
+    while(newWaitQueue.length > 0) {
+      let currentOldElement = oldWaitQueue.shift(),
+          currentNewElement = newWaitQueue.shift();
       
       oldVistedQueue.push(currentOldElement),
       newVistedQueue.push(currentNewElement);
@@ -1233,8 +1233,8 @@ collections.base = (function(){
           if(index > -1) {
             currentNewElement[key] = newVistedQueue[index];
           } else {
-            waitOldQueue.push(currentOldElement[key]);
-            waitNewQueue.push(currentNewElement[key] = {});
+            oldWaitQueue.push(currentOldElement[key]);
+            newWaitQueue.push(currentNewElement[key] = {});
           }
         }
       }
@@ -1242,6 +1242,14 @@ collections.base = (function(){
   
     return newHead;
   }
+
+  Object.defineProperty(Object.prototype,'deepCopy',{
+    value(newObj) {
+      return deepCopy(this,newObj);
+    },
+    enumerable : false,
+    writable : true
+  });
 
   base.enumerable = enumerable;
   base.enumerableTree = enumerableTree;

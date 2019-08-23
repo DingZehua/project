@@ -18,17 +18,23 @@ config.access = {
             '^/js/dom.js$','^/js/myjs1.4.js$','^' + config.path.pc + '/?','^/upload/','^/test'],
   deny  : ['^/server.js$','^/$']
 }
+// 网站配置参数
 config[Symbol.for('server')] = {
   hostName : '192.168.0.14',
   port : '80'
 }
 
+// 默认页
 config.defaultPage = {
   root : 'index.html',
   pc : 'index.html',
 }
 
-config.fileType = ['html','htm','php','jsp','asp','aspx'];
+// 该路径下的js文件不在服务器运行.
+config.staticPage = [config.path.pc + '/js/'];
+
+// 服务端处理程序.
+config.activeFileType = ['html','htm','php','jsp','asp','aspx'];
 // Session生存时间不能过于太短，不然token会造成无限成定向.
 // 安全阈值不能低于1分钟。
 // 以秒为单位.session持续时间.
@@ -56,9 +62,18 @@ config.contentType.script = 'appliction/javascript';
 config.contentType.json = 'appliction/json';
 config.contentType.unknow = '*/*';
 config.contentType.octet = 'application/octet-stream';
+config.contentType.txt = 'text/plain';
 
 config.token_expired = 60 * 5;
 config.token_number = 2000;
+
+config.fileMimeType = {
+  'js' : 'text/javascript',
+  'css' : config.contentType.css,
+  'txt' :  config.contentType.txt,
+  'html' : config.contentType.html,
+  'json' : config.contentType.json
+};
 
 
 Object.freeze(config);

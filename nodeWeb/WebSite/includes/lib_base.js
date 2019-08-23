@@ -5,6 +5,7 @@ let lib_base = (function() {
   let lib_base = {};
   let md5 = require('md5');
   let config = require('../config');
+  let isArr = arr => Array.isArray(arr);
 
   // 加载文件.
   function readPage(fileName,encode) {
@@ -503,6 +504,36 @@ let lib_base = (function() {
     if(!obj) return '';
     return Object.entries(obj).reduce((str,[key,value]) => `${str}${key}=${value}&`,'?').slice(0,-1);
   }
+
+  /**
+   * @api public
+   * @param {Array} pathMap 
+   * @return {RegExp}
+   */
+
+  function accessPath(pathMap) {
+    if(!isArr(pathMap)) {
+      throw TypeError('pathMap must a Array type');
+    }
+
+    return new RegExp(pathMap.join('|')   
+                      .replace(/\\/g,''.padStart(2,'\\'))
+                      .replace(/\//g,''.padStart(2,'\\//'))
+                      .replace(/[.]/g,'[.]')
+                      .replace(/[\[]([\\\.])[\]]/g,'.') ||
+                      /[^\s\S]*/,'i');
+  }
+
+  /**
+   * @api public
+   * @param {Array} arr 
+   * @return {RegExp}
+   */
+
+  function uniquePath(arr) {
+    return accessPath([...new Set(arr.filter(function(x){return x;}))])
+  }
+
   lib_base.readPage = readPage;
   lib_base.fileStat = fileStat;
   lib_base.fetchPOSTDataCurring = fetchPOSTDataCurring;
@@ -516,6 +547,8 @@ let lib_base = (function() {
   lib_base.md5 = md5;
   lib_base.queryStringify = queryStringify;
   lib_base.createToken = createToken;
+  lib_base.accessPath = accessPath;
+  lib_base.uniquePath = uniquePath;
 
   return lib_base;
 }());

@@ -5,6 +5,7 @@ let index = (function(args){
   let readPage = lib_base.readPage;
   let fileStat = lib_base.fileStat;
   return (async function(){
+    /*
     if(!SESSION.userName) { SESSION.userName = 'ZhangSan'; console.log('set');}
     if(SESSION.isExist()) {
       console.log(SESSION.userName);
@@ -15,9 +16,10 @@ let index = (function(args){
     } else {
       console.log(GET);
     }
+    */
+    //console.log(await fetchPOSTData());
     return await readPage(__dirname + '\\index.html');
   }());
 });
 
-try{(module && (module.exports = index));}
-catch(e){}
+(typeof module ==='object' && (module.exports = index)) || '';
