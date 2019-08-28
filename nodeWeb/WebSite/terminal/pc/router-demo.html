@@ -1,0 +1,95 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<script src="js/base.js"></script>
+<script src="js/myjs1.4.js"></script>
+<script src='js/vue.js'></script>
+<script src="js/vue-router.js"></script>
+<script>
+  const col = collections;
+  const base = col.base;
+  const methods = base.method;
+  //Vue.config.productionTip = false;
+  Vue.use(VueRouter);
+</script>
+<style> 
+.wrap {
+  padding: 5px;
+  margin:5px;
+  border:1px solid slategray;
+}
+
+.nav a {
+  color : black;
+}
+
+</style>
+</head>
+<body>
+<div class="wrap" id='app'>
+  <h1>Hello App!</h1>
+  <p class='nav'>
+    <router-link to='/user/foo'>Go to Foo</router-link>
+    <router-link to='/user/bar'>Go to Bar</router-link>
+    <router-link to='/user/bar/cc'>Go to CC</router-link>
+  </p>
+  <transition name="slide-right">
+    <router-view ></router-view>
+  </transition>
+</div>
+
+<script>
+
+const user = {
+  template : `
+    <div class="wrap">
+    {{$route.params.id}}
+    <router-view></router-view>
+    </div>
+  `
+}
+
+const routes = [
+  {
+    path : '/user/:id',
+    component : user ,
+    children : [
+      {
+        path : 'cc',
+        component : {
+          template : `
+            <div> This is bar CC</div>
+          `
+        }
+      }
+    ]
+  },
+  {
+    path : '/user/bar/cc',
+    component : {
+      template : `
+        <div> This is CC </div>
+      `
+    }
+  }
+];
+
+const rootRouter = new VueRouter({
+  routes
+});
+
+rootRouter.beforeEach((to,from,next) => {
+  console.log(to);
+  next();
+});
+
+new Vue({
+  router : rootRouter,
+  el : '#app'
+});
+
+</script>
+
+</body>
+</html>

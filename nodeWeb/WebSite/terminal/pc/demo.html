@@ -9,13 +9,60 @@
   const col = collections;
   const base = col.base;
   const methods = base.method;
+  Vue.config.productionTip = false;
 </script>
 <style>                           
 </style>
 </head>
-<body> 
+<body>
+
+<script>
+
+Vue.component('base-input')
+
+</script>
 
 <!--
+<script> 
+
+Vue.component('user-area',{
+  data() {
+    return {
+      person : {
+        userName : 'ZhangSan',
+        sex : 1
+      },
+      attr : {
+        price : 50
+      }
+    }
+  },
+  template : `
+    <div>
+      <slot name="person" v-bind:user="person">
+        {{attr.price}}
+      </slot>
+    </div>
+  `
+});
+
+window.onload = () => {
+  !(function() {
+    let vm = new Vue({
+      el : `#userInfo`
+    }) 
+  }());
+}
+
+</script>
+
+<div id="userInfo">
+  <user-area v-slot:person="slotPerson">
+    {{slotPerson.user.userName}}
+  </user-area>
+</div>
+
+
 <script>
 
 Vue.component('blog-post',{
@@ -196,8 +243,8 @@ let vm = new Vue({
 })
 
 </script>
--->
 
+-->
 <style>
 
 .wrap{
@@ -261,17 +308,21 @@ Vue.component('son',{
       <p>魔法:{{magic}}</p>
       <p>攻击:{{attack}}</p>
       <p>防御:{{defense}}</p>
-      <base-btn v-for='(item,id) in items' :param=item.param :text=item.text @click="increment" :key='id'></base-btn>
+      <base-btn v-for='(item,id) in items' :param="item.param" :text=item.text @click="increment" :key='id'></base-btn>
+      <br/>
+      <button @click="modifyData">修改</button>
     </div>
   `,
   props : [
-    'wisdom','magic','attack','defense'
+    'wisdom','magic','attack','defense','analysisData'
   ],
   methods : {
     increment(valName) {
       //const newData = JSON.parse(JSON.stringify(this.analysisData));
       //newData[valName] += 1;
       this.$emit(`update:${valName}`, this[valName] + 1 );
+    },
+    modifyData() {
     }
   },
   data() {
@@ -283,11 +334,13 @@ Vue.component('son',{
         { param : 'defense', text : '防御' },
       ]
     }
-  }
+  },
 });
 
+const module = {};
+
 window.onload = () => {
-  let vm = new Vue({
+  module.vm = new Vue({
       el : '#father',
       data : {
         analysisData : {
@@ -312,6 +365,7 @@ window.onload = () => {
       :magic.sync="analysisData.magic"
       :attack.sync="analysisData.attack"
       :defense.sync="analysisData.defense"
+      :analysis-data="analysisData"
     >This is Parent Component</son>
     <p>智力: {{analysisData.wisdom}}</p>
     <p>魔法: {{analysisData.magic}}</p>
@@ -319,5 +373,6 @@ window.onload = () => {
     <p>防御: {{analysisData.defense}}</p>
   </div>
 </div>
+
 </body>
 </html>

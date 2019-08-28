@@ -1,0 +1,146 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<script src="js/base.js"></script>
+<script src="js/myjs1.4.js"></script>
+<script src='js/vue.js'></script>
+<script src="js/vue-router.js"></script>
+<script>
+  const col = collections;
+  const base = col.base;
+  const methods = base.method;
+  //Vue.config.productionTip = false;
+  Vue.use(VueRouter);
+</script>
+</head>
+<body>
+
+<script>
+
+const Home = { template : `<router-view></router-view>` };
+const Default = { template : `<div>default</div>` };
+const Foo = { template : `<div>foo</div>` };
+const Bar = { template : `<div>bar</div>` };
+const Baz = { template : `<div>baz</div>` };
+const WithParams = { template : `<div>{{$route.params.id}}</div>` };
+const Foobar = { template : `<div>foobar</div>` };
+const FooBar = { template : `<div>FooBar</div>` };
+
+const router = new VueRouter({
+  routes : [
+    { 
+      path : '/' , component : Home,
+      children : [
+        { path : '', component : Default },
+        { path : 'foo', component : Foo },
+        { path : 'bar', component : Bar },
+        { path : 'baz', name : 'baz', component : Baz },
+        { path : 'with-params/:id', component : WithParams },
+        { path : 'relative-redirect', redirect : 'foo' }
+      ]
+    },
+    { path: '/absolute-redirect', redirect : '/bar' },
+    {
+      path : '/dynamic-redirect/:id?',
+      redirect : (to) => {
+        const { hash,params,query } = to;
+        if(query.to === 'foo') {
+          return {path : '/foo', query : null };
+        }
+        if(hash === '#baz') {
+          return {name : 'baz', hash : ''}
+        }
+        if(params.id) {
+          return '/with-params/:id';
+        } else {
+          return '/bar'
+        }
+      }
+    },
+    { path : '/named-redirect', redirect : { name : 'baz' } },
+    { path : '/redirect-with-params/:id', redirect : '/with-params/:id' },
+    { path : '/foobar', component : Foobar, caseSensitive : true },
+    { path : '/FooBar', component : FooBar, pathToRegexpOptions : { sensitive : true } },
+    { path : '*' , redirect : '/' }   
+  ]
+});
+
+document.addEventListener('DOMContentLoaded', ()=> {
+  new Vue({
+    router,
+    el : '#app'
+  });
+},false);
+
+</script>
+
+<div id='app'>
+  <h1>Redirect</h1>
+  <ul>
+    <li>
+      <router-link to='/relative-redirect'>
+        /relative-redirect (redirects to /foo)
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/relative-redirect?foo=bar'>
+        /relative-redirect (redirects to /foo?foo=bar)
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/absolute-redirect'>
+        /absolute-redirect (redirect to /bar)
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/dynamic-redirect'>
+        /dynamic-redirect (redirect to /bar)
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/dynamic-redirect/123'>
+        /dynamic-redirect/123 (redirect to /with-params/123)
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/dynamic-redirect?to=foo'>
+        /dynamic-redirect?to=foo (redirect to /foo)
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/dynamic-redirect#baz'>
+        /dynamic-redirect#baz (redirect to /baz)
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/named-redirect#baz'>
+        /named-redirect#baz (redirect to /baz)
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/redirect-with-params/123'>
+        /redirect-with-params/123 (redirect to /with-params/123)
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/foobar'>
+        /foobar
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/FooBar'>
+        /FooBar
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/not-found'>
+        /not-found(redirects to /)
+      </router-link>
+    </li>
+  </ul>
+  <router-view class="view"></router-view>
+</div>
+
+</body>
+</html>

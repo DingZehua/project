@@ -1,0 +1,101 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<script src="js/base.js"></script>
+<script src="js/myjs1.4.js"></script>
+<script src='js/vue.js'></script>
+<script src="js/vue-router.js"></script>
+<script>
+  const col = collections;
+  const base = col.base;
+  const methods = base.method;
+  //Vue.config.productionTip = false;
+  Vue.use(VueRouter);
+</script>
+</head>
+<body>
+<script>
+
+const Root = { template : '<div>root</div>' };
+const Home = { template : `<div><h1>Home</h1><router-view></router-view></div>`};
+const Foo = { template : `<div>foo</div>` };
+const Bar = { template : '<div>bar</div>' };
+const Baz = { template : `<div>baz</div>` };
+const Default = { template : `<div>default</div>` };
+const Nested = { template : `<router-view/>` };
+const NestedFoo = { template : `<div> nested foo</div>` };
+
+const router = new VueRouter({
+  routes : [
+    { path : '/root', component : Root , alias : '/root-alias' },
+    { 
+      path : '/home', component : Home 
+      ,children : [
+        { path : 'foo', component : Foo, alias : '/foo' },
+        { path : 'bar', component : Bar, alias : 'bar-alias' },
+        { path : 'baz', component : Baz, alias : [ '/baz','baz-alias' ]},
+        { path : 'default', component : Default, alias : '' },
+        { path : 'nested', component : Nested, alias : 'nested-alias' ,
+          children : [
+            { path : 'foo',component : NestedFoo }
+          ]
+        },
+      ]
+    },
+  ]
+});
+
+document.addEventListener('DOMContentLoaded',() => {
+  new Vue({
+    el : '#app',
+    router
+  });
+},false);
+
+</script>
+
+<div id='app'>
+  <h1> Route Alias </h1>
+  <ul>
+    <li>
+      <router-link to='/root-alias'>
+        /root-alias (renders /root)
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/foo'>
+        /foo (renders /home/foo)
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/home/bar-alias'>
+        /home/bar-alias (renders /home/bar)
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/baz'>
+        /baz (renders /home/baz)
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/home/baz-alias'>
+        /home/baz (renders /home/baz)
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/home'>
+        /home (renders /home/default)
+      </router-link>
+    </li>
+    <li>
+      <router-link to='/home/nested-alias/foo'>
+        /home/nested-alias/foo (renders /home/nested/foo)
+      </router-link>
+    </li>
+  </ul>
+  <router-view class="view"></router-view>
+</div>
+
+</body>
+</html>

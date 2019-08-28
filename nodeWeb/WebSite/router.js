@@ -156,8 +156,6 @@ let router = (function(args) {
     header['set-Cookie'] = setCookie._build();
     header['content-type'] = contentType + ';charset=utf-8;';
 
-    console.log(generalFileName);
-
     // TODO:data模板操作。
     return {data,status,header,generalFileName};
   })();

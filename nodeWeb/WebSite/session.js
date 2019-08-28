@@ -69,7 +69,7 @@ class Session {
           sessionSet.clearExpired(time,function() {
             runing = false;
             time = null;
-            console.log('clear All finally');
+            //console.log('clear All finally');
           });
         }
       }

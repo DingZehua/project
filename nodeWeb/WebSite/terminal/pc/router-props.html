@@ -1,0 +1,51 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<script src="js/base.js"></script>
+<script src="js/myjs1.4.js"></script>
+<script src='js/vue.js'></script>
+<script src="js/vue-router.js"></script>
+<script>
+  const col = collections;
+  const base = col.base;
+  const methods = base.method;
+  //Vue.config.productionTip = false;
+  Vue.use(VueRouter);
+  //let component;
+  //let components;
+</script>
+</head>
+<body>
+<script>
+
+const User = {
+  template : '<div> User : {{ color }} {{question || "unknow" }} </div>',
+  props : ['color','question']
+}
+
+const router = new VueRouter({
+  routes : [
+    { path : '/user/:id', component : User, props : (route) => { return { color : 'red',question: new Date() }}}
+  ]
+});
+
+document.addEventListener('DOMContentLoaded',() => {
+  new Vue({
+    el : '#app',
+    router
+  });
+});
+
+</script>
+
+<div id='app'>
+  <h1> Props </h1>
+  <router-link to="/user/bar">bar</router-link>
+  <router-link to="/user/foo">foo</router-link>
+  <router-link to="/user/baz?q=where are you">baz</router-link>
+  <router-view></router-view>
+</div>
+
+</body>
+</html>

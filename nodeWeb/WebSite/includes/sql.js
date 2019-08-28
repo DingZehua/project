@@ -5,9 +5,11 @@ class mysqlDB  {
   constructor (config) {
     this.con = mysql.createConnection(config);
     this.con.connect((err) => {
-      if(err) { //console.log(err);
-       } 
-      else { console.log('mysql start success.'); }
+      if(err) { 
+        //console.log(err);
+      } else {
+        console.log('mysql start success.'); 
+      }
     });
     this._queryThunk = thunkify(this.con.query);
     this._end = thunkify(this.con.end);
@@ -23,7 +25,7 @@ class mysqlDB  {
    * @param {sql} mysqlSyntax
    * @return {MyPromise} MyPromise
    */
-  queryProm(str) {
+  query(str) {
     let self = this;
     return new MyPromise(function(resolve,reject) {
       self.con.query(str,function(err,data) {
@@ -32,7 +34,7 @@ class mysqlDB  {
       });
     });
   }
-  endProm () {
+  end () {
     let self = this;
     return new MyPromise(function(resolve,reject) {
       self.con.end(function(err) {
@@ -41,7 +43,7 @@ class mysqlDB  {
       });
     });
   }
-  updateProm(table = mustParam(),
+  update(table = mustParam(),
               obj  = mustParam(),
               rule = mustParam()) {
     let sql = `update ${table} set ${Object.entries(obj)
@@ -49,23 +51,23 @@ class mysqlDB  {
                 return `${key} = '${value}'`;
               })} `;
     sql += ' ' + rule;
-    return this.queryProm(sql);
+    return this.query(sql);
   }
-  insertProm(table = mustParam(),
+  insert(table = mustParam(),
              data  = mustParam()) {
     let sql = `insert into ${table} 
               (${Object.keys(data)}) 
               values(${Object.values(data).map( value => `'${value}'` )}`;
-    return this.queryProm(sql);
+    return this.query(sql);
   }
   /**
    * 
    * @param {*} tableName
    * @param {*} whereSyntax 
    */
-  deleteProm(table = mustParam(),rule = mustParam()) {
+  delete(table = mustParam(),rule = mustParam()) {
     let sql = `delete FROM ${table} ${rule}`;
-    return this.queryProm(sql);
+    return this.query(sql);
   }
   /**
    * @return {Object} Object
@@ -74,7 +76,7 @@ class mysqlDB  {
     if(sql.search(/\s+limit\s+\d+(,\d+)?/) < 0) {
       sql += ' limit 1';
     }
-    return this.queryProm(sql).then((res) => res[0]);
+    return this.query(sql).then((res) => res[0]);
   }
 }
 

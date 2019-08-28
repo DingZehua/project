@@ -1,0 +1,171 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<script src="js/base.js"></script>
+<script src="js/myjs1.4.js"></script>
+<script src='js/vue.js'></script>
+<script src="js/vue-router.js"></script>
+<script src='js/axios.min.js'></script>
+<script>
+  const col = collections;
+  const base = col.base;
+  const methods = base.method;
+  //Vue.config.productionTip = false;
+  Vue.use(VueRouter);
+</script>
+</head>
+<body>
+
+<style>
+
+.wrap {
+  padding : 4px;
+}
+
+#userSettings {
+  margin-left : 5px;
+  width : 100%;
+  float : left;
+  overflow-y: hidden;
+}
+
+.boxSize {
+  box-sizing:border-box;
+}
+
+.banner {
+  float: left;
+  width:calc(100% - 8px);
+  border : 1px solid slategray;
+}
+
+.nav {
+  float:left;
+  width:20%;
+  border:1px solid darkgray;
+  height:200px;
+}
+
+.content {
+  float : left;
+  border:1px solid darkgray;
+  height:100px;
+  width:80%;
+}
+
+</style>
+
+<script>
+
+const Nav = {
+  template : `
+    <div class="wrap nav boxSize">
+      <ul>
+        <li><router-link to="/usersettings/mail">mail</router-link></li>
+        <li><router-link to="/usersettings/profile">profile</router-link></li>
+        <li><router-link to="/usersettings/redirect">go to profile</router-link></li>
+        <li><router-link to="/usersettings/userInfo">go to userInfo</router-link></li>
+      </ul>
+    </div>
+  `
+};
+
+const Email = {
+  template : `
+    <div class="wrap content boxSize"> UserEmailsSubscriptions</div>
+  `
+};
+
+const userProfile = {
+  default : {
+    template : `<div class="wrap content boxSize"> UserProfile </div>`
+  },
+  private : {
+    template : `<div class="wrap content boxSize"> UserProfilePreview </div>`
+  }
+}
+
+const userInfo = {
+  template : `
+    <div class="wrap content boxSize">
+      UserInfo
+    </div>
+  `
+}
+
+const userSettings = {
+  template : `
+    <div class="wrap boxSize" id="userSettings">
+      <p>UserSettings : {{State}} </p>
+      <div class="banner">
+        <base-nav></base-nav>
+        <router-view></router-view>
+        <router-view name="private"></router-view>
+      </div>
+    </div>
+  `,
+  computed : {
+    State() {
+      return this.$route.path.split('/').pop() || 'unKnow';
+    }
+  },
+  components : {
+    'base-nav' : Nav
+  }
+}
+
+const router = new VueRouter( {
+  routes : [
+    {
+      path : '/usersettings',
+      component : userSettings,
+      children : [
+        {
+          path : 'mail',
+          component : Email
+        },
+        {
+          path : 'profile',
+          components : {
+            ...userProfile
+          }
+        },
+        {
+          path : 'redirect',
+          redirect : 'profile'
+        },
+        {
+          name : 'info',
+          path : 'userInfo',
+          component :userInfo
+        }
+      ]
+    }
+  ]
+});
+
+window.onload = () => {
+  new Vue({
+    router,
+    el : '#app',
+    methods : {
+      showHash() {
+        console.log(this.$route);
+      }
+    }
+  });
+};
+
+</script>
+
+<div id='app'>
+  <h1>Named Routed</h1>
+  <p>Current route name : {{ $route.name }}</p>
+  <span><button @click="showHash">show</button></span>
+  <router-link to="/userSettings">user</router-link>
+  <router-view></router-view>
+</div>
+
+</body>
+</html>

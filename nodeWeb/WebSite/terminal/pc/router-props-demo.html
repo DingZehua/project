@@ -1,0 +1,85 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<script src="js/base.js"></script>
+<script src="js/myjs1.4.js"></script>
+<script src='js/vue.js'></script>
+<script src="js/vue-router.js"></script>
+<script type='module'>
+import Hello from './js/hello.js';
+main(Hello);
+</script>
+<script>
+  const col = collections;
+  const base = col.base;
+  const methods = base.method;
+  //Vue.config.productionTip = false;
+  Vue.use(VueRouter);
+  //let component;
+  //let components;
+</script>
+</head>
+<body>
+<script>
+
+const main = (Hello)=> {
+  function dynamicPropsFn(route) {
+    const now = new Date();
+    return {
+      name : (now.getFullYear() + parseInt(route.params.years)) + '!'
+    };
+  }
+
+  const router = new VueRouter({
+    routes : [
+      {
+        path : '/', 
+        component : Hello
+      },
+      { path : '/hello/:name', component : Hello, props : true,beforeEnter() {
+        console.log('route Enter');
+      }},
+      { path : '/static', component : Hello, props : { name : 'world' },meta : { loged : false } },
+      { path : '/dynamic/:years', component : Hello , props : dynamicPropsFn },
+      { path : '/attrs', component : Hello , props : { name : 'attrs' }}
+    ],
+  });
+
+  router.beforeEach((to,from,next)=> {
+    console.log(to.matched);
+    next();
+  });
+
+  new Vue({
+    el : '#app',
+    router,
+    data : {
+      toPath : ''
+    },
+    methods : {
+      update(val) {
+        this.toPath = val;
+      }
+    }
+  });
+}
+
+</script>
+
+<div id='app'>
+  <h1>Route props</h1>
+  <p>router path : {{ toPath }}</p>
+  <ul>
+    <li><router-link to='/'>/</router-link></li>
+    <li><router-link to='/hello/you'>/hello/you</router-link></li>
+    <li><router-link to='/hello/me'>/hello/me</router-link></li>
+    <li><router-link to='/static'>/static</router-link></li>
+    <li><router-link to='/dynamic/1'>/dynamic/1</router-link></li>
+    <li><router-link to='/attrs'>/attrs</router-link></li>
+  </ul>
+  <router-view foo='123' @update="update"></router-view>
+</div>
+
+</body>
+</html>
