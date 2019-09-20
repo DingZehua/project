@@ -127,30 +127,13 @@ var namespace = function () {
           }
           return true;
         }
-
-        if(obj instanceof Number) {
-          if(obj.valueOf() === 0 || isNaN(obj.valueOf())) {
-            return true;
-          }
-          return false;
-        }
-
-        if(obj instanceof String) {
-          const str = obj.valueOf().toLocaleLowerCase();
-          if(str === 'undefined' || str === 'null' || str === 'undefined'){
-            return true;
-          }
-          return false;
-        }
-
         for (var key in obj) {
           return false;
         }
         return true;
       }
       if (typeof obj === 'string') {
-        const str = obj.toLocaleLowerCase();
-        if (str !== '' && str !== '0' && str !== 'null' && str !== 'undefined') {
+        if (obj !== '' && obj !== '0' && obj !== 'null' && obj !== 'undefined') {
           return false;
         }
         return true;

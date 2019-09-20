@@ -39,13 +39,14 @@ let lib_base = (function() {
         if(contentType === config.formSubmitType.mul) {
           throw Symbol.for('POST_EXCEPTION');
         }
-        req.on('data',(chunk) => {
+        req.once('data',(chunk) => {
           post += chunk;
         });
       } else {
-        req.on('data',(chunk) => {
+        req.once('data',(chunk) => {
           post += chunk;
         });
+
         // 处理文件和post数据
         if(contentType === config.formSubmitType.mul) {
           ([,boundary] = boundary.split('boundary='));
@@ -60,8 +61,10 @@ let lib_base = (function() {
       }).then(() => {
         if(!getFile) return queryString.parse(post);
           else {
+            // 通过ajax访问时可以没有contentType的.
             if(contentType) {
-              console.log(dataSplit(post,boundary));
+              let data = dataSplit(post,boundary);
+              ({post,files} = data);
             }
             return {POST:post,files};
           }
@@ -85,10 +88,10 @@ let lib_base = (function() {
           // 对文本进行转换
           dataList.post[Buffer.from(name.slice(6,-1),'binary').toString('utf-8')] = Buffer.from(data.slice(0,-2),'binary').toString('utf-8'); 
         } else {
-          /* 取得文件集合 */
+          /* 取得文件 */
           let fileType = contentType.split(': ')[1];
           fileName = fileName.slice(10,-1);
-          if(fileName !== '' && fileType !== config.contentType.octet) {
+          if(fileName !== '' /* && fileType !== config.contentType.octet */) {
             if(fileType === config.contentType.plain) {
               data = Buffer.from(data,'binary').toString('utf-8');
             }
@@ -101,7 +104,7 @@ let lib_base = (function() {
             });
           }
         }
-      })
+      });
       return dataList;
     }
 
@@ -239,15 +242,6 @@ let lib_base = (function() {
         return Reflect.set(t.userData[SESS_ID].data,prop,value,t.userData[SESS_ID].data);
       },
       get(t,prop,receiver) {
-        if(Reflect.get(t,prop,receiver)) {
-          if(typeof t[prop] === 'function') {
-            return function() {
-              return t[prop].apply(t,[SESS_ID,...arguments]);
-            }
-          } else {
-            return t[prop];
-          }
-        }
         if(!t.isExist(SESS_ID)) { t.add(SESS_ID); }
         return Reflect.get(t.userData[SESS_ID].data,prop,t.userData[SESS_ID].data);
       },

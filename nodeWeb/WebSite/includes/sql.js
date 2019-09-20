@@ -6,7 +6,7 @@ class mysqlDB  {
     this.con = mysql.createConnection(config);
     this.con.connect((err) => {
       if(err) { 
-        //console.log(err);
+        console.log(err);
       } else {
         console.log('mysql start success.'); 
       }
@@ -23,7 +23,7 @@ class mysqlDB  {
   /**
    * 
    * @param {sql} mysqlSyntax
-   * @return {MyPromise} MyPromise
+   * @return {Promise} Promise
    */
   query(str) {
     let self = this;
@@ -44,8 +44,9 @@ class mysqlDB  {
     });
   }
   update(table = mustParam(),
-              obj  = mustParam(),
-              rule = mustParam()) {
+         obj  = mustParam(),
+         rule = mustParam()) 
+  {
     let sql = `update ${table} set ${Object.entries(obj)
               .map(([key,value]) => {
                 return `${key} = '${value}'`;

@@ -1,0 +1,154 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<script src="http://192.168.0.14/js/base.js"></script>
+<script src="http://192.168.0.14/js/myjs1.4.js"></script>
+<script src='http://192.168.0.14/terminal/pc/js/vue.js'></script>
+<script src="http://192.168.0.14/terminal/pc/js/vue-router.js"></script>
+<script src='http://192.168.0.14/terminal/pc/js/axios.min.js'></script>
+<script>
+  const col = collections;
+  const base = col.base;
+  const methods = base.method;
+  //Vue.config.productionTip = false;
+  Vue.use(VueRouter);
+</script>
+
+<script>
+
+const Home = { template : ` <div class="home"> home </div> `};
+const Foo = { template : ` <div class="foo"> foo </div> ` };
+const Bar = {
+  template : `
+    <div class="bar">
+      bar
+      <div style="height:1500px"></div>
+      <p id="anchor" style="height:500px">Anchor</p>
+      <p id="anchor2" style="height:500px">Anchor2</p>
+      <p id="inumber">with number</p>
+    </div>
+  `
+};
+
+const scrollBehavior  = function(to ,from ,savedPosition) {
+  if(savedPosition) {
+    return savedPosition;
+  } else {
+    const position = {};
+
+    if(to.hash) {
+      position.selector = to.hash;
+
+      if(to.hash === '#achor2') {
+        position.offset = { y:100 };
+      }
+
+      if(/^#\d/.test(to.hash) || document.querySelector(to.hash)) {
+        return position;
+      }
+
+      return false;
+    }
+
+    return new Promise(resolve => {
+      if(to.matched.some(m => m.meta.scrollToTop)) {
+        position.x = 0;
+        position.y = 0;
+      }
+
+      this.app.$root.$once('triggerScroll',() => {
+        resolve(position);
+      });
+    });
+  }
+}
+
+const router = new VueRouter({
+  mode : 'history',
+  scrollBehavior,
+  base : '/app',
+  routes : [
+    { path : '/', component :Home,meta : { scrollToTop : true } },
+    { path : '/foo', component : Foo },
+    { path : '/bar', component : Bar, meta : { scrollToTop :true } }
+  ]
+});
+
+cm.bind_event(document,'DOMContentLoaded',function() {
+  new Vue({
+    router,
+    el : '#app',
+    methods : {
+      afterLeave() {
+        this.$root.$emit('triggerScroll');
+
+        console.log(this);
+      }
+    }
+  });
+},false);
+
+</script>
+
+</head>
+<body>
+
+<style>
+
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  color: #2c3e50;
+}
+
+#cc {
+  padding: 0 20px;
+}
+
+ul {
+  line-height: 1.5em;
+  padding-left: 1.5em;
+}
+
+a {
+  color: #7f8c8d;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #4fc08d;
+}
+
+.fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s ease;
+  }
+  .fade-enter,
+  .fade-leave-active {
+    opacity: 0;
+  }
+  .view {
+    border: 1px solid red;
+    height: 4500px;
+    position: relative;
+  }
+
+</style>
+
+<div id='app'>
+  <h1>Scroll Behavior</h1>
+  <ul>
+    <li><router-link to="/">/</router-link></li>
+    <li><router-link to="/foo">/foo</router-link></li>
+    <li><router-link to="/bar">/bar</router-link></li>
+    <li><router-link to="/bar#anchor">/bar#anchor</router-link></li>
+    <li><router-link to="/bar#anchor2">/bar#anchor2</router-link></li>
+    <li><router-link to="/bar#1number">/bar#1number</router-link></li>
+  </ul>
+  <transition name="fade" mode='out-in' @after-leave="afterLeave">
+    <router-view class="view"></router-view>
+  </transition>
+</div>
+
+</body>
+</html>

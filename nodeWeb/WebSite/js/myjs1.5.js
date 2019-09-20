@@ -1,18 +1,4 @@
 var namespace = function () {
-  getEle.call(this);
-  if (typeof HTMLElement !== 'undefined') {
-    (function (_this) {
-      if (typeof HTMLElement.getIdEle === 'undefined') {
-        HTMLElement.prototype.getClassEles = _this.chaining_getClass;
-        HTMLElement.prototype.getTagNameEles = _this.chaining_getTag;
-      }
-    }(this));
-  }
-  this.remove_myGetEle = function () {
-    delete HTMLElement.prototype.getClassEles;
-    delete HTMLElement.prototype.getTagNameEles;
-  };
-  this.constructor = namespace;
   this.css = {
     'removeClassName': function (str, ClassName) {
       var strArr = str.split(' ');
@@ -20,10 +6,10 @@ var namespace = function () {
       for (var i = 0; i < strArr.length; i++) {
         if (strArr[i] !== ClassName) {
           if (returnStr !== '') {
-            returnStr = strArr[i];
+            returnStr += ' ' + strArr[i];
           }
           else {
-            returnStr += ' ' + strArr[i];
+            returnStr = strArr[i];
           }
         }
       }
@@ -48,10 +34,10 @@ var namespace = function () {
     'removeAttr': function (ele, attrName) {
       ele.removeAttribute(attrName);
     },
-    'disable_ele': function (ele) {
+    'disable': function (ele) {
       ele.disabled = 'disabled';
     },
-    'enable_ele': function (ele) {
+    'enable': function (ele) {
       this.removeAttr(ele, 'disabled');
     }
   };
@@ -107,12 +93,6 @@ var namespace = function () {
     }
   };
   this.common = {
-    'remove_string': function (value) {
-      return value.replace(/[^0-9]+/, '');
-    },
-    'check_number': function (value) {
-      return /^[0-9]+[.]?[0-9]*$/.test(value);
-    },
     'empty': function (obj) {
       if (obj === undefined) {
         return true;
@@ -162,16 +142,13 @@ var namespace = function () {
       }
       return false;
     },
-    'getIdEle': function (id) {
-      return document.getElementById(id);
-    },
-    'getClassEles': function (className) {
+    'gClasses': function (className) {
       if (typeof document.getElementsByClassName !== 'undefined') {
         return document.getElementsByClassName(className);
       }
       else {
         var classNodes = Array();
-        var dom = this.getTagNameEles('*');
+        var dom = this.gTags('*');
         for (var i = 0; i < dom.length; i++) {
           if (dom[i].className.indexOf(className) > -1) {
             classNodes.push(dom[i]);
@@ -180,44 +157,20 @@ var namespace = function () {
         return classNodes;
       }
     },
-    'getClassEle': function (className) {
-      return this.getClassEles(className)[0];
+    'gClass': function (className) {
+      return this.gClass(className)[0];
     },
-    'getNameEles': function (Name) {
+    'gNames': function (Name) {
       return document.getElementsByName(Name);
     },
-    'getNameEle': function (Name) {
-      return this.getNameEles(Name)[0];
+    'gName': function (Name) {
+      return this.gNames(Name)[0];
     },
-    'getTagNameEles': function (TagName) {
+    'gTags': function (TagName) {
       return document.getElementsByTagName(TagName);
     },
-    'getTagNameEle': function (TagName) {
-      return this.getTagNameEles(TagName)[0];
-    },
-    'getThisEle': function (ele, _event) {
-      _event = this.getEvent(_event);
-      if (ele !== window) {
-        return ele;
-      }
-      else {
-        ele = _event.srcElement || _event.target;
-        return ele;
-      }
-    },
-    'getTarget': function (_event) {
-      return _event.srcElement || _event.target;
-    },
-    'get_pre': function (el) {
-      var node = el.previousSibling;
-      return node.nodeName !== '#text' ? node : node.previousSbiling;
-    },
-    'get_next': function (el) {
-      var node = el.nextSibling;
-      return node.nodeName !== '#text' ? node : node.nextSibling;
-    },
-    'get_text': function (el) {
-      return el.innerText || el.textContent;
+    'gTag': function (TagName) {
+      return this.gTags(TagName)[0];
     },
     'g': function (str) {
       if (!/[#.>:@]|\s/.test(str)) {
@@ -228,116 +181,30 @@ var namespace = function () {
       }
       else {
         str = str.replace(/@/g, '');
-        return document.querySelectorAll(str);
+        return document.querySelector(str);
       }
     },
     '$': function (str) { return this.g(str); },
-    'RemoveArrDuplicate': function (arr) {
-      for (var i = 0; i < arr.length; i++) {
-        for (var j = i; j < arr.length; j++) {
-          var nextJ = j + 1;
-          if (nextJ >= arr.length) {
-            break;
-          }
-          else {
-            if (arr[i] === arr[nextJ]) {
-              arr.splice(nextJ, 1);
-              j--;
-            }
-          }
-        }
-      }
-      return arr;
-    },
-    'createNode': function (EleName, id, className, text) {
+    'cNode': function ({EleName, id, className, text}) {
       var Node = document.createElement(EleName);
-      var id = id || '';
-      var className = className || '';
+
       if (!this.empty(text)) {
-        this.appendNode(Node, this.createTextNode(text));
+        this.appendNode(Node, this.cTextNode(text));
       }
-      Node.id = id;
-      Node.className = className;
+
+      if(id) {
+        Node.id = id;
+      }
+      if(className) {
+        Node.className = className;
+      }
       return Node;
     },
-    'createTextNode': function (text) {
+    'cTextNode': function (text) {
       return document.createTextNode(text);
-    },
-    'addTag': function (ele, eleName, id, className) {
-      ele.appendChild(this.createNode(eleName, id, className));
     },
     'appendNode': function (ele, childNode) {
       (childNode !== undefined && childNode !== null) ? ele.appendChild(childNode) : '';
-    },
-    'BeforeNode': function (el, child, i) {
-      var i = i || 0;
-      el.insertBefore(child, this.getChildNodes(el)[i]);
-    },
-    'getParentEle': function (obj) {
-      return obj.parentNode || obj.parentElement;
-    },
-    'getChildNodes': function (obj, text_node_delete) {
-      var text_node_delete = typeof text_node_delete === 'boolean' ? text_node_delete : false;
-      var objNodes = obj.childNodes;
-      if (text_node_delete) {
-        this.deleteTextEle(obj, objNodes);
-      }
-      return objNodes;
-    },
-    'getTableEle': function (ele, section) {
-      if (typeof ele !== 'object') {
-        return false;
-      }
-      if (ele === '[object HTMLTableElement]') {
-        section = section || 'tbody';
-        var table = ele.getElementsByTagName(section)[0];
-        return table;
-      }
-    },
-    'getTableRowsEle': function (ele, section) {
-      section = section || 'tbody';
-      if (typeof ele !== 'object') {
-        return false;
-      }
-      if (typeof ele === '[object HTMLTableElement]') {
-        ele = this.getTableEle(ele, section);
-      }
-      if (typeof ele === '[object HTMLTableSectionElement]') {
-        return this.getChildNodes(ele, true);
-      }
-      if (typeof ele === '[object NodeList]') {
-        return ele;
-      }
-    },
-    'deleteTextEle': function (parent, childs) {
-      if (childs === undefined) {
-        childs = this.getChildNodes(parent);
-      }
-      for (var i = 0; i < childs.length; i++) {
-        if (childs[i].nodeName === '#text') {
-          parent.removeChild(childs[i]);
-          i--;
-        }
-      }
-    },
-    'remove_childNode': function (parent, child) {
-      parent.removeChild(child);
-    },
-    'ele_delete': function (ele) {
-      var parent = this.getParentEle(ele);
-      parent.removeChild(ele);
-    },
-    'deep_ele_delete': function (el) {
-      var cns = this.getChildNodes(el);
-      for (var i = (cns.length - 1); i > 0; i--) {
-        if (cns[i].nodeName !== '#text') {
-          this.deep_ele_delete(cns[i]);
-        }
-        else {
-          this.ele_delete(cns[i]);
-        }
-      }
-      this.ele_delete(el);
     },
     'ajax': function (data, url, callback, sendType, dataName, async) {
       if (!url) { return; }
@@ -392,53 +259,34 @@ var namespace = function () {
       }
       return xmlhttp;
     },
-    'ajax_send': function (type, dataType, jsonData, uri, F_success, _async, F_error) {
-      _async = typeof _async !== 'undefined' ? _async : true;
-      type = typeof type !== undefined ? type : 'post';
-      dataType = typeof dataType !== undefined ? dataType : 'text';
-      F_error = typeof F_error !== undefined ? F_error : function () { alert('error') };
-      var result;
-      result = $.ajax({
-        'type': type,
-        'dataType': dataType,
-        'data': { 'jsonData': jsonData },
-        'url': uri,
-        'success': F_success,
-        'error': F_error,
-        'async': _async
-      });
-      return result;
-    },
-    'ajax_post_send': function (jsonData, uri, F_success, _async) {
+    'post': function (jsonData, uri, F_success, _async) {
       var result;
       _async = typeof _async !== 'undefined' ? _async : true;
-      //result =  this.ajax_send('post','text',jsonData,uri,F_success,_async);
       result = this.ajax(jsonData, uri, F_success, 'POST', '', _async);
       return result.responseText;
     },
-    'ajax_get_send': function (jsonData, uri, F_success, _async) {
+    'get': function (jsonData, uri, F_success, _async) {
       var result;
       _async = typeof _async !== 'undefined' ? _async : true;
-      //result =   this.ajax_send('get','text',jsonData,uri,F_success,_async);
       result = this.ajax(jsonData, uri, F_success, 'GET', '', _async);
       return result.responseText;
     },
 
-    'bind_arr_event': function (ele, event_name, F_Object) {
+    'binds': function (ele, event_name, F_Object) {
       if (typeof ele === undefined || event_name === '') {
         return false;
       }
 
       if ((ele.constructor === NodeList || ele instanceof Object) && typeof ele.length !== 'undefined') {
         for (var i = 0; i < ele.length; i++) {
-          this.bind_event(ele[i], event_name, F_Object);
+          this.bind(ele[i], event_name, F_Object);
         }
       }
       else {
-        this.bind_event(ele, event_name, F_Object);
+        this.bind(ele, event_name, F_Object);
       }
     },
-    'bind_event': function (obj, event_name, F_Object, capture_bool) {
+    'bind': function (obj, event_name, F_Object, capture_bool) {
       //IE10会保留 addEventListener 和 attachEvent
       if(!obj) { 
         throw TypeError('obj 必须是一个对象');
@@ -453,10 +301,7 @@ var namespace = function () {
         obj.attachEvent('on' + event_name, F_Object);
       }
     },
-    bind: function (obj, event_name, F_Object, capture_bool) {
-      this.bind_event.apply(this, Array.prototype.slice.call(arguments, 0));
-    },
-    'freed_event': function (obj, event_name, F_Object, capture_bool) {
+    'freed': function (obj, event_name, F_Object, capture_bool) {
       if (typeof obj === undefined || obj === null) return false;
       capture_bool = typeof capture_bool === 'boolean' ? capture_bool : false;
       if (typeof obj.removeEventListener !== 'undefined') {
@@ -465,20 +310,6 @@ var namespace = function () {
       else {
         obj.detachEvent('on' + event_name, F_Object);
       }
-    },
-    'freed_arr_event': function (ele, event_name, F_Object, capture_bool) {
-      if ((ele == '[object NodeList]' || ele instanceof Object) && typeof ele.length !== 'undefined') {
-        for (var i = 0; i < ele.length; i++) {
-          this.freed_event(ele[i], event_name, F_Object, capture_bool);
-        }
-      }
-      else {
-        this.freed_event(ele, event_name, F_Object, capture_bool);
-      }
-    },
-    'getEvent': function (e) {
-      e = e || window.event;
-      return e;
     },
     'stop_event_conduct': function (e) {
       if (typeof e === 'object' && e.stopPropagation) {
@@ -502,36 +333,6 @@ var namespace = function () {
     },
     'JSONtoObj': function (jsonData) {
       return JSON.parse(jsonData);
-    },
-    'sort': function (obj, filed_name) {
-      var image_obj = this.JSONtoObj(this.toJSON(obj));
-      var arr_obj = [];
-      var temp_item = [];
-      var cnt = 0;
-      for (var key in image_obj) {
-        arr_obj[cnt] = {};
-        arr_obj[cnt]['key'] = key;
-        arr_obj[cnt]['sort'] = image_obj[key][filed_name];
-        delete obj[key];
-        cnt++;
-      }
-
-      for (var i = 0, len = arr_obj.length; i < len; i++) {
-        if ((i + 1) === len)
-          break;
-        for (var j = i + 1; j < len; j++) {
-          var a = arr_obj[i]['sort'] * 1;
-          var b = arr_obj[j]['sort'] * 1;
-          if (a < b) {
-            temp_item = arr_obj[i];
-            arr_obj[i] = arr_obj[j];
-            arr_obj[j] = temp_item;
-          }
-        }
-      }
-      for (var i = 0, len = arr_obj.length; i < len; i++) {
-        obj[arr_obj[i]['key']] = image_obj[arr_obj[i]['key']];
-      }
     },
     'get_uri_param': function (name) {
       name = name || '';
@@ -570,25 +371,13 @@ var namespace = function () {
       }
       el.scrollLeft = left;
       el.scrollTop = top;
-    },
-    'is_standard_attr': function (el, att) {
-      if (el === void 0 || att === void 0 || att.NodeType === 2) return;
-      var tag = this.createNode(el.nodeName);
-      return (tag[att] !== void 0 || tag.getAttribute(att) !== null);
     }
   };
 };
-var getEle = function () {
-  this.chaining_getClass = function (ClassName) {
-    return this instanceof HTMLElement ? this.getElementsByClassName(ClassName) : undefined;
-  };
-  this.chaining_getTag = function (tagName) {
-    return this instanceof HTMLElement ? this.getElementsByTagName(tagName) : undefined;
-  };
-}
 
 namespace.prototype =
   {
+    constructor : namespace,
     'EventHandler': function (modules)/*观察者模式*/ {
       this.handlers = {};
       this.add = function (type, handler) {

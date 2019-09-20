@@ -24,7 +24,7 @@ let router = (function(args) {
     let fetchPOSTData = lib_base.fetchPOSTDataCurring(req,contentType,boundary);
     let readPage = lib_base.readPage;
     let fileStat = lib_base.fileStat;
-    
+  
     // 取得访问方法和accept.
     if(req.method === 'GET' || req.method === 'POST') {
       if(!contentType) {

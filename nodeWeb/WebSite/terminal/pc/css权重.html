@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  div .cls1 #id2.cls2 {
+    color : blue;
+  }
+  /* 如果这个优先级高，要测试前后顺序. */
+  div #id1 .cls2 {
+    color : red;
+  }
+  </style>
+  <script>
+  </script>
+</head>
+<body>
+  <div>
+    <div class="cls1" id="id1">
+      <p class="cls2" id="id2">text</p>
+    </div>
+  </div>
+  
+</body>
+</html>

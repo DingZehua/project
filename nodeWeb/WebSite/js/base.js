@@ -735,6 +735,7 @@ collections.base = (function(){
 
   var intSplit = function(value){
     var arr = [];
+    if(value === 0) return [0]; 
     while(value){
       arr.unshift(value % 10);
       value = parseInt(value / 10)
@@ -886,7 +887,7 @@ collections.base = (function(){
         this.queue[this.status].forEach(function(method,i,arr) {
           let child = this.childs.inherit[i];
           // 加入执行队列
-          let value = null;
+          let value;
           try {
             if(this.status === REJECTED){
               if(!isFun(method)){

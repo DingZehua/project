@@ -6,9 +6,7 @@ let page = (function(args){
   let fileStat = lib_base.fileStat;
   const pageDir = __dirname + '\\';
   return (async function(){
-    let sqlQuery = GET['sql'];
-    const data = await sql.query(sqlQuery);
-    return await JSON.stringify(data);
+    return await readPage(pageDir + 'app.html');
   }());
 })
 

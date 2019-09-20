@@ -1,0 +1,59 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+  <base target="_blank">
+  <script src="http://192.168.0.14/js/base.js"></script>
+<script src="http://192.168.0.14/js/myjs1.5.js"></script>
+<script src='http://192.168.0.14/terminal/pc/js/vue.js'></script>
+<script src="http://192.168.0.14/terminal/pc/js/vue-router.js"></script>
+<script src='http://192.168.0.14/terminal/pc/js/axios.min.js'></script>
+<script>
+  const col = collections;
+  const base = col.base;
+  const methods = base.method;
+  //Vue.config.productionTip = false;
+  Vue.use(VueRouter);
+</script>
+
+<style>
+  html,body,a,ul,li {
+    margin: 0;
+    padding: 0;
+    list-style : none;
+  }
+  a {
+    text-decoration : none;
+  }
+  #title-box {
+    width : 100%;
+    padding:15px 0px;
+  }
+  #title-text {
+    color : dodgerblue;
+    text-align : center;
+  }
+  
+  .module {
+    width : 98%;
+    margin-left: 1%;
+    margin-right : 1%;
+  }
+
+</style>
+<script>
+</script>
+</head>
+<body>
+
+<div>
+  <div id="title-box">
+    <h1 id="title-text"> <a>开发组件库</a> </h1>
+  </div>
+  <div class="module" id="title-box">
+  </div>
+  <a href="http://192.168.0.14/" >主页</a>
+</div>
+
+</body>
+</html>

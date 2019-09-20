@@ -1,9 +1,9 @@
 const deepDelete = require('./includes/lib_base').deepDelete;
 class Session {
   // 生存时间默认15分钟。
-  constructor(expired = 1000 * 60 * 15) {
+  constructor(expired) {
     this.userData = {};
-    this.expired = expired * 1000;
+    this.expired =  (expired && expired * 1000) || (1000 * 60 * 15);
     this._count = 0;
   }
   add(SESS_ID) {

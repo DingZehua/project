@@ -94,6 +94,12 @@ const userInfo = {
   `
 }
 
+const Home = {
+  template : ` 
+    <div> Home </div>
+  `
+};
+
 const userSettings = {
   template : `
     <div class="wrap boxSize" id="userSettings">
@@ -141,7 +147,8 @@ const router = new VueRouter( {
           component :userInfo
         }
       ]
-    }
+    },
+    { path : '/',component : Home }
   ]
 });
 
