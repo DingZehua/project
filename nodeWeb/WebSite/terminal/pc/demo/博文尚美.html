@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./css/common.css">
+  <script src="../js/myjs1.5.js"></script>
+  <script>
+    window.onload = ()=> {
+      const olist = cm.gs('#banner ol li');
+      const ulist = cm.gs('#banner ul li');
+      const tagUl = cm.g('#banner ul');
+      
+      const location = [];
+      
+      foreach(ulist,function(v,i) {
+        Object.defineProperty(location,i, {
+          get : function() {
+            return ulist[i].getClientRects()[0];
+          }
+        });
+      });
+      location['spacing'] = function(a,b) {
+        let padding = 0;
+        foreach(array(this,a,b),function(v,i){
+          padding += v.width;
+        });
+        return padding;
+      }
+
+      location['tax'] = function(a) {
+        if(undef(a)) return null;
+        return this[a].width / this.spacing() * 100;
+      }
+
+      const widthSum = location.spacing();
+      foreach(ulist,function(v,i) {
+        v.style.width = (location[i].width  / widthSum * 100) + '%';
+      });
+
+      cm.binds(olist,'click',(e) => {
+        const self = e.target;
+        let index = null;
+        let active = null;
+
+        every(olist,(oli,i) => {
+          
+          if(self === oli) {
+            index = i;
+          }
+          if(ulist[i].className.indexOf('active') > -1) {
+            active = ulist[i];
+          } 
+          return true;
+        });
+
+        const uli = ulist[index];
+        if(uli !== active) {
+
+          for(let i = 0,len = ulist.length; i < len; i++) {
+            css.removeClass(ulist[i],'active');
+            css.removeClass(olist[i],'active');
+          }
+
+          css.addClass(uli,'active');
+          css.addClass(self,'active');
+
+          // 计算尺子挪移的尺寸.
+          const showMargin    = (parseInt(tagUl.style.marginLeft.replace('%',''))) || 0;
+          // location.length 父元素的放大因子.
+          // 计算宽度差.
+          // 计算存在偏差,是因为inline-block元素中间存在空格，解决方法是将父元素的font-size设置为0即可.
+          const spacingMargin = location[index].x / location.spacing() * 100 * location.length;
+          const nextMargin    = (showMargin - spacingMargin);
+
+          const exceTime = 400;
+          const oneTime = 17;
+          let count = 1;
+          // 开始动画.
+          // TODO: 计算偏差.
+          setTimeout(function() {
+            let factor = (oneTime * count++) / exceTime;
+            if(factor < 1) {
+              const curMargin = spacingMargin * factor;
+              tagUl.style.marginLeft = (showMargin - curMargin) + '%';
+              setTimeout(arguments.callee,oneTime);
+            } else {
+              tagUl.style.marginLeft = nextMargin + '%';
+            }
+          },oneTime);
+        }
+      });
+
+      function every(arr,fn) {
+        return Array.prototype.every.call(arr,fn);
+      }
+      function foreach(arr,fn) {
+        return Array.prototype.forEach.call(arr,fn);
+      }
+      function array(arr,a,b) {
+        if(b >= 0) {
+          b++;
+        } else if(b < 0) {
+          b = arr.length + 1 - b;
+        } else {
+          b = arr.length;
+        }
+        return Array.prototype.slice.call(arr,a || 0, b);
+      }
+
+      function isDef(a) {
+        return !unDef(a);
+      }
+
+      function unDef(a) {
+        return a === undefined || a === null;
+      }
+    }
+  </script>
+  <style>
+    #_news { height:450px;}
+    #_news .area-title { font-family: '黑体'; }
+    #_news .area-title h2 { margin-top:68px; }
+    #_news dl { margin-top:47px;overflow: hidden; }
+    #_news dt { width:234px; height:196px;float:left; }
+    #_news dd { width:846px; float:left; }
+    #_news .news_list { width:100%; }
+    #_news .news_list li { width:50%;float:left;margin-bottom:48px;}
+    #_news .news_date { 
+      width:72px;height:72px;border-right:1px solid #DCDCDC;
+      box-sizing : border-box;line-height:36px;text-align:center;
+      float:left;
+    }
+    #_news .news_date i { color:#66C5B4;font-size:39px;font-style:normal;}
+    #_news .news_date span { color:#999;font-size:20px;}
+    #_news .news_text { float:left;width:330px;margin-left:20px; }
+    #_news .news_text h3{ font-size:14px;font-weight:bold; }
+    #_news .news_text h3 a { color:#3f3f3f; }
+    #_news .news_text p { font-size:12px;line-height:21px;color:#a4a4a4;margin-top:15px;}
+  </style>
+</head>
+<body>
+  <div id="head" class="container clear">
+    <img class="head_logo l" src="./images/logo.png" alt="">
+    <div class="head_menu r">
+      <ul>
+        <li class="active"><a href="#">Lorem.</a></li>
+        <li><a href="#">Eaque?</a></li>
+        <li><a href="#">Dolore?</a></li>
+        <li><a href="#">Quam!</a></li>
+        <li><a href="#">Sequi.</a></li>
+        <li><a href="#">Accusantium?</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="banner" class="container-fulid clear">
+    <ul>
+      <li class="active" style="background-image: url(./images/banner-1.png)"><a href="#"></a></li>
+      <li style="background-image: url(./images/banner-2.jpg)"><a href="#"></a></li>
+      <li style="background-image: url(./images/banner-3.jpg)"><a href="#"></a></li>
+      <li style="background-image: url(./images/banner-4.jpg)"><a href="#"></a></li>
+    </ul>
+    <ol>
+      <li class="active"></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ol>
+  </div>
+  <div id="service">
+    <div class="area-title">
+      <h2 style="background-image:url(./images/bg.png)">服务范围</h2>
+      <p>OUR SERVICES</p>
+    </div>
+    <div class="container">
+      <ul class="item">
+        <li>
+          <div></div>
+          <h3><a href="#"></a> 1.web design</h3>
+          <p>
+            企业品牌网站设计/手机网站制作<br>
+            动画网站创意设计
+          </p>
+        </li>
+        <li>
+          <div></div>
+          <h3><a href="#"></a> 2.graphic design</h3>
+          <p>
+            标志logo设计/产品宣传册设计
+            <br>
+            企业广告/海报设计
+          </p>
+        </li>
+        <li>
+          <div></div>
+          <h3><a href="#"></a> 3.e-business plan</h3>
+          <p>
+            淘宝/天猫装修设计及运营推广<br>
+            企业微博、微信营销
+          </p>
+        </li>
+        <li>
+          <div></div>
+          <h3><a href="#"></a> 4.mailboxagents</h3>
+          <p>
+            腾讯/网易企业邮箱品牌代理<br>
+            个性化邮箱定制开发
+          </p>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div id="client" class="container-fulid">
+    <div class="area-title">
+      <h2 style="background-image:url(./images/bg.png)">{ 客户案例 }</h2>
+      <p>With the best professional technology, to design the best innovative web site</p>
+    </div>
+    <div class="container">
+      <ul>
+        <li style="background-image: url(./images/example-1.png)"><a href="#"></a></li>
+        <li style="background-image: url(./images/example-2.png)"><a href="#"></a></li>
+        <li style="background-image: url(./images/example-3.png)"><a href="#"></a></li>
+      </ul>
+    </div>
+    <div class="btn">
+      <span>View More</span>
+    </div>
+  </div>
+  <div id="_news" class="container">
+    <div class="area-title">
+      <h2>最新资讯</h2>
+      <p>TEH LATEST NEWS</p>
+    </div>
+    <dl class="clear">
+      <dt><img src="./images/xs1.png" alt=""></dt>
+      <dd>
+        <ul class="news_list">
+          <li>
+            <div class="news_date">
+              <i>09</i>
+              <span>Jan</span>
+            </div>
+            <div class="news_text">
+              <h3><a href="#">网站排名进入前三的技巧说明</a></h3>
+              <p>很多客户都会纳闷为什么自己的网站老是优化不到搜索引擎 首页，更不用说进首页前三了。那么网站优...</p>
+            </div>
+          </li>
+          <li>
+            <div class="news_date">
+              <i>08</i>
+              <span>Jan</span>
+            </div>
+            <div class="news_text">
+              <h3><a href="#">做个网站多少钱？</a></h3>
+              <p>“做个网站多少钱？”很多客户打电话过来直接第一句就抛出来的问题。这好比买辆车多少钱，你是要...</p>
+            </div>
+          </li>
+          <li>
+            <div class="news_date">
+              <i>07</i>
+              <span>Jan</span>
+            </div>
+            <div class="news_text">
+              <h3><a href="#">哪些网站优化手法属于网站过度优化</a></h3>
+              <p>大部分人都想让自己的网站，一夜之间出现在搜索引擎首页，独占鳌头。但是事实告诉我们罗马不是一...</p>
+            </div>
+          </li>
+          <li>
+            <div class="news_date">
+              <i>06</i>
+              <span>Jan</span>
+            </div>
+            <div class="news_text">
+              <h3><a href="#">哪些网站优化手法属于网站过度优化</a></h3>
+              <p>大部分人都想让自己的网站，一夜之间出现在搜索引擎首页，独占鳌头。但是事实告诉我们罗马不是一....</p>
+            </div>
+          </li>
+        </ul>
+      </dd>
+    </dl>
+  </div>
+  <div id="footer" class="container-fulid">
+    <div class="container">
+      <p class="l">Copyright 2006- 2014 Bowenshangmei Culture All Rights Reserved.</p>
+      <span class="r">
+        <a href="#">Home</a>
+        <span>|</span>
+        <a href="#">About</a>
+        <span>|</span>
+        <a href="#">Portfolio</a>
+        <span>|</span>
+        <a href="#">Contact</a>
+      </span>
+    </div>
+  </div>
+  <div id="link" class="container">
+    <span>Links:</span>
+    <a href="#">Lorem.</a>
+    <span>|</span>
+    <a href="#">Neque?</a>
+    <span>|</span>
+    <a href="#">Cum.</a>
+    <span>|</span>
+    <a href="#">Obcaecati.</a>
+    <span>|</span>
+    <a href="#">Hic?</a>
+    <span>|</span>
+    <a href="#">Eos.</a>
+    <span>|</span>
+    <a href="#">Neque?</a>
+    <span>|</span>
+    <a href="#">Ratione?</a>
+    <span>|</span>
+    <a href="#">Dolore?</a>
+    <span>|</span>
+    <a href="#">Quidem.</a>
+    <span>|</span>
+    <a href="#">Doloremque.</a>
+    <span>|</span>
+    <a href="#">Perferendis.</a>
+    <span>|</span>
+    <a href="#">Dolorem.</a>
+    <span>|</span>
+    <a href="#">Sed?</a>
+    <span>|</span>
+    <a href="#">Iusto.</a>
+    <span>|</span>
+    <a href="#">Iure.</a>
+    <span>|</span>
+  </div>
+  <!-- const showMargin = parseInt(tagUl.style.marginLeft.replace('px','') || 0);
+    const showWidth = parseInt(tagUl.style.width.replace('px','') || 0);
+    /* 
+    tagUl.style.marginLeft = (showMargin - Math.floor(location[index].x)) + 'px';
+    tagUl.style.width = (location.spacing(0,index)) + 'px'; */
+    // 计算尺子挪移的尺寸.
+    let x = Math.floor(location[index].x);
+    // 计算宽度差.
+    let width = showWidth - location.spacing(0,index);
+
+    let factor = 0;
+    let exceTime = 500;
+    let oneTime = 50;
+    let count = 1;
+
+    setTimeout(function animation() {
+      factor = (oneTime * count++) / exceTime;
+      let curWidth = 0;
+      let curMargin = 0;
+      if(factor < 1) { 
+        curWidth = factor * width;
+        curMargin = factor * x;
+        tagUl.style.marginLeft = (showMargin - Math.floor(curMargin)) + 'px';
+        tagUl.style.width = (showWidth - curWidth) + 'px';
+        setTimeout(arguments.callee,oneTime);
+      } else {
+        tagUl.style.marginLeft = (showMargin - x) + 'px';
+        tagUl.style.width = (location.spacing(0,index)) + 'px';
+      }
+    },oneTime);
+  -->
+</body>
+</html>

@@ -1,0 +1,52 @@
+* { margin : 0; padding: 0; }
+h1,h2,h3 { font-size:16px; }
+img { display: block; }
+a { text-decoration:none; color:#464646;font-size:12px;}
+ul,ol { list-style:none; }
+
+.l { float:left; }
+.r { float:right;}
+.clear:after { display: block;clear:both;content:'' }
+
+.container { width:980px;margin:0 auto; }
+.container-fluid { width: 100%; }
+body { font-family: arial '微软雅黑'; overflow-y:scroll;background-color:#fafafa;}
+
+.ost-bg { background:url(../images/ost-bg.png) no-repeat}
+
+#head { height:42px;background:url(../images/head_bg.png) repeat-x;}
+#head .container { height:42px; }
+#head .head_logo { background-position:left -38px;width:220px;height:100%;}
+#head .head_logo a { text-indent:-5000px; display: block;height: 100%; }
+#head .head_ad { width:220px;height:100%; }
+#head .head_menu_czsh,#head .head_menu_top { margin-top:13px;height:18px;font-size:12px; }
+#head .head_menu_czsh { padding-left:20px;background: url(../images/czsh-bg.png) no-repeat left;cursor:pointer;}
+#head .head_menu_top { margin-left:26px; }
+#head .head_icon { background-position: -149px -131px;height:100%;width:12px;display: block; }
+
+#footer { margin-top:100px;margin-bottom:30px;width:1000PX;}
+#footer .logo_box,#footer .link_box { height:124px;float:left;}
+
+#footer .link_box { margin-left:32px;width:622px;color:#929094}
+#footer .link_box ul { width: 100%; }
+#footer .link_box ul li { font-size:12px;line-height: 20px;height:20px; }
+#footer .link_box ul li:first-child { font-size:0px; }
+#footer .link_box li span { font-size:12px;margin:0 1px;}
+#footer .link_box li a { color:#929094; }
+#footer .link_box li a:hover { text-decoration: underline; }
+#footer .logo_box a { display: block;float: left;margin-left:5px;}
+
+#footer .tips-msg { text-align:center;line-height: 22px;clear:both;font-size:0;}
+#footer .tips-msg p { font-size:15px;font-weight:bold;color:#717171;height:25px;line-height:25px;margin-top:10px;}
+#footer .tips-msg span { color:#929094;margin:0px 5px;font-size:12px;}
+
+.tengxun_logo { background:url(../images/tengxun_logo.png) no-repeat;width:180px;height:35px;}
+.tianmei_logo { background:url(../images/tianmei_logo.png) no-repeat;width:48px;height:44px;}
+.linglan_logo { background:url(../images/linlang_logo.png) no-repeat;width:85px;height:39px;}
+
+
+.new_icon,.hot_icon {  width:12px;height:11px; background: url(../images/nav-tips.png) no-repeat;position:absolute;margin-left:2px;top:50%;margin-top:-5px;text-indent:-9999px;overflow: hidden;}
+.new_icon { background-position: 0 0;}
+.hot_icon { background-position: 0 -13px;}
+.search_capture_word { text-indent:-9999px;overflow: hidden; }
+.a_box,.block { display:block;width:100%;height:100%; }

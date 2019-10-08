@@ -1302,5 +1302,8 @@ collections.base = (function(){
   base.CONST.ERR_ = ERR_;
   return base;
 }());
+
+const __base = collections.base;
+
 try{(module && (module.exports = collections));}
 catch(e){}
