@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  
+  .upload input { display:none; }
+  .upload .upload-btn { background:url("./images/upload.png");width:86px;height:34px;cursor:pointer;}
+
+  .label-check input{ display: none; }
+  .label-check .check_btn { background: url('./images/checkbox.png') 0 -28px;width:28px;height:28px;}
+  .label-check input:checked + .check_btn { background-position-y: 0; }
+
+  .upload--pos { position: relative;width:86px;height:34px;}
+  .upload--pos .input--hide { position: absolute;;width: 100%;height:100%;opacity:0;top:0;left:0;cursor:pointer;border:0px;}
+  .upload--pos div { background:url("./images/upload.png");width: 100%;height:100%;}
+
+  .tran-animation { width:100px;height:100px;background:red;transition:all 1s ease-in-out;}
+  .tran-animation:hover {width:200px;height:200px }
+  </style>
+</head>
+<body>
+  <label class="upload">
+    <input type="file">
+    <div class="upload-btn"></div>
+  </label>
+  <label class="label-check">
+    <input type="checkbox" name="" id="">
+    <div class="check_btn"></div>
+  </label>
+  <div class="upload--pos">
+    <div></div>
+    <input type="file" class="input--hide">
+  </div>
+  <input type="date" name="" id="">
+  <div class="tran-animation"></div>
+</body>
+</html>

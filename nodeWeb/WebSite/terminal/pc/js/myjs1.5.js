@@ -294,12 +294,15 @@ var namespace = function () {
       }
     },
     'bind': function (obj, event_name, F_Object, capture_bool) {
-      //IE10会保留 addEventListener 和 attachEvent
-      if(!obj) { 
-        throw TypeError('obj 必须是一个对象');
+      if(!(obj instanceof HTMLElement)) { 
+        throw TypeError('obj must is a HTMLElement');
       }
-      if (typeof obj === 'undefined' || obj === null)
-        return false;
+      if(typeof event_name !== 'string') {
+        throw TypeError('event_name must is a string.')
+      }
+      if(!(F_Object instanceof Function)) {
+        throw TypeError('F_Object must is a Function.')
+      }
       var capture_bool = typeof capture_bool === 'boolean' ? capture_bool : false;
       if (typeof obj.addEventListener !== 'undefined') {
         obj.addEventListener(event_name, F_Object, capture_bool);

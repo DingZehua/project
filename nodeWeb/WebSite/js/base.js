@@ -624,7 +624,7 @@ collections.base = (function(){
   }
 
   var isObject = function(o){
-    if(o === undefined || o === null) {
+    if(o === undefined || o === null || o !== o) {
       return false;
     }
     return classOf(o) === 'Object';
@@ -752,7 +752,7 @@ collections.base = (function(){
     return arr;
   }
   
-  var isChildClass = function(constructor,obj){
+  var isExten = function(constructor,obj){
     return obj instanceof constructor;
   }
 
@@ -1289,7 +1289,7 @@ collections.base = (function(){
   base.method.isCanComputeVal = isCanComputeVal;
   base.method.intSplit = intSplit;
   base.method.strSplit = strSplit;
-  base.method.isChildClass = isChildClass;
+  base.method.isExten = isExten;
   base.method.hideAttr = hideAttr;
   base.method.showAttr = showAttr;
   base.method.heapSort = heapSort;

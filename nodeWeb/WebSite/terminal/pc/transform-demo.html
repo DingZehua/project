@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  
+    * { margin:0;padding:0; }
+    ul,ol { list-style:none; }
+    ul { width:560px;margin:5px auto;overflow:hidden;}
+    ul li { width:100px;float:left;height:32px;line-height:32px;background-color:red;color:white;margin:0 5px;text-align:center;
+            transform:skewX(-30deg);
+    }
+    ul li:first-child { padding:0 12px;margin-left:-10px; }
+    ul li:last-child  { padding:0 12px;margin-right:-20px; }
+    ul li span { transform: skewX(30deg);display: block;user-select:none;}
+  </style>
+</head>
+<body>
+  <ul>
+    <li><span>lorem</span></li>
+    <li><span>lorem</span></li>
+    <li><span>lorem</span></li>
+    <li><span>lorem</span></li>
+    <li><span>lorem</span></li>
+  </ul>
+</body>
+</html>

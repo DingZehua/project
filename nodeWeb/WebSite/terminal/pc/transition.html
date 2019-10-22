@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  
+  ul,li,p,h3 { margin:0;padding:0;list-style:none; }
+  .clear:after { content: '';display:block;clear:both; }
+  
+  body { color:#333333; }
+
+  ul.nav { width:360px; }
+  ul.nav li { float:left;width:60px;height:70px;background:url('./images/aNavBg.png') 0px  -70px;transition:.5s;}
+  ul.nav li:hover { background-position-y: 0px; }
+  
+  ul.nav li:nth-child(1) { background-position-x:0; }
+  ul.nav li:nth-child(2) { background-position-x:-60px; }
+  ul.nav li:nth-child(3) { background-position-x:-120px; }
+  ul.nav li:nth-child(4) { background-position-x:-180px; }
+  ul.nav li:nth-child(5) { background-position-x:-240px; }
+  ul.nav li:nth-child(6) { background-position-x:-300px; }
+  
+  ul.news { width:612px; }
+  .news li { width:274px;height:140px;margin:0 16px;float:left;cursor:pointer;}
+  .news li div { border-top:2px solid #2f80ed;width:91px;height:13px;transition:.2s;}
+  .news li:hover div { width:152px; }
+  .news li:hover h3 { color:#1c7fc1; }
+  .news li h3 { line-height: 21px;height:40px;font-size:15px;padding:6px 0px;font-weight:normal;}
+  .news li p { height: 25px; line-height:25px;color:#999999;font-size:11px;}
+  </style>
+</head>
+<body>
+  <ul class='nav clear'>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
+  <ul class="news clear">
+    <li>
+      <div></div>
+      <h3>2019级新生开学典礼温校长讲话</h3>
+      <p>2019.09.28 / 学校新闻</p>
+    </li>
+    <li>
+      <div></div>
+      <h3>陕西国际商贸学院副校长李吉友一行4人到访我校</h3>
+      <p>2019.09.26 / 交流合作</p>
+    </li>
+    <li>
+      <div></div>
+      <h3>117名成都东软学子来我校交换学习</h3>
+      <p>2019.09.23 / 学校新闻</p>
+    </li>
+    <li>
+      <div></div>
+      <h3>大连东软信息学院召开“不忘初心、牢记使命”主题教育动员部署会</h3>
+      <p>2019.09.18 / 学校新闻</p>
+    </li>
+    <li>
+      <div></div>
+      <h3>俄罗斯北方联邦罗蒙诺索夫大学校长一行来访大连东软信息学院</h3>
+      <p>2019.09.17 / 学校新闻</p>
+    </li>
+    <li>
+      <div></div>
+      <h3>大连东软信息学院举行2019级学生军训成果汇报暨总结表彰大会</h3>
+      <p>2019.09.12 / 学校新闻</p>
+    </li>
+  </ul>
+</body>
+</html>

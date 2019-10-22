@@ -81,7 +81,7 @@
           if(index < 0) {
             throw new Error('在btns中无法找到该元素');
           }
-          foreach(this.btns,(btn,i,arr) => {
+          forEach(this.btns,(btn,i,arr) => {
             ScrollImg.css.removeClass(btn,this.activeName);
           });
           ScrollImg.css.addClass(el,this.activeName);
@@ -95,12 +95,12 @@
         let count = 1;
         let start = this._curPosition;
 
-        let run = () => {
+        let move = () => {
           let factor = (this.oneTime * count++) /this.exceTime;
           if(factor < 1) {
             this._curPosition = start + (spacing * factor);
             this.cont.style.marginLeft = -this._curPosition + 'px';
-            this._timeoutId = setTimeout(run,this.oneTime);
+            this._timeoutId = setTimeout(move,this.oneTime);
           } else {
             this._curPosition = this._toPosition;
             this.cont.style.marginLeft = -this._curPosition + 'px';
@@ -109,7 +109,7 @@
             this._autoRun();
           }
         }
-        run();
+        move();
       }
       stop() {
         if(this._timeoutId) {
@@ -158,7 +158,7 @@
       if(!/\bactive\b/.test(self.className)) {
         let index = title_list.indexOf(self);
         if(index > -1) {
-          foreach(title_list,(title,i,list) => {
+          forEach(title_list,(title,i,list) => {
             css.removeClass(title,'active');
             css.removeClass(article_list[i],'active');
             css.removeClass(head_list[i],'active');
@@ -173,9 +173,18 @@
     function every(arr,fn) {
         return Array.prototype.every.call(arr,fn);
     }
-    function foreach(arr,fn) {
-      return Array.prototype.forEach.call(arr,fn);
+
+    function forEach(a,fn,ctx) {
+      if(isUndef(a.length)) throw new Error('param 1 must a similar Array');
+      let exit = 0;
+      for(let i = 0,len = a.length; i < len; i++) {
+        exit = fn.call(ctx || null,a[i],i,a);
+        
+        if(exit === null || exit === false) 
+          break;
+      }
     }
+
     /** 
      * @param {similarArray}
      * @param {a} Int
@@ -267,7 +276,7 @@
     #banner #banner-center { width:497px;height:290px;float:left;position:relative;}
     #banner-center .scroll-img { margin-top:14px;width:100%;height:256px;overflow:hidden;}
     #banner-center .scroll-img ul { width:2982px; }
-    #banner-center .scroll-img li { width:497;height:100%;float:left; }
+    #banner-center .scroll-img li { width:497px;height:100%;float:left; }
     .scroll-img li img { width:100%;height:100%; }
     .scroll-img-btn {  }
     .lt,.rt,
