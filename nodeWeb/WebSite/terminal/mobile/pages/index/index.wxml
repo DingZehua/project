@@ -1,0 +1,42 @@
+<block wx:if="{{!loading}}">
+  <div id="head">
+    <div id="title"> {{category}} </div>
+  </div>
+  <div class="untiRow" wx:for="{{data}}" wx:key='name'>
+    <div class="score">
+      <block wx:if="{{item.score}}"> {{item.score}}</block><block wx:else>{{item.score}}</block>
+    </div>
+    <div>
+      <div class="thumb-img"> <img src="{{item.img_url}}" /> </div>
+      <div class="brief"> 
+        <div class="movie-name">
+          {{item.name}}
+        </div>
+        <div class="tips">
+          {{item.brief}}
+        </div>
+      </div>
+    </div>
+  </div>
+</block>
+<block wx:else>
+  <button bindtap="getData">获取</button>
+  <block wx:if="{{loadingAnimation}}">
+    <loading>加载中...</loading>
+  </block>
+</block>
+<view id="xx">
+  <view style="flex-shrink:0.2;width:100px;border:1px solid red;box-sizing:border-box;"> </view>
+  <view style="flex-shrink:0.3;width:135px;border:1px solid red;box-sizing:border-box;"> </view>
+  <view style="flex-shrink:0.2;width:140px;border:1px solid red;box-sizing:border-box;"> </view>
+</view>
+<!--
+<view id="content-box">
+  <view style="flex-grow:0.1;width:25%;border : 1px solid red;box-sizing : border-box;">
+  </view>
+  <view style="flex-grow:0.2;width:25%;border : 1px solid red;box-sizing : border-box;">
+  </view>
+  <view style="width:25%;border : 1px solid red;box-sizing : border-box;">
+  </view>
+</view>
+-->

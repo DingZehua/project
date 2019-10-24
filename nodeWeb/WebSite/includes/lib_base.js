@@ -59,10 +59,11 @@ let lib_base = (function() {
       }).then(() => {
         if(!getFile) return queryString.parse(post);
           else {
-            if(contentType) {
-              console.log(dataSplit(post,boundary));
+            // 处理post表单提交
+            if(contentType === config.formSubmitType.mul) {
+              return dataSplit(post,boundary);
             }
-            return {POST:post,files};
+            return {POST:queryString.parse(post),files};
           }
       });
     });
@@ -187,7 +188,7 @@ let lib_base = (function() {
         },this);
       },
       allCookieKeys() {
-        return Array.from(new Set([...this.keys(),...this.clientKeys()]));
+        return Array.from(new Set([...this.clientKeys(),...this.keys()]));
       },
       has(hasKey) {
         return this.keys().some( (key) => key === hasKey);
@@ -214,7 +215,7 @@ let lib_base = (function() {
   }
 
   function buildSession_id() {
-    return md5(md5(Math.random().toString()));
+    return md5(md5(Math.random().toString()) + Math.random().toString() );
   }
 
   // 一旦调用，就算是注册session.
@@ -355,7 +356,7 @@ let lib_base = (function() {
                     tokenlen--;
                   }
                 },
-                allocate,SESS_IDs.length);
+                allocate,tokenlen);
             }
 
             // 通知消息队列
@@ -378,6 +379,7 @@ let lib_base = (function() {
               }
               runging = false;
             }
+
           } else {
             yield;
           }

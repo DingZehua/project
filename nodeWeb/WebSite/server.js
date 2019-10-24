@@ -21,12 +21,9 @@ const sessionClearTake = Session.clearExpired(sessionSet);
 
 // token
 const tokens = require('./includes/lib_base').createToken(config.token_number,config.token_expired);
-let access_count = 0;
 
 // 得到请求。
 function main(req,res) {
-
-  console.log(++access_count);
 
   let {...GLOBALS} = require('./constant').time;
   GLOBALS.PHYSICAL_ROOT = process.cwd();          // 物理路径

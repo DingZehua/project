@@ -19,9 +19,9 @@ let router = (function(args) {
     // SESSION COOKIES GET POST
     const COOKIES = lib_base.fetchCookies(req);
     const GET = lib_base.fetchGETData(urlObj.query);
-    let fetchPOSTData = lib_base.fetchPOSTDataCurring(req,contentType,boundary);
-    let readPage = lib_base.readPage;
-    let fileStat = lib_base.fileStat;
+    const fetchPOSTData = lib_base.fetchPOSTDataCurring(req,contentType,boundary);
+    const readPage = lib_base.readPage;
+    const fileStat = lib_base.fileStat;
     // TODO:判断SESS_ID
     let SESS_ID = null;
     if(!COOKIES.SESS_ID) {
@@ -94,6 +94,8 @@ let router = (function(args) {
             SESSION,
             token : tokens(SESS_ID,GET.token,urlObj.pathname,GET,GLOBALS.curTIME),
         });
+        // 处理返回null和undefined的情况.
+        data = data === void 0 || data === null ? '' : data.toString();
       } catch(e) {
         if(e instanceof Error && 
           e.message.search('Cannot find module') > -1) {

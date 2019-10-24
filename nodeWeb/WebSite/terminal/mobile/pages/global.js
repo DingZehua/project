@@ -1,0 +1,1 @@
+module.import = require('../global');

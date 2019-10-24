@@ -1,0 +1,88 @@
+
+page {
+  flex-direction: column;
+}
+
+div {
+  display: block;
+}
+
+#head {
+  padding: 5px 0;
+  background-color: white;
+  text-align: center;
+}
+
+#title {
+  font-weight: 500;
+  color:#333;
+  font-size:36rpx;
+}
+
+.untiRow {
+  padding: 5px;
+  width : "100%";
+  border-top:1px solid #EEE;
+  display: flex;
+}
+
+.untiRow .score {
+  top : 5px;
+  right : 5px;
+  color : red;
+  font-weight : bold;
+  position : absolute;
+}
+
+.untiRow view {
+  
+  margin-left : 0 auto;
+  width: "96%";
+  max-height:60px;
+}
+
+.untiRow view .thumb-img {
+  width: 50px;
+  height : 50px;
+  box-sizing : "content-box";
+  padding : 5px;
+  border:1px solid #ccc;
+}
+
+.untiRow view .thumb-img image{
+  width:50px;
+  height:50px;
+}
+
+.untiRow view .brief {
+  width:"74%";
+  float: left;
+  margin-left:5px;
+}
+
+.untiRow view .brief .movie-name {
+  font-weight: bold;
+  font-size:14px;
+}
+
+.untiRow view .brief .tips {
+  color:#ddd;
+  font-size:16px;
+}
+
+#xx {
+  width: "400px";
+  display: flex;
+  /*align-items:stretch*/
+  flex-wrap:nowrap;
+  height: 200px;
+  border-top:1px solid green;
+  border-bottom : 1px solid green;
+}
+
+.wrap {
+  width:25%;
+  border : 1px solid red;
+  box-sizing : border-box;
+  height:50px;
+}
