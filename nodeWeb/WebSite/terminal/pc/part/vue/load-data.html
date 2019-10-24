@@ -1,0 +1,101 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<script src="js/base.js"></script>
+<script src="js/myjs1.4.js"></script>
+<script src='js/vue.js'></script>
+<script src="js/vue-router.js"></script>
+<script src='js/axios.min.js'></script>
+<script>
+  const col = collections;
+  const base = col.base;
+  const methods = base.method;
+  //Vue.config.productionTip = false;
+  Vue.use(VueRouter);
+</script>
+<script>
+
+const goods_detail = {
+  template : `
+    <div class="post">
+      <div class="loading" v-if="loading">
+        loading...
+      </div>
+      <div v-if="error" class="error">
+        {{ error }}
+      </div>
+      <div v-if="data" class="data">
+        <h3> goods_name: {{ data.goods_name }}</h3>
+        <p>  goods_id: {{ data.goods_id }} </p>
+      </div>
+    </div>
+  `,
+  data() {
+    return {
+      loading : true,
+      error : null,
+      data : null
+    }
+  },
+  created() {
+    this.getData(this.$route.params.id);
+  },
+  methods : {
+    getData(id) {
+      const vm = this;
+      axios.get('goods',{
+        params : {
+          sql : `select goods_id,goods_name,goods_sn from goods where goods_id = '${id}'`
+        },
+        transformResponse(data) {
+          return JSON.parse(data)[0];
+        }
+      }).
+      then(function(response) {
+        const data = response.data;
+        vm.data = data;
+        vm.$emit('update',data.goods_name);
+      }).catch(function(err) {
+        vm.error = err;
+      }).finally(function() {
+        vm.loading = false;
+      });
+    }
+  },
+  beforeRouteUpdate(to,from,next) {
+    this.getData(to.params.id);
+    next();
+  }
+};
+
+const router = new VueRouter({
+  routes : [
+    {
+      path : '/goods/:id',component : goods_detail
+    }
+  ]
+})
+
+cm.bind_event(document,'DOMContentLoaded',function() {
+  new Vue({
+    el : '#goods',
+    data : {
+      goods_name : ''
+    },
+    router
+  });
+});
+
+</script>
+</head>
+<body>
+<div id='goods'>
+  <h1> 品名: {{ goods_name }} </h1>
+  <router-link to="/goods/418">418</router-link>
+  <router-link to="/goods/358">358</router-link>
+  <router-view @update="goods_name = $event"></router-view>
+</div>
+
+</body>
+</html>

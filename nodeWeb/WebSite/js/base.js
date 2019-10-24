@@ -21,7 +21,7 @@ collections.base = (function(){
     }
   }
 
-  var heapSort = (function(){
+  var heapSort = (function() {
     var ascend = function(a,b){
       return a < b;
     }
@@ -408,7 +408,7 @@ collections.base = (function(){
           for (var i = 0; i < this.values.length; i++){
             f.call(c,this.values[i]);
           } 
-        }
+        } 
         hideAttr(enumerableHead,'parent','root','foreach');
         set(nameToValues);
       },
@@ -624,7 +624,7 @@ collections.base = (function(){
   }
 
   var isObject = function(o){
-    if(o === undefined || o === null) {
+    if(o === undefined || o === null || o !== o) {
       return false;
     }
     return classOf(o) === 'Object';
@@ -735,6 +735,7 @@ collections.base = (function(){
 
   var intSplit = function(value){
     var arr = [];
+    if(value === 0) return [0]; 
     while(value){
       arr.unshift(value % 10);
       value = parseInt(value / 10)
@@ -751,7 +752,7 @@ collections.base = (function(){
     return arr;
   }
   
-  var isChildClass = function(constructor,obj){
+  var isExten = function(constructor,obj){
     return obj instanceof constructor;
   }
 
@@ -813,32 +814,20 @@ collections.base = (function(){
           );
         }
         catch(e) {
-          this.status = REJECTED;
-          clearTimeout(out);
-          setTimeout((function(err){
-            this.pcall(err);
-          }).bind(this),0,e);
+          if(this.status === PENDING) {
+            this.status = REJECTED;
+            clearTimeout(out);
+            setTimeout((function(err){
+              this.pcall(err);
+            }).bind(this),0,e);
+          }
         }
       }
-      then(resolve,reject,parent,index) {
+      then(resolve,reject) {
         this.queue[REJECTED].push(!isFun(reject) ? null : reject);
         this.queue[FULFILLED].push(!isFun(resolve) ? null : resolve);
-        //保留本层的参数，给child使用。
-        let last = this.queue[REJECTED].length - 1;
-        this.childs.inherit.push(null);
-        // 如果有父对象，那么更新状态，如果有子对象，那么也会更新到本对象的子对象。
-        if(parent && parent.childs.inherit[index] === null) {
-          // 如果继承对象没有执行这个方法，那么则不加进队列
-          parent.childs.inherit[index] = this;
-          this.status = parent.status;
-        }
         let child = new Prom(function(){});
-        let self = this;
-        child.then = (function(){
-          return (function(resolve,reject) {
-            return Prom.prototype.then.apply(this,[resolve,reject,self,last]);
-          }).bind(child)
-        }());
+        this.childs.inherit.push(child);
         return child;
       }
       catch(reject) {
@@ -874,6 +863,7 @@ collections.base = (function(){
             param.childs.indirect.push(this);
           }
         } else if(param && typeof param.then === 'function') {
+          // 处理其他Promise对象.
           param.then((res)=> {
             this.status = FULFILLED;
             this.value = res;
@@ -897,14 +887,18 @@ collections.base = (function(){
         this.queue[this.status].forEach(function(method,i,arr) {
           let child = this.childs.inherit[i];
           // 加入执行队列
-          let value = null;
+          let value;
           try {
             if(this.status === REJECTED){
               if(!isFun(method)){
                 throw(this.value);
               }
             }
-            value = (isFun(method) && method(this.value)) || this.value;
+
+            if(isFun(method)) {
+              value = method(this.value);
+            }
+
             if(child){
               child.value = value;
               child.status = FULFILLED;
@@ -993,7 +987,7 @@ collections.base = (function(){
           let val = {};
           let unInitVal = val;
           if(!Array.from(ps).length) {
-            s([]);
+            resolve([]);
             return;
           }
           for(let [i,p] of ps.entries()) {
@@ -1021,7 +1015,7 @@ collections.base = (function(){
     
       return new MyPromise(function(resolve,reject) {
         if(typeof gen === 'function') gen = gen.apply(cxt,args);
-        if(!gen || typeof gen.next !== 'function') resolve(gen);
+        if(!gen || typeof gen.next !== 'function') return resolve(gen);
         success();
         function success(res) {
           let ret;
@@ -1052,9 +1046,9 @@ collections.base = (function(){
           if(value && isPromise(value)) value.then(success,failed); // 处理异步函数处理的结果
           else {
             failed(new TypeError(`
-            传递给co函数的值不能是原始值,value : ${ret.value}
-          `));
-        }
+              传递给co函数的值不能是原始值,value : ${ret.value}
+            `));
+          }
         }
       });
     
@@ -1142,9 +1136,9 @@ collections.base = (function(){
           if(value && isPromise(value)) promises.push(defer.call(this,results,value,keys[i]));
           else { results[keys[i]] = obj[keys[i]]; }
         }
-        return MyPromise.all(promises.then(function() {
+        return MyPromise.all(promises).then(function() {
           return results;
-        }));
+        });
       }
       /**
        * 
@@ -1174,7 +1168,7 @@ collections.base = (function(){
           else { resultMaps[i] = v; }
           i++;
         });
-        return MyPromise.all().then(function() {
+        return MyPromise.all(promises).then(function() {
           let m = new Map();
           let i = 0;
           obj.forEach(function(v,key){
@@ -1218,6 +1212,46 @@ collections.base = (function(){
   hideAttr(Function.prototype);
   hideAttr(Object.prototype);
 
+  const deepCopy = (oldHead,newHead = {}) => {
+    let oldVistedQueue = [],oldWaitQueue = [],
+        newVistedQueue = [],newWaitQueue = [];
+  
+    oldWaitQueue.push(oldHead);
+    newWaitQueue.push(newHead);
+  
+    while(newWaitQueue.length > 0) {
+      let currentOldElement = oldWaitQueue.shift(),
+          currentNewElement = newWaitQueue.shift();
+      
+      oldVistedQueue.push(currentOldElement),
+      newVistedQueue.push(currentNewElement);
+      
+      for(let key in currentOldElement) {
+        if(typeof currentOldElement[key] !== 'object') {
+          currentNewElement[key] = currentOldElement[key];
+        } else {
+          let index = oldVistedQueue.indexOf(currentOldElement[key]);
+          if(index > -1) {
+            currentNewElement[key] = newVistedQueue[index];
+          } else {
+            oldWaitQueue.push(currentOldElement[key]);
+            newWaitQueue.push(currentNewElement[key] = {});
+          }
+        }
+      }
+    }
+  
+    return newHead;
+  }
+
+  Object.defineProperty(Object.prototype,'deepCopy',{
+    value(newObj) {
+      return deepCopy(this,newObj);
+    },
+    enumerable : false,
+    writable : true
+  });
+
   base.enumerable = enumerable;
   base.enumerableTree = enumerableTree;
   base.Range = Range;
@@ -1255,17 +1289,21 @@ collections.base = (function(){
   base.method.isCanComputeVal = isCanComputeVal;
   base.method.intSplit = intSplit;
   base.method.strSplit = strSplit;
-  base.method.isChildClass = isChildClass;
+  base.method.isExten = isExten;
   base.method.hideAttr = hideAttr;
   base.method.showAttr = showAttr;
   base.method.heapSort = heapSort;
   base.method.log = log;
   base.method.co = co;
   base.method.thunkify = thunkify = thunkify;
+  base.method.deepCopy = deepCopy;
 
   base.CONST = {};
   base.CONST.ERR_ = ERR_;
   return base;
 }());
+
+const __base = collections.base;
+
 try{(module && (module.exports = collections));}
 catch(e){}

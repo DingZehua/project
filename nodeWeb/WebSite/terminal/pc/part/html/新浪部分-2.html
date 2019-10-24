@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    *{ margin:0;padding:0; }
+    ul { list-style:none; }
+    a { text-decoration:none;color:black; }
+    img { display:block; }
+    h1,h2,h3 { font-size:16px; }
+    
+    .l { float:left; }
+    .clear:after { content:'';display:block;clear:both;font-size:0px;}
+
+    #main {width:358px;margin:0 auto;margin-top:50px;}
+    #main a:hover { color:#ff8400;text-decoration:underline; }
+
+    .title { height:34px;line-height:34px;background: #f8f8f8;border:1px solid #dbdee1;}
+    .title span { font-size:16px;display:block;padding:0px 13px;border-left:1px solid #dbdee1;border-right:1px solid #dbdee1;margin-left:-1px;}
+    .title span a { color:black; }
+    .title span.active { height:32px;line-height:32px;border-bottom:1px solid white;border-top:3px solid #ff8400;margin-top:-1px;}
+    .title span:nth-of-type(1).active { border-left:1px solid white;}
+
+    /* color:#122e67 */
+
+    .cont-1 { height:30px;line-height:30px; }
+    .cont-1 ul {}
+    .cont-1 ul li { margin-right:5px; }
+    .cont-1 ul li a{ font-size:12px;color:#7a7a7a;/* vertical-align: bottom; */}
+
+    .cont-2 {}
+    
+    .cont-2-2 { width:237px;overflow: hidden; }
+    .cont-2 .img-box { width:121px; }
+    .cont-2 img { margin:4px 16px 11px 0px;}
+
+    .cont-3 {}
+
+    .cont-3 ul,.cont-2 ul {}
+    .cont-3 a,.cont-2 a { color:#122e67; }
+    .cont-3 ul li,.cont-2 ul li { height:26px;line-height:26px;padding-left:10px;font-size:14px;background:url(./images/dot.jpg) no-repeat 0px center;overflow: hidden;}
+  </style>
+</head>
+<body>
+  <div id="main">
+    <h2 class="title"><span class="l"><a href="#">科技</a></span><span class="l active"><a href="#">探索</a></span></h2>
+    <div class="cont-1 clear">
+      <ul class="l">
+        <li class='l'><a href="#">Lorem.</a></li>
+        <li class='l'><a href="#">Unde.</a></li>
+        <li class='l'><a href="#">Vitae!</a></li>
+        <li class='l'><a href="#">Ad?</a></li>
+        <li class='l'><a href="#">Itaque.</a></li>
+        <li class='l'><a href="#">Max!</a></li>
+        <li class='l'><a href="#">No!</a></li>
+        <li class='l'><a href="#">Mini</a></li>
+      </ul>
+    </div>
+    <div class="cont-2 l clear">
+      <div class="l img-box"><a href="#"><img src="./images/yu.jpg" alt=""></a></div>
+      <div class="l cont-2-2">
+        <ul class="">
+          <li><a href="#">Lorem ipsum dolor .</a></li>
+          <li><a href="#">Lorem ipsum dolor Lorem, ipsum dolor. .</a></li>
+          <li><a href="#">Lorem ipsum dolor .</a></li>
+          <li><a href="#">Lorem ipsum dolor .</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class='cont-3 l clear'>
+      <ul>
+        <li><a href="#">Lorem ipsum dolor sit amet.</a></li>
+        <li><a href="#">Nam facere eum molestiae quae!</a></li>
+        <li><a href="#">Quibusdam maxime quae nulla consectetur.</a></li>
+        <li><a href="#">Odit ab placeat iure iusto?</a></li>
+        <li><a href="#">Ea voluptatem impedasdfsdfsdfsadfsadfasdfasdfasdfit voluptates ratione.</a></li>
+        <li><a href="#">Vel praesentium error aspernatur? Impedit.</a></li>
+        <li><a href="#">Possimus officia est nostrum quia?</a></li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

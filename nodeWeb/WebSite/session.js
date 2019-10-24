@@ -1,9 +1,9 @@
 const deepDelete = require('./includes/lib_base').deepDelete;
 class Session {
   // 生存时间默认15分钟。
-  constructor(expired = 1000 * 60 * 15) {
+  constructor(expired) {
     this.userData = {};
-    this.expired = expired * 1000;
+    this.expired =  (expired && expired * 1000) || (1000 * 60 * 15);
     this._count = 0;
   }
   add(SESS_ID) {
@@ -69,7 +69,7 @@ class Session {
           sessionSet.clearExpired(time,function() {
             runing = false;
             time = null;
-            console.log('clear All finally');
+            //console.log('clear All finally');
           });
         }
       }
@@ -82,3 +82,20 @@ class Session {
 try{(module && (module.exports = Session));}
 catch(e){}
 
+const r = (function() {
+  let g = (function *() {
+    let args = null;
+    let result = null
+    while(1) {
+      args = yield result;
+      result = Math.max.apply(Math,args);
+    }
+  }());
+
+  g.next();
+
+  g.result = (args) => {
+    return g.next(args).value;
+  }
+  return g;
+}());

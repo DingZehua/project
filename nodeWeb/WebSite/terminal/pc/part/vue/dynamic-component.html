@@ -1,0 +1,274 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<script src="js/base.js"></script>
+<script src="js/myjs1.4.js"></script>
+<script src='js/vue.js'></script>
+<script src="js/vue-router.js"></script>
+<script src='js/axios.min.js'></script>
+<script>
+  const col = collections;
+  const base = col.base;
+  const methods = base.method;
+  // let template,component,components;
+</script>
+<style> 
+
+html,body,ul,li {
+  margin : 0px;
+  padding: 0px;
+}
+
+#acticle {
+  border:1px solid slategrey;
+  padding:10px;
+  box-sizing : border-box;
+  float:left;
+  width:100%;
+}
+
+.wrap {
+  width:calc(100% - 20px - 2px);
+}
+/*标题*/
+.title {
+  float : left;
+  width : 100%;
+}
+
+.acticle-btn {
+  border: 1px solid darkgrey;
+  border-top-left-radius : 2px;
+  border-top-right-radius : 2px;
+  border-bottom : 0px;
+  background-color : tan;
+  padding:2px;
+  text-align : center;
+  float: left;
+}
+
+.acticle-btn:hover {
+  background-color: aquamarine;
+}
+
+.acticle-btn.on,.acticle-btn.on:hover {
+  background-color: darkseagreen;
+}
+
+/*内容列表*/
+.barner {
+  width:100%;
+  padding : 4px;
+  float:left;
+  box-sizing : content-box;
+  border: 1px solid darkgrey;
+}
+
+.list-wrap {
+  width: calc(20% - 8px); /*减去父容器占用的空间*/
+  float:left;
+}
+
+.list-wrap ul li {
+  list-style: none;
+}
+
+.list-wrap li {
+  background:white;
+  float:left;
+  display:block;
+  width: 100%;
+}
+
+.list-wrap li:hover{
+  background: silver;
+}
+
+.list-wrap li.on,.list-wrap li.on:hover {
+  background:deepskyblue;
+}
+
+.content {
+  float: left;
+  border-left:1px solid darkgrey;
+  margin-left:4px;
+  margin-right: 4px;
+  box-sizing : border-box;
+  width:80%;
+  height:300px;
+}
+
+</style>
+</head>
+<body>
+<!-- data Sources -->
+<script>
+
+const acticleData = {
+  '1' : `Dont wait for the storm to pass,
+   dance in the rain kick up litter decide to want nothing 
+   to do with my owner today demand to be let outside at once,
+    and expect owner to wait for me as i think about it cat cat 
+    moo moo lick ears lick paws so make meme, make cute face but 
+    lick the other cats. Kitty poochy chase imaginary bugs, but 
+    stand in front of the computer screen. Sweet beast cat dog 
+    hate mouse eat string barf pillow no baths hate everything 
+    stare at guinea pigs. My left donut is missing, as is my 
+    right loved it, hated it, loved it,
+   hated it scoot butt on the rug cat not kitten around`,
+   '2' : `
+   Bushwick blue bottle scenester helvetica ugh, 
+   meh four loko. Put a bird on it lumbersexual franzen shabby 
+   chic, street art knausgaard trust fund shaman scenester 
+   live-edge mixtape taxidermy viral yuccie succulents. Keytar 
+   poke bicycle rights, crucifix street art neutra air plant PBR&B 
+   hoodie plaid venmo. Tilde swag art party fanny pack vinyl letterpress 
+   venmo jean shorts offal mumblecore. Vice blog gentrify mlkshk tattooed 
+   occupy snackwave, hoodie craft beer next level migas 8-bit chartreuse. 
+   Trust fund food truck drinking vinegar gochujang.
+   `,
+   '3' : `
+   Icing dessert soufflé lollipop 
+   chocolate bar sweet tart cake chupa chups. 
+   Soufflé marzipan jelly beans croissant toffee
+    marzipan cupcake icing fruitcake. Muffin cake 
+    pudding soufflé wafer jelly bear claw sesame snaps 
+    marshmallow. Marzipan soufflé croissant lemon drops 
+    gingerbread sugar plum lemon drops apple pie gummies. 
+    Sweet roll donut oat cake toffee cake. 
+   Liquorice candy macaroon toffee cookie marzipan.
+   `
+};
+
+</script>
+
+<script>
+  // todo : title功能.
+  Vue.component('acticle', {
+    template : `
+      <div class="wrap">
+        <post-title :title-name="titleName" @click="modifyTemplate"></post-title>
+        <keep-alive>
+          <component :is="currectTemplate" :options="options" @click="selectOption"></component>
+        </keep-alive>
+      </div>
+    `,
+    data() {
+      return {
+        titleName : [
+          { name : 'Posts',template : 'barner',active : true},
+          { name : 'Archive',template : 'empty-barner',active : false }
+        ],
+        options : [
+          { text : 'Cat Ipsum' ,id : 1 ,active : false},
+          { text : 'Hipster Ipsum' ,id : 2 ,active : false},
+          { text : 'Cupcake Ipsum' ,id : 3 ,active : false},
+        ],
+        currectTemplate : 'barner'
+      }
+    },
+    methods : {
+      modifyTemplate({type,index}) {
+        this.currectTemplate = type;
+        for(let i = 0;i < this.titleName.length; i++) {
+          this.titleName[i].active = false;
+        }
+        this.titleName[index].active = true;
+      },
+      selectOption(index) {
+        for(let i = 0; i < this.options.length; i++) {
+          this.options[i].active = false;
+        }
+        this.options[index].active = true;
+      }
+    }
+  });
+  Vue.component('post-title',{
+    template : `
+      <div class='title'>
+        <div 
+          class="acticle-btn"  
+          v-for="(item,index) in titleName" 
+          @click="$emit('click',{type : item.template,index});" 
+          :class="[item.active ? 'on' : '']"  
+        >
+          {{item.name}}
+        </div>   
+      </div>
+    `,
+    props : [
+      'titleName'
+    ]
+  });
+  Vue.component('barner', {
+    template : `
+      <div class="barner">
+        <div class="list-wrap">
+          <ul>
+            <li v-for="(option,index) in options" @click="setText(option.id,index);" :class="[option.active ? 'on' : '']">
+              {{option.text}}
+            </li>
+          </ul>
+        </div>
+        <div class="content">
+          {{ text }}
+        </div>
+      </div>
+    `,
+    props : {
+      options : Array
+    },
+    data() {
+      return {
+        text : 'Click on a blog title to the left to view it.'
+      }
+    },
+    methods : {
+      setText(id,index) {
+        this.text = acticleData[id];
+        this.$emit('click',index);
+      }
+    }
+  });
+
+  const emptyBarner = {
+    template :`
+      <div class="barner">
+        Archive component
+      </div>
+    `,
+    inheritAttrs : false
+  };
+
+  const asyncComponent = function() {
+    return new Promise((res,rej) => {
+      setTimeout(()=> {
+        res(emptyBarner);
+      },3000);
+    })
+  }
+
+  // 如果是一个函数，那么则是一个普通的回调函数，否则执行后之后返回Promise对象则在后面加一个.then(); 
+  // if(result instanceof Promise) .then( func.called? if is uncall getdata else do noting );
+  // else wait callback function call.finaly wait, if is uncall getdata else do noting.
+
+  Vue.component('empty-barner',(res,rej) => { 
+    setTimeout(()=> {
+      res(emptyBarner);
+    },3000);
+  });
+
+  cm.bind_event(document,'DOMContentLoaded',(e) => {
+    new Vue({
+      el : '#acticle',
+    });
+  });
+</script>
+
+<div id='acticle'>
+  <acticle></acticle>
+</div>
+
+</body>
+</html>

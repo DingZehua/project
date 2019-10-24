@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    input[value*="Define"][name] { font-size:20px }
+    .text:after { content : "World"; }
+    .text:before{ content : "lorem"; display:block;width:200px;color : blue;border:1px solid blue;}
+    input:focus { background-color : pink; }
+    input:disabled { background: darksalmon; }
+    input:checked { width:200px;height:300px; }
+    ul li:nth-of-type(3n-1) { background: red; }
+    li:last-child { color:GREEN; }
+  </style>
+</head>
+<body>
+  <input type="text" value="define1" define="true">
+  <input type="text" value="cdefine" define="true">
+  <input type="text" value="definec" define="true">
+  <input type="text" name="" value="noDefine">
+  <a href="#">acddd</a>
+  <div class="text">Hello</div>
+  <input type="text" name="" id=""> 
+  <input type="text" disabled="disabled">
+  <input type="checkbox" name="" id="" checked>
+  <ul>
+    <li>li1</li>
+    <li>li2</li>
+    <li>li3</li>
+    <li>li4</li>
+    <li>li5</li>
+    <a href="">a link</a>
+  </ul>
+  
+</body>
+</html>

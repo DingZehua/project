@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>transform</title>
+  <script src="./js/util.js"></script>
+  <style>
+  * { margin : 0; padding: 0; }
+  ul,ol { list-style: none; }
+  img {display: block;}
+  
+  ul { width:250px;}
+  ul li { padding-top:10px;width:100%;height:97px;border-bottom:1px dashed #d0d6d9;}
+  ul .section {height:88px;padding-top:9px;position: relative;overflow: hidden;}
+  .section .photo { width:126px;height:97px;float:left;}
+  .section img { width:112px;height:77px;margin:0 auto;margin:0 9px 0 5px;}
+  .section .text { width:114px;float:left;}
+  .section .text p { line-height: 21px;font-size:13px;}
+
+  .photo_box { width:92px;height:57px;left:9px;top:18px;border:1px solid white;position: absolute;transition: .5s;transform:translateY(-120px) rotate(-90deg)}
+  .photo_text { width:92px;left:10px;top:42px;text-align:center;font-size:13px;color:white;position: absolute;transition: .5s;transform:translateY(80px) rotate(90deg);user-select:none;}
+  
+  .section:hover { background-color:#f6f6f6; }
+  .section:hover .photo_box { transform:translateY(0px) rotate(0deg) }
+  .section:hover .photo_text { transform:translateY(0px) rotate(0deg) }
+  .section:hover .text p { color:#45b823;cursor: pointer;text-decoration:underline }
+  </style>
+</head>
+<body>
+  <ul>
+    <li>
+      <div class="section">
+        <div class="photo">
+          <img src="./images/0016.png" alt="">
+          <div class="photo_box"></div>
+          <div class="photo_text">五十度灰</div>
+        </div>
+        <div class="text">
+          <p>网友2分45秒神解说《五十度》：笑喷了</p>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="section">
+        <div class="photo">
+          <img src="./images/0016.png" alt="">
+          <div class="photo_box"></div>
+          <div class="photo_text">五十度灰</div>
+        </div>
+        <div class="text">
+          <p>网友2分45秒神解说《五十度》：笑喷了</p>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="section">
+        <div class="photo">
+          <img src="./images/0016.png" alt="">
+          <div class="photo_box"></div>
+          <div class="photo_text">五十度灰</div>
+        </div>
+        <div class="text">
+          <p>网友2分45秒神解说《五十度》：笑喷了</p>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="section">
+        <div class="photo">
+          <img src="./images/0016.png" alt="">
+          <div class="photo_box"></div>
+          <div class="photo_text">五十度灰</div>
+        </div>
+        <div class="text">
+          <p>网友2分45秒神解说《五十度》：笑喷了</p>
+        </div>
+      </div>
+    </li>
+  </ul>
+</body>
+</html>

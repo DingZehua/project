@@ -1,0 +1,111 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<script src="http://192.168.0.14/js/base.js"></script>
+<script src="http://192.168.0.14/js/myjs1.5.js"></script>
+<script src='http://192.168.0.14/terminal/pc/js/vue.js'></script>
+<script src="http://192.168.0.14/terminal/pc/js/vue-router.js"></script>
+<script src='http://192.168.0.14/terminal/pc/js/axios.min.js'></script>
+<script>
+  const col = collections;
+  const base = col.base;
+  const methods = base.method;
+  //Vue.config.productionTip = false;
+  Vue.use(VueRouter);
+</script>
+
+<style>
+
+.index {
+  width: 100%;
+  box-sizing : content-box;
+  height:1500px;
+  border: 1px solid red;
+}
+
+</style>
+
+<script>
+
+function scrollBehavior(to,from,savedPosition) {
+
+  if(savedPosition) {
+    return savedPosition;
+  }
+
+  const position = {};
+  const [{meta}] = to.matched.slice(-1);
+  
+  if(!cm.empty(meta)) {
+    if(meta.scrollTo) {
+      position.x = meta.scrollTo.x || 0;
+      position.y = meta.scrollTo.y || 0;
+      return position;
+    } else if(meta.delay) {
+      return new base.Promise((res,rej)=> {
+        setTimeout(function() {
+          res({y : meta.delay });
+        },meta.delay);
+      });
+    }
+    return false;
+  } else if(to.hash !== '') {
+    position.selector = to.hash;
+    return position;
+  }
+
+  return false;
+}
+
+const Index = {
+  template : ` <div class="index">{{ $route.matched.slice(-1).pop().meta || 'unKnow'}}</div>`
+}
+
+const Home = {
+  template : `
+  <div>
+    <div class="index"></div>
+    <div id="acticle" class="index" style="height:300px"> </div>
+  </div>`
+}
+
+const routes = [
+  { path : '/goto100',component : Index ,meta : { scrollTo : { x : 0, y : 100 } } },
+  { path : '/goto200',component : Index ,meta : { scrollTo : { x : 0, y : 200 } } },
+  { path : '/goto300',component : Index ,meta : { scrollTo : { x : 0, y : 300 } } },
+  { path : '/delay500',component : Index, meta : { delay : 500 }},
+  { path : '/', component : Home,alias : '/Home' }
+];
+
+const router = new VueRouter({
+  mode : 'history',
+  base : '/app/router-scroll',
+  scrollBehavior,
+  routes
+});
+
+cm.bind(document,'DOMContentLoaded',(e) => {
+  new Vue({
+    el : '#app',
+    router
+  });
+});
+
+</script>
+
+</head>
+<body>
+
+<div id='app'>
+  <h3>scrollBehavior</h3>
+  <router-link to="/goto100">/goto100</router-link>
+  <router-link to="/goto200">/goto200</router-link>
+  <router-link to="/goto300">/goto300</router-link>
+  <router-link to="/delay500">/delay500</router-link>
+  <router-link to="/Home#acticle">Home</router-link>
+  <router-view></router-view>
+</div>
+
+</body>
+</html>

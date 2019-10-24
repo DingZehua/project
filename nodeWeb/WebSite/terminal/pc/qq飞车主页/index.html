@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>qq飞车主页</title>
+  <link rel="stylesheet" href="./css/common.css">
+  <script src="../js/myjs1.5.js"></script>
+  <script src="../../../js/base.js"></script>
+  <script>
+  
+  window.onload = () => {
+    class ScrollImg {
+      static cm = cm;
+      static css = css;
+      constructor({
+        cont,
+        btns,
+        width,
+        exceTime,
+        oneTime,
+        activeName,
+        callback,
+        eventName,
+        loop,
+        autoRunTime
+        }) {
+        this.cont = cont;                 // 父容器.
+        this.btns = btns;                 // 子节点.
+        this.width = width;               // 子节点宽度.
+        this.exceTime = exceTime;         // 动画一次执行的事件.
+        this.oneTime = oneTime;           // 动画执行频率.
+        this.activeName = activeName;     // 标记当前活动节点的className.
+        this.callback = callback;         // 单次动画结束后的回调函数.
+        this.eventName = eventName;       // 事件触发类型.
+        this.loop = function() {          // 轮回滚动开关.
+          return !!loop;
+        }
+
+        this._curPosition = 0;            
+        this._timeoutId = null;
+        this._autoRunTimoutId = null;
+        this._toPosition = -1;
+        this.index = 0;
+        this.reg = new RegExp('\\b' + this.activeName + '\\b');
+        this.range = new __base.Range(0,this.btns.length - 1);
+        this.autoRunTime = autoRunTime;   // 自动播放间隔时间.
+        ScrollImg.cm.binds(
+          this.btns,this.eventName,
+          (e) => {
+            this._run(e.target);
+          }
+        );
+
+        this._autoRun();
+      }
+      pre() {
+        this.go(this.index - 1);
+      }
+      next() {
+        this.go(this.index + 1);
+      }
+      go(index) {
+        if(!this.range.includes(index)) {
+          if(!this.loop()) {
+            return;
+          } else {
+            if(index < this.range.from()) {
+              index = this.range.to();
+            } else {
+              index = this.range.from();
+            }
+          }
+        }
+        this._run(this.btns[index]);
+      }
+      _run(el) {
+        if(!this.reg.test(el.className)) {
+          const index = array(this.btns).indexOf(el);
+          if(index < 0) {
+            throw new Error('在btns中无法找到该元素');
+          }
+          forEach(this.btns,(btn,i,arr) => {
+            ScrollImg.css.removeClass(btn,this.activeName);
+          });
+          ScrollImg.css.addClass(el,this.activeName);
+          this.index = index;
+          this._toPosition = this.width * index;
+          this.stop();
+          this._runing(this._toPosition - this._curPosition);
+        }
+      }
+      _runing(spacing) {
+        let count = 1;
+        let start = this._curPosition;
+
+        let move = () => {
+          let factor = (this.oneTime * count++) /this.exceTime;
+          if(factor < 1) {
+            this._curPosition = start + (spacing * factor);
+            this.cont.style.marginLeft = -this._curPosition + 'px';
+            this._timeoutId = setTimeout(move,this.oneTime);
+          } else {
+            this._curPosition = this._toPosition;
+            this.cont.style.marginLeft = -this._curPosition + 'px';
+            this._timeoutId = null;
+            this.callback && this.callback.call(null);
+            this._autoRun();
+          }
+        }
+        move();
+      }
+      stop() {
+        if(this._timeoutId) {
+          clearTimeout(this._timeoutId);
+          this._timeoutId = null;
+        }
+        if(this._autoRunTimoutId){
+          clearTimeout(this._autoRunTimoutId);
+          this._autoRunTimoutId = null;
+        }
+      }
+      _autoRun() {
+        this._autoRunTimoutId = setTimeout(()=> {
+          this.next();
+        },this.autoRunTime);
+      }
+    }
+
+    const si = new ScrollImg({
+      cont        : cm.g('#banner-center .scroll-img ul'),
+      btns        : cm.gs('.scroll-img-btn'),
+      width       : 497,
+      exceTime    : 500,
+      oneTime     : 17,
+      activeName  : 'active',
+      callback    : function() { console.log('animation End') },
+      eventName   : 'click',
+      autoRunTime : 2000,
+      loop        : true
+    });
+
+    cm.bind(cm.g('.left_arrow div'),'click',(e) => {
+      si.pre();
+    });
+    cm.bind(cm.g('.right_arrow div'),'click',(e) => {
+      si.next();
+    });
+
+    let title_list   = array(cm.gs('.news .tab_title_list_ul li'));
+    let article_list = array(cm.gs('.news .tab_main_area'));
+    let head_list    = array(cm.gs('.news .tab_main_head'));
+
+    cm.binds(title_list,'mouseover',(e) => {
+      let self = e.target.parentNode;
+
+      if(!/\bactive\b/.test(self.className)) {
+        let index = title_list.indexOf(self);
+        if(index > -1) {
+          forEach(title_list,(title,i,list) => {
+            css.removeClass(title,'active');
+            css.removeClass(article_list[i],'active');
+            css.removeClass(head_list[i],'active');
+          });
+          css.addClass(self,'active');
+          css.addClass(article_list[index],'active');
+          css.addClass(head_list[index],'active');
+        }
+      }
+    });
+
+    function every(arr,fn) {
+        return Array.prototype.every.call(arr,fn);
+    }
+
+    function forEach(a,fn,ctx) {
+      if(isUndef(a.length)) throw new Error('param 1 must a similar Array');
+      let exit = 0;
+      for(let i = 0,len = a.length; i < len; i++) {
+        exit = fn.call(ctx || null,a[i],i,a);
+        
+        if(exit === null || exit === false) 
+          break;
+      }
+    }
+
+    /** 
+     * @param {similarArray}
+     * @param {a} Int
+     * @param {b} Int
+    */
+    function array(arr,a,b) {
+      if(b >= 0) {
+        b++;
+      } else if(b < 0) {
+        b = arr.length + 1 - b;
+      } else {
+        b = arr.length;
+      }
+      return Array.prototype.slice.call(arr,a || 0, b);
+    }
+
+    function isDef(a) {
+      return !isUndef(a);
+    }
+
+    function isUndef(a) {
+      return a === undefined || a === null;
+    }
+  }
+    
+  </script>
+  <style>
+    #main { background: url(./images/bg20190915.jpg) no-repeat center 0; height:780px; }
+    #nav { background:url(./images/nav_down_re.png) repeat-x,url(./images/nav.png) no-repeat center 0
+    }
+    #nav .container { position: relative;min-height:236px;}
+    #nav .inside_logo {margin:0 auto;width:138px;height:112px;padding-top:15px;}
+
+    #nav dl { position:absolute;top:0;text-align: center;font-size:12px;}
+    #nav dt { height:65px; }
+    #nav dt a { width:100%;height:100%;}
+    #nav dd { height:28px;line-height: 28px;  }
+    #nav dd a { color:white;display: block;height:100%;width:100%;position: relative; }
+    #nav dd a:hover { color:orangered;text-decoration:underline;}
+    #nav a.new:after { width:12px;height:11px; background: url(./images/nav-tips.png) no-repeat 0 0;  position: absolute;right:2px;top:8px;display:block;content:'';}
+    #nav a.hot:after { width:12px;height:11px; background: url(./images/nav-tips.png) no-repeat 0 -13px;  position: absolute;right:2px;top:8px;display:block;content:''; }
+    #nav .nav_index { left:0;width:65px; }
+    #nav .nav_index a { height:100%;width:100%;display: block; text-indent:-9999px;overflow: hidden;}
+    #nav .nav_yxzl { left:94px;width:86px;}
+    #nav .nav_sszx { left:204px;width:81px; }
+    #nav .nav_hdzx { left:325px;width:80px; }
+    #nav .nav_shop { left:560px;width:85px; }
+    #nav .nav_video { left:680px;width:83px; }
+    #nav .nav_wjhd { left:796px;width:90px; }
+    #nav .nav_service { left:885px;width:128px; }
+    #nav .nav_service a:after { right:12px; }
+
+    .down_user_spr { background:url(./images/down_user_spr.png) no-repeat; }
+    .top_bg_spr { background:url(./images/top.png) no-repeat; }
+
+    #link { margin:0 auto;width:635px;height:200px; }
+    #link a { display:block;height:100%;width:100%; }
+    #banner { height:290px;background:url(./images/top.png) no-repeat;}
+    #banner #banner-left { width:250px;height:275px;float:left; }
+    #banner-left .downgame { width:240px;height:124px;margin-top:-22px;background-position: 0 0;margin-left:6px;overflow: hidden;}
+    .downgame a { display: block;height:100%;width:100%; }
+    .downgame .cn_text,.downgame .en_text { text-indent: -9999px;overflow: hidden; }
+    .downgame .cn_text { background-position:-254px -2px;width:90px;height:22px;margin:44px  auto 0 auto;}
+    .downgame .en_text { background-position:-262px -34px;width:76px;height:11px;margin:5px  auto 0 auto; }
+
+    /* CSS动画 */
+    .downgame:hover .cn_text { animation:1s upMove }
+    .downgame:hover .en_text { animation:1s downMove }
+
+    @keyframes upMove{
+      0%{ transform:translateY(-40px);opacity:0; }
+      100% { transform:translateY(0);opacity: 1; }
+    }
+
+    @keyframes downMove{ 
+      0% { transform:translateY(40px);opacity:0; }
+      100% { transform:translate(0px);opacity:1; }
+    }
+
+    /* CSS动画 */
+    #banner-left .login { width:235px;height:182px;margin-top:5px;background-position:-4px -129px;margin-left:10px;overflow: hidden;}
+    .login .thumb { margin:0 auto;margin-top:37px;width: 56px;height:56px;border-radius:50%;border:3px solid #283257;box-sizing:border-box;overflow: hidden;}
+    .login .thumb img { width:100%;height: 100%; }
+    .login .word,.login .word a {font-size:12px;}
+    .login .word { margin-top:33px;text-align: center;height:12px;line-height: 12px;color:white;}
+    .login .word a { color:#4dffdb; }
+    .login .word a:hover { text-decoration:underline; }
+
+    #banner #banner-center { width:497px;height:290px;float:left;position:relative;}
+    #banner-center .scroll-img { margin-top:14px;width:100%;height:256px;overflow:hidden;}
+    #banner-center .scroll-img ul { width:2982px; }
+    #banner-center .scroll-img li { width:497px;height:100%;float:left; }
+    .scroll-img li img { width:100%;height:100%; }
+    .scroll-img-btn {  }
+    .lt,.rt,
+    .lb,.rb {
+      width:12px;height:12px;
+      z-index:2;
+      position: absolute;
+    }
+    .lt {background-position:-621px -299px;}
+    .rt {background-position:-633px -299px;}
+    .lb {background-position:-621px -313px;}
+    .rb {background-position:-633px -313px;}
+    #banner-center .lt {top:9px;left:-2px;}
+    #banner-center .rt {top:12px;right:-1px;}
+    #banner-center .lb {bottom:18px;left:-2px;}
+    #banner-center .rb {bottom:18px;right:-1px;}
+    #banner-center .bottom-control { position: absolute;bottom:19px;width:100%;height:39px;background-color:#131417;opacity: 0.8; }
+    .left_arrow { position: absolute;top:11px;left:11px;width:10px;height:20px;background-position:-542px -297px}
+    .right_arrow { position:absolute;top:11px;right:13px;width:10px;height:20px;background-position:-555px -297px;}
+    .left_arrow div,.right_arrow div { width:100%;height:100%;display: block;cursor:pointer;}
+    .left_arrow:hover,.right_arrow:hover { background-position-y:-326px; }
+
+    .bottom-control ul { width:100%;height:39px;font-size:0px;text-align:center;overflow: hidden;}
+    .bottom-control li { width:15px;height:15px;margin:0 2px;display:inline-block;background-position: -603px -299px;margin-top:12px;cursor:pointer;}
+    .bottom-control li.active { background-position-x:-582px; }
+    #banner-center .top_word { left:379px;top:14px;width:42px;height:18px;position: absolute;background-position:-723px -298px;}
+    #banner-center .top_word_grap { left:421px;top:14px;width:41px;height:18px;position: absolute;background-position:-765px -320px;}
+
+    #banner-right {margin-left:10px;margin-top:14px;width:210px;height:256px;float:left;position: relative;}
+    #banner-right img { width:100%;height:100%; }
+
+    #banner-right .lt { top:-2px;left:0px; }
+    #banner-right .rt { top:-2px;right:-4px; }
+    #banner-right .lb { bottom:-1px;left:-1px; }
+    #banner-right .rb { bottom:-1px;right:-4px; }
+
+    .inside-bar_spr { background:url(./images/inside_bar.png) no-repeat; }
+    #inside_left {width:228px;height:884px;float:left;background-position:-242px 0px;background-repeat: repeat-y;position:relative;}
+
+    #inside_left .inside_top_bg { position: absolute; top:0;left:0; background-position: 0 0;width:100%;height:17px;}
+    #inside_left .inside_bottom_bg { position: absolute; bottom:0;left:0; background-position: 0 -20px;width:100%;height:13px; }
+
+    #inside_left .inside_btn,#inside_left .link_box,#inside_left .online_service,#inside_left .union_btn {margin:0 auto;overflow: hidden;width:208px;background-color:#efeff1;}
+
+    .link_box_ul { width:100%;line-height:32px;margin:11px 0;}
+    .link_box_ul li { float:left;width:50%;height: 32px;font-size:12px;text-align:center;position:relative;}
+    .link_box_ul li a { font-size:12px;}
+    .link_box_ul._bold { font-weight:bold; }
+
+    #inside_left a:hover{text-decoration:underline;}
+
+    #inside_left .inside_btn { margin-top:17px; }
+    .inside_btn a { display:block;width:100%;height:100%; }
+    .inside_btn div { margin-top:6px;width:100%;height:57px;overflow: hidden;}
+    .inside_btn .pink_btn { background-position:0px -137px; }
+    .inside_btn .blue_btn { background-position:0px -200px; }
+    .inside_btn .pink_btn p,.inside_btn .blue_btn p{ margin-left:46px;margin-top:12px;background-position-y:-269px;width:33px;height:33px;}
+    .inside_btn .pink_btn p { background-position-x: 0px; }
+    .inside_btn .blue_btn p { background-position-x: -41px;}
+
+    #inside_left .link_box {margin-top:12px;min-height:22px;position: relative;}
+
+    #inside_left .inside_lt_bg,#inside_left .inside_rt_bg,#inside_left .inside_lb_bg,#inside_left .inside_rb_bg {
+      width:13px;height: 13px;position: absolute;
+    }
+
+    #inside_left .inside_mt_bg,#inside_left .inside_mb_bg {
+      width:30px;height: 10px;position: absolute;
+    }
+
+    #inside_left .service_bar { margin-top:10px;width:100%;height:63px;background-position: 0 -40px; }
+
+    #inside_left .online_service { background-position:0px -304px;height:46px;margin-top:10px;}
+    .online_service a { display:block;width:100%;height:100%; }
+
+    #inside_left .union_btn { background-position:0 -354px;line-height:38px;height:38px;margin-top:7px;position: relative;text-align:center;}
+
+    #inside_left .union_btn a { font-size:12px; }
+    #inside_left .union_btn a:after { 
+      content: '';
+      border:4px solid transparent;
+      border-bottom:4px solid #c7c8ce;
+      display:block;
+      position:absolute;
+      top:50%;
+      right:19px;
+      margin-top:-6px;
+    }
+
+    #inside_left .union_btn a:hover { text-decoration: none;opacity: 0.8; }
+    #inside_left .union_btn a:hover:after { 
+      border:4px solid transparent;
+      border-top:4px solid #c7c8ce;
+      margin-top:-2px;
+    }
+    
+    #inside_left .inside_lt_bg {background-position:0 -105px;left:0;top:0;}
+    #inside_left .inside_mt_bg {background-position:-30px -105px;left:50%;top:0;margin-left:-15px;}
+    #inside_left .inside_rt_bg {background-position:-15px -105px;right:0;top:0;}
+    #inside_left .inside_lb_bg {background-position:0 -121px;left:0;bottom:0;}
+    #inside_left .inside_mb_bg {background-position:-30px -117px;left:50%;bottom:0;margin-left:-15px;}
+    #inside_left .inside_rb_bg {background-position:-15px -121px;right:0;bottom:0;}
+    
+    .title_bg { background:url(./images/title.png) no-repeat;width:100%;height:20px;margin-top:12px;margin-left:4px;}
+    #inside_main .news .title_bg { background-position: 0 0; }
+    #inside_main .rctivity .title_bg{ background-position:0 -31px; }
+    #inside_main ._event .title_bg{ background-position:0 -60px; }
+    #inside_main .viersion .title_bg { background-position:0 -187px; }
+    #inside_main ._video  .title_bg { background-position:0 -122px; }
+
+    .tab { width:478px; }
+    .tab_title { width:100%;height:44px;border-bottom:1px solid #d4d6d9;overflow:hidden;}
+    .tab_main { margin-top:2px;width:100%}
+    .tab_main a:hover { text-decoration:underline;}
+
+    .tab_main .tab_title_list_ul { height: 34px;line-height:34px;text-align: center;}
+    .tab_title_list_ul li { float:left;position: relative;}
+    .tab_title_list_ul li div { font-size:14px;font-weight:bold;width:100%;height:100%;user-select: none;}
+    .tab_title_list_ul li.active:before { position: absolute;border:6px solid transparent; border:6px solid transparent;left:50%;margin-left:-6px;display:block;content:'';top:-3px; }
+    .tab_main_head { height:33px;line-height:33px;text-align:center;font-weight:bold;display:none;}
+    .tab_main_head.active { display:block; }
+    .tab_main_head a { font-size:17px; }
+    .tab_main_area { width:100%;line-height:25px;font-size:12px;display: none;}
+    .tab_main_area.active { display: block; }
+    .tab_main_area li { float:left;width:100%;color:#2A2C45;position: relative;height:25px;}
+    .tab_main_area li span { margin:0 14px;float:left;}
+    .tab_main_area li a{ font-size:12px;color:#2a2c45;white-space:nowrap;overflow: hidden;text-overflow:ellipsis;display:block;height:100%;float:left;box-sizing:border-box;}
+    .tab_main_area li a:hover{color:#6467AD; }
+    .tab_main_area li .date { position: absolute;color:#92939f;right:0;top:0;font-style:normal;}
+
+    /* 版区隔壁 */
+    .tab_side { height:270px;width:212px;float:left;margin-left:22px;margin-bottom:15px;}
+    .tab_side img { margin:0 auto;margin-top:10px; }
+
+    #inside_main { float:left;margin-left:16px;width:712px;}
+    .news { width:478px;float:left;margin-bottom:15px;}
+    .news .tab_title_list_ul li { width:20%; }
+    .news .tab_main_head a{ color: #ff3052; }
+    .news .tab_title_list_ul li.active div { color: #ff3052; }
+    .news .tab_title_list_ul li.active:before { border-top:6px solid #ff3052 }
+    .news .tab_main_area li:before { display:block;content:'';position: absolute;width:4px;height:6px;top:50%;left:0;margin-top:-3px;background:url(./images/inside_spr.png) no-repeat -22px -26px; }
+
+    ._event { width:478px;float:left;margin-bottom:15px;}
+    ._event .tab_title_list_ul li { width:33%; }
+    ._event .tab_title_list_ul li.active div { color: #309DFF; }
+    ._event .tab_title_list_ul li.active:before { border-top:6px solid #309DFF }
+    ._event .tab_main {position: relative;}
+    ._event .tab_main_left { width:156px;position:absolute;left:0;margin-top:15px;}
+    ._event img { margin:0 auto; }
+    ._event .tab_main_right { width:310px;right:0;position:absolute;margin-top:15px;}
+    ._event dl { margin-top:-10px; }
+    ._event .tab_main_head { text-align:left;}
+    ._event .tab_main_head a { color:#309dff;}
+    ._event .tab_main_area li a { width:100%;padding-right:50px; }
+    ._event p { color:#687089;font-size:12px;line-height:25px;height:25px;position: relative;}
+    ._event p .line-icon { width:35px;height:10px; background: url(./images/inside_spr.png) no-repeat -21px 0;  position:absolute;top:50%;margin-top:-5px;margin-left:5px;}
+
+    ._video { width:100%;float:left;margin-bottom:15px; }
+    ._video .tab_title_list_ul { margin-bottom:15px; }
+    ._video .tab_title_list_ul li { width:16.6%; }
+    ._video .tab_title_list_ul li.active div { color: green; }
+    ._video .tab_title_list_ul li.active:before { border-top:6px solid green; }
+    ._video .img_list { width:100%; }
+    ._video .img_list li { float:left;width:25%; }
+    ._video .img_list p { line-height: 24px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+    ._video .img_list a { font-size:12px;color:#2a2c45; }
+    ._video .img_list img { width:171px;}
+  </style>
+</head>
+<body>
+  <div class="container-fulid" id="head">
+    <div class="container">
+      <div class="head_logo l ost-bg">
+        <a href="#">腾讯游戏</a>
+      </div>
+      <div class="head_ad l">
+        <a href="#">
+          <img src="./images/ad.jpg" alt="">
+        </a>
+      </div>
+      <div class="head_menu r">
+        <div class="head_menu_czsh l"><a href="#">成长守护平台</a></div>
+        <div class="head_menu_top l"><a href="#">腾讯游戏排行榜<i class="head_icon r ost-bg"></i></div></a></div>
+    </div>
+  </div>
+  </div>
+  <div id="main" class="container-fluid">
+    <div id="nav" class="container-fulid">
+      <div class="container">
+        <div class="inside_logo">
+          <a href="#">
+            <img src="./images/inside_logo.png" alt="">
+          </a>
+        </div>
+        <dl class="nav_index">
+          <dt><a href="#">首页</a></dt>
+        </dl>
+        <dl class="nav_yxzl">
+          <dt></dt>
+          <dd><a href="#">新手指引</a></dd>
+          <dd><a class="hot" href="#">官方漫画</a></dd>
+          <dd><a class="new" href="#">飞车手游</a></dd>
+          <dd><a href="#">精美壁纸</a></dd>
+          <dd><a href="#">游戏下载</a></dd>
+        </dl>
+        <dl class="nav_sszx">
+          <dt></dt>
+          <dd><a class="hot" href="#">SSC</a></dd>
+          <dd><a href="#">谁是车王</a></dd>
+          <dd><a href="#">全民争霸赛</a></dd>
+        </dl>
+        <dl class="nav_hdzx">
+          <dt></dt>
+          <dd><a class="hot" href="#">版本专区</a></dd>
+          <dd><a href="#">合作专区</a></dd>
+          <dd><a href="#">CDK兑换</a></dd>
+        </dl>
+        <dl class="nav_hdzx">
+          <dt></dt>
+          <dd><a class="hot" href="#">版本专区</a></dd>
+          <dd><a href="#">合作专区</a></dd>
+          <dd><a href="#">CDK兑换</a></dd>
+        </dl>
+        <dl class="nav_shop">
+          <dt></dt>
+          <dd><a href="#">紫钻专区</a></dd>
+          <dd><a href="#">道聚城</a></dd>
+          <dd><a href="#">点券充值</a></dd>
+        </dl>
+        <dl class="nav_video">
+          <dt></dt>
+          <dd><a href="#">教学视频</a></dd>
+          <dd><a href="#">视频中心</a></dd>
+        </dl>
+        <dl class="nav_wjhd">
+          <dt></dt>
+          <dd><a href="#">官方论坛</a></dd>
+          <dd><a class="hot" href="#">掌上飞车</a></dd>
+          <dd><a href="#">兴趣部落</a></dd>
+          <dd><a href="#">官方微信</a></dd>
+          <dd><a href="#">官方微信</a></dd>
+        </dl>
+        <dl class="nav_service">
+          <dt></dt>
+          <dd><a href="#">客户中心</a></dd>
+          <dd><a class="new" href="#">安全信用体系</a></dd>
+          <dd><a href="#">封号查询</a></dd>
+          <dd><a href="#">游戏安全评测</a></dd>
+          <dd><a class="new" href="#">道具删除找回</a></dd>
+        </dl>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div id="link">
+        <a href="#"></a>
+      </div>
+    </div>
+    <div class="container" id="banner">
+      <div id="banner-left">
+        <div class="downgame down_user_spr">
+          <a href="#">
+            <div class="cn_text down_user_spr">下载游戏</div>
+            <div class="en_text down_user_spr">DOWNLOAD</div>
+          </a>
+        </div>
+        <div class="login down_user_spr">
+          <div class="thumb">
+            <img src="./images/login_logo.jpg" alt="">
+          </div>
+          <div class="word">
+            欢迎<a href="#">登录</a>,进入飞车世界
+          </div>
+        </div>
+      </div>
+      <div id="banner-center">
+        <div class="scroll-img">
+          <ul>
+            <li>
+              <a href="#"><img src="./images/banner-1.jpeg" alt=""></a>
+            </li>
+            <li>
+              <a href="#"><img src="./images/banner-2.jpeg" alt=""></a>
+            </li>
+            <li>
+              <a href="#"><img src="./images/banner-3.jpeg" alt=""></a>
+            </li>
+            <li>
+              <a href="#"><img src="./images/banner-4.jpeg" alt=""></a>
+            </li>
+            <li>
+              <a href="#"><img src="./images/banner-5.jpeg" alt=""></a>
+            </li>
+            <li>
+              <a href="#"><img src="./images/banner-6.jpeg" alt=""></a>
+            </li>
+          </ul>
+        </div>
+        <div class="bottom-control">
+          <div class="left_arrow top_bg_spr" href="javascript:void(0)">
+            <div class="block"></div>
+          </div>
+          <div class="right_arrow top_bg_spr" href="javascript:void(0)">
+            <div class="block"></div>
+          </div>
+          <ul>
+            <li class="top_bg_spr scroll-img-btn active"></li>
+            <li class="top_bg_spr scroll-img-btn"></li>
+            <li class="top_bg_spr scroll-img-btn"></li>
+            <li class="top_bg_spr scroll-img-btn"></li>
+            <li class="top_bg_spr scroll-img-btn"></li>
+            <li class="top_bg_spr scroll-img-btn"></li>
+          </ul>
+          </div>
+          <div class="lt top_bg_spr"></div>
+          <div class="rt top_bg_spr"></div>
+          <div class="lb top_bg_spr"></div>
+          <div class="rb top_bg_spr"></div>
+          <div class="top_word top_bg_spr"></div>
+          <div class="top_word_grap top_bg_spr"></div>
+      </div>
+      <div id="banner-right">
+        <a href='#'><img src="./images/banner-right.jpg" alt=""></a>
+        <div class="lt top_bg_spr"></div>
+        <div class="rt top_bg_spr"></div>
+        <div class="lb top_bg_spr"></div>
+        <div class="rb top_bg_spr"></div>
+      </div>
+    </div>
+  </div>
+  <div class="container clear">
+    <div id="inside_left" class="inside-bar_spr">
+      <div class="inside_top_bg inside-bar_spr"></div>
+      <div class="inside_bottom_bg inside-bar_spr"></div>
+      <div class="inside_btn">
+        <div class="inside-bar_spr pink_btn">
+          <a href="#">
+            <p class="inside-bar_spr"></p>
+          </a>
+        </div>
+        <div class="inside-bar_spr blue_btn">
+          <a href="#">
+            <p class="inside-bar_spr"></p>
+          </a>
+        </div>
+      </div>
+      <div class="link_box clear">
+        <div class="inside_lt_bg inside-bar_spr"></div>
+        <div class="inside_rt_bg inside-bar_spr"></div>
+        <div class="inside_lb_bg inside-bar_spr"></div>
+        <div class="inside_rb_bg inside-bar_spr"></div>
+        <ul class="link_box_ul _bold clear">
+          <li>
+            <a href="#">点券充值</a>
+          </li>
+          <li>
+            <a href="#">视频中心</a>
+          </li>
+          <li>
+            <a href="#">开通紫钻</a>
+          </li>
+          <li>
+            <a href="#">官方论坛</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="link_box clear">
+        <div class="inside_lt_bg inside-bar_spr"></div>
+        <div class="inside_mt_bg inside-bar_spr"></div>
+        <div class="inside_rt_bg inside-bar_spr"></div>
+        <div class="inside_lb_bg inside-bar_spr"></div>
+        <div class="inside_mb_bg inside-bar_spr"></div>
+        <div class="inside_rb_bg inside-bar_spr"></div>
+        <ul class="link_box_ul clear">
+          <li>
+            <a href="#">点亮图标</a>
+          </li>
+          <li>
+            <a href="#">道聚城<span class="hot_icon">hot</span></a>
+          </li>
+          <li>
+            <a href="#">SSC联赛</a>
+          </li>
+          <li>
+            <a href="#">体验服</a>
+          </li>
+          <li>
+            <a href="#">补丁下载</a>
+          </li>
+          <li>
+            <a href="#">新手礼包<span class="new_icon">new</span></a>
+          </li>
+          <li>
+            <a href="#">回归福利<span class="new_icon">new</span></a>
+          </li>
+          <li>
+            <a href="#">CDK兑换</a>
+          </li>
+          <li>
+            <a href="#">官方微信</a>
+          </li>
+          <li>
+            <a href="#">掌上飞车<span class="new_icon">new</span></a>
+          </li>
+          <li>
+            <a href="#">官方漫画<span class="hot_icon">hot</span></a>
+          </li>
+          <li>
+            <a href="#">合作专区</a>
+          </li>
+        </ul>
+      </div>
+      <div class="service_bar inside-bar_spr"></div>
+      <div class="link_box clear">
+          <div class="inside_lt_bg inside-bar_spr"></div>
+          <div class="inside_mt_bg inside-bar_spr"></div>
+          <div class="inside_rt_bg inside-bar_spr"></div>
+          <div class="inside_lb_bg inside-bar_spr"></div>
+          <div class="inside_mb_bg inside-bar_spr"></div>
+          <div class="inside_rb_bg inside-bar_spr"></div>
+          <ul class="link_box_ul clear">
+            <li>
+              <a href="#">封号查询</a>
+            </li>
+            <li>
+              <a href="#">密码找回</a>
+            </li>
+            <li>
+              <a href="#">用户协议</a>
+            </li>
+            <li>
+              <a href="#">玩家条例</a>
+            </li>
+            <li>
+              <a href="#">安全中心</a>
+            </li>
+            <li>
+              <a href="#">防沉迷</a>
+            </li>
+            <li>
+              <a href="#">家长监控</a>
+            </li>
+            <li>
+              <a href="#">点亮皇族</a>
+            </li>
+          </ul>
+      </div>
+      <div class="online_service inside-bar_spr"><a href="#" class="search_capture_word">在线客服</a></div>
+      <div class="union_btn inside-bar_spr">
+        <a href="#" class="a_box">
+          QQ飞车合作媒体站点
+        </a>
+      </div>
+      <div class="union_btn inside-bar_spr">
+        <a href="#" class="a_box">
+          QQ飞车合作伙伴站点
+        </a>
+      </div>
+    </div>
+    <div id="inside_main">
+      <div class="tab news">
+        <div class="tab_title">
+          <h2 class="title_bg"></h2>
+        </div>
+        <div class="tab_main">
+          <ul class="tab_title_list_ul">
+            <li class="active"><div>综合</div></li>
+            <li><div>活动</div></li>
+            <li><div>公告</div></li>
+            <li><div>赛事</div></li>
+            <li><div>论坛</div></li>
+          </ul>
+          <div class="tab_main_head active">
+            <a href="#">9.28-9.29 送11776点券+5000消费券+枫色如画</a>
+          </div>
+          <ul class="tab_main_area clear active">
+            <li><span>[活动]</span><a href="#">全新赛车夺宝上线 极品赛车超值抢</a><i class="date">10/01</i></li>
+            <li><span>[活动]</span><a href="#">荣耀战勋第四期奖励更新 首发A车炽焰风华来袭！</a><i class="date">10/01</i></li>
+            <li><span>[活动]</span><a href="#">假期精选宝箱 精彩不容错过</a><i class="date">10/01</i></li>
+            <li><span>[活动]</span><a href="#">小长假狂欢持续 抢永久黑域电魔！</a><i class="date">10/01</i></li>
+            <li><span>[活动]</span><a href="#">七天小长假狂欢潮 霸气兽形态T1齐上线！</a><i class="date">10/01</i></li>
+            <li><span>[活动]</span><a href="#">欢乐小长假 100%必得首发极品A车+孔羽聆音系列</a><i class="date">10/01</i></li>
+          </ul>
+          <div class="tab_main_head">
+            <a href="#">全新赛车夺宝上线 极品赛车超值抢！</a>
+          </div>
+          <ul class="tab_main_area clear">
+            <li><span>[活动]</span><a href="#">假期精选宝箱 精彩不容错过</a><i class="date">10/01</i></li>
+            <li><span>[活动]</span><a href="#">小长假狂欢持续 抢永久黑域电魔！</a><i class="date">10/01</i></li>
+            <li><span>[活动]</span><a href="#">七天小长假狂欢潮 霸气兽形态T1齐上线！</a><i class="date">10/01</i></li>
+            <li><span>[活动]</span><a href="#">欢乐小长假 100%必得首发极品A车+孔羽聆音系列</a><i class="date">10/01</i></li>
+            <li><span>[活动]</span><a href="#">小长假狂欢热潮 四级宝石限时抢！</a><i class="date">10/01</i></li>
+            <li><span>[活动]</span><a href="#">小长假狂欢持续 永久T2纪元系列来袭！</a><i class="date">10/01</i></li>
+          </ul>
+          <div class="tab_main_head">
+            <a href="#">关于10.1活动延长调整公告</a>
+          </div>
+          <ul class="tab_main_area clear">
+            <li><span>[公告]</span><a href="#">10月1日不停机更新公告</a><i class="date">10/01</i></li>
+            <li><span>[公告]</span><a href="#">第七十五季车神争霸赛开赛公告</a><i class="date">10/01</i></li>
+            <li><span>[公告]</span><a href="#">第七十四季车神争霸赛奖励发放的通知</a><i class="date">10/01</i></li>
+            <li><span>[公告]</span><a href="#">点券、幸运币月末清空公告——9月</a><i class="date">10/01</i></li>
+            <li><span>[公告]</span><a href="#">关于幸运水晶球活动异常问题的说明</a><i class="date">10/01</i></li>
+            <li><span>[公告]</span><a href="#">幸运召唤卡、点券卡月末清空公告——9月</a><i class="date">10/01</i></li>
+          </ul>
+          <div class="tab_main_head">
+            <a href="#">SSC2019秋季赛S2分站赛，全民参与，电竞之魂在</a>
+          </div>
+          <ul class="tab_main_area clear">
+            <li><span>[赛事]</span><a href="#">更青春 更专业 全国公开赛上线预告</a><i class="date">10/01</i></li>
+            <li><span>[SSC]</span><a href="#">SSC2019秋季赛S1分站海选晋级名单&奖励发放公告</a><i class="date">10/01</i></li>
+            <li><span>[SSC]</span><a href="#">SSC2019秋季赛燃擎启动：首站发车 我们赛场见</a><i class="date">10/01</i></li>
+            <li><span>[谁是车王]</span><a href="#">竞技回归 2019下半年赛事一览</a><i class="date">10/01</i></li>
+            <li><span>[谁是车王]</span><a href="#">谁是车王S7用户调研问卷</a><i class="date">10/01</i></li>
+            <li><span>[谁是车王]</span><a href="#">第七季车王胡旭专访 打破质疑实力蝉联</a><i class="date">10/01</i></li>
+          </ul>
+          <div class="tab_main_head">
+            <a href="#">【爆料】【qq飞车官方测试】-?赛道随心造全新</a>
+          </div>
+          <ul class="tab_main_area clear">
+            <li><span>[论坛精华]</span><a href="#">【团队招募】QQ飞车测试团2018年新春招募</a><i class="date">10/01</i></li>
+            <li><span>[论坛精华]</span><a href="#">【团队招募】?﹏QQ飞车<极速梦想测试团>跨年盛大招募</a><i class="date">10/01</i></li>
+            <li><span>[论坛精华]</span><a href="#">【团队招募】QQ飞车赛道设计团2018新年盛大招募</a><i class="date">10/01</i></li>
+            <li><span>[论坛精华]</span><a href="#">【分享】周年币拿下穿梭者</a><i class="date">10/01</i></li>
+            <li><span>[论坛精华]</span><a href="#">【飞驰之王】Ycbb战丶陈小汪 海洋公园 2.09.66（爆天甲)</a><i class="date">10/01</i></li>
+            <li><span>[论坛精华]</span><a href="#">【极限之王原装版】丶Gz女神丨瑶瑶 猴园春色1.18.27（S）</a><i class="date">10/01</i></li>
+          </ul>
+        </div>
+      </div>
+      <div class="tab_side rctivity">
+        <div class="tab_title">
+          <h2 class="title_bg"></h2>
+        </div>
+        <a href="#"><img src="./images/img-list-1.jpg"></a>
+        <a href="#"><img src="./images/img-list-2.jpg"></a>
+      </div>
+      <div class="_event tab">
+        <div class="tab_title">
+          <h2 class="title_bg"></h2>
+        </div>
+        <div class="tab_main active">
+          <ul class="tab_title_list_ul">
+            <li class="active"><div>SSC</div></li>
+            <li><div>谁是车王</div></li>
+            <li><div>全民争霸赛</div></li>
+          </ul>
+          <div class="tab_main_left"><img src="./images/img-150x168.jpg"></div>
+          <div class="tab_main_right">
+            <dl>
+              <dt>
+                <div class="tab_main_head active">
+                  <a href="#">SSC秋季S2火热报名中！</a>
+                </div>
+              </dt>
+              <dd>
+                <p>2018.7.4-8.19<span class="line-icon"></span></p>
+              </dd>
+            </dl>
+            
+            <ul class="tab_main_area clear active">
+              <li><div><a href="#">SSC2019秋季赛S2分站赛，全民参与，电竞之魂</a></div><i class="date">10/01</i></li>
+              <li><a href="#">SSC2019秋季赛S1分站海选晋级名单&奖励发放公告</a><i class="date">10/01</i></li>
+              <li><a href="#">SSC2019秋季赛燃擎启动：首站发车 我们赛场见</a><i class="date">10/01</i></li>
+              <li><a href="#">车队道具赛冠军车队谜境专访：难关重重，终登</a><i class="date">10/01</i></li>
+              <li><a href="#">SSC2019春季赛冠军采访：车队竞速 竞速界顶梁柱</a><i class="date">10/01</i></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="tab_side viersion">
+        <div class="tab_title">
+          <h2 class="title_bg"></h2>
+        </div>
+        <a href="#"><img src="./images/img-list-3.jpg"></a>
+        <a href="#"><img src="./images/img-list-4.jpg"></a>
+      </div>
+      <div class="_video">
+        <div class="tab_title">
+          <h2 class="title_bg"></h2>
+        </div>
+        <div class="tab_main active">
+          <ul class="tab_title_list_ul">
+            <li class="active"><div>最新</div></li>
+            <li><div>推荐</div></li>
+            <li><div>教学</div></li>
+            <li><div>赛车</div></li>
+            <li><div>赛事</div></li>
+            <li><div>官方</div></li>
+          </ul>
+          <ul class="img_list">
+            <li>
+              <img src="./images/video-img-list-1.jpg" alt="">
+              <p><a href="#">菜菜的雨上:个人单挑机场实战四Lorem.Lorem.</a></p>
+            </li>
+            <li>
+              <img src="./images/video-img-list-2.jpg" alt="">
+              <p><a href="#">【个人计时】无细节 瓦特厂房Lorem.Lorem.</a></p>
+            </li>
+            <li>
+              <img src="./images/video-img-list-3.jpg" alt="">
+              <p><a href="#">【个人计时】泉宏陈奇好兄弟Lorem.Lorem.</a></p>
+            </li>
+            <li>
+              <img src="./images/video-img-list-4.jpg" alt="">
+              <p><a href="#">Ty丶帅源-古城秘境-1.13.49Lorem.Lorem.</a></p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="footer" class="container">
+    <div class="logo_box">
+      <a href="#" class="tengxun_logo search_capture_word" title="腾讯娱乐"> 腾讯娱乐 </a>
+      <a href="#" class="linglan_logo search_capture_word" title="琳琅天上"> 琳琅天上 </a>
+      <a href="#" class="tianmei_logo search_capture_word" title="天美"> 天美 </a>
+    </div>
+    <div class="link_box">
+      <ul>
+        <li>
+          <a href="#">腾讯互动娱乐</a><span>|</span>
+          <a href="#">服务条款</a><span>|</span>
+          <a href="#">腾讯游戏隐私保护指引</a><span>|</span>
+          <a href="#">腾讯游戏招聘</a><span>|</span>
+          <a href="#">腾讯游戏客服</a><span>|</span>
+          <a href="#">游戏地图</a><span>|</span>
+          <a href="#">商务合作</a><span>|</span>
+          <a href="#">腾讯网</a><span>|</span>
+          <a href="#">网站导航</a>
+        </li>
+        <li>
+          <a href="#">腾讯公司版权所有</a>
+        </li>
+        <li>COPYRIGHT © 1998 - 2019 TENCENT. ALL RIGHTS RESERVED.</li>
+        <li>著作权人：腾讯科技（深圳）有限公司　出版单位：深圳市腾讯计算机系统有限公司</li>
+        <li>
+          <a href="#">粤网文[2017]6138-1456号</a><span>|</span>
+          <a href="#">（总）网出证（粤）字第057号</a>
+        </li>
+      </ul>
+    </div>
+    <div class="tips-msg">
+      <p>温馨提示：本游戏适合16岁(含)以上玩家娱乐；请您确定已如实进行实名注册；为了您的健康，请合理控制游戏时间。</p>
+      <span>抵制不良游戏</span>
+      <span>拒绝盗版游戏</span>
+      <span>注意自我保护</span>
+      <span>谨防受骗上当</span>
+      <span>适度游戏益脑</span>
+      <span>沉迷游戏伤身</span>
+      <span>合理安排时间</span>
+      <span>享受健康生活</span>
+    </div>
+  </div>
+</body>
+</html>

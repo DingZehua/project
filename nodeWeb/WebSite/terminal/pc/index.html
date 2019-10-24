@@ -1,20 +1,729 @@
 ﻿<!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>欢迎页面</title>
-    </head>
-    <body>
-        <script src='js/myjs1.4.js'></script>
-        <link href="2.css" rel="stylesheet" type="text/css" />
-        <img src='/images/img02.jpg'/>
-        <% for(let user of users) {%>
-            <li>
-                <span>用户名</span>:<span><%= user.user_name%></span>
-                <span>email</span>:<span><%= user.email%></span>
-            </li>
-        <%}%> 
-        <script>
-        </script>
-    </body> 
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <script src='js/vue.js'></script>
+      <script src='js/myjs1.4.js'></script>
+      <title>my site</title>
+      <style>
+        .panle {
+          width : 500px;
+          height : 500px;
+          background-color:beige;
+        }
+        .wrap-line {
+          border:1px solid #DDD;
+        }
+        </style>
+  </head>
+  <body>
+<!--
+<div id='app'>
+  {{msg}}
+  <p> {{computedMsg}} </p>
+  <span>当前时间:{{now}}</span>
+</div>
+<script  type="text/javascript">
+  let vue = new Vue(
+    {
+      el : '#app',
+      data : {
+        msg : 'hello'
+      },
+      computed : {
+        computedMsg() {
+          this.msg += ':computed';
+          return this.msg.split('').reverse().join('');
+        },
+        now() {
+          return new Date();
+        }
+      }
+    }
+  );
+</script>
+<style>
+  .fontdRed {
+    color : red;
+  }
+  
+</style>
+<div id='act'>
+  <span v-bind:class='{ fontdRed : onRed }'>{{msg}}</span>
+  <input type='button' @click='onRed = !onRed' :value='!onRed ? "变成红色" : "变成白色"'/>
+</div>
+
+<script>
+
+let vm = new Vue({
+  el : '#act',
+  data : {
+    onRed : false,
+    msg : 'helloWorld'
+  }
+});
+
+</script>
+
+<div id='some'>
+  <h1 v-if='awesome'>
+    vue is awesome.
+  </h1>
+  <h1 v-else>
+    Oh on!
+  </h1>
+</div>
+
+<script>
+  let vm2 = new Vue({
+    el : '#some',
+    data : {
+      awesome : true
+    }
+  });
+</script>
+
+<div id='panle1' class="panle">
+  <template v-if='type === "A"'>
+    <h1>
+      title
+    </h1>
+    <p>paragraph1</p>
+    <p>paragraph2</p>
+  </template>
+  <template v-else-if='type === "B"'>
+    <h1>title2</h1>
+    <span style='color:chocolate;'>Now you don't</span>
+  </template>
+  <template v-else>
+      <h1>title3</h1>
+      Now you don't
+    </template>
+</div>
+
+<script>
+let vm3 = new Vue({
+  el :'#panle1',
+  data : {
+    type : 'A'
+  }
+});
+</script>
+
+<div id='login' class='panle wrap-line'>
+  <template v-if='loginType === "username"'>
+    <label>Username</label>
+    <input placeholder="Enter your user" key='username'/>
+  </template>
+  <template v-else>
+    <label>Email</label>
+    <input placeholder="Enter your email address" key='email'/> 
+  </template>
+  <button @click='toggleLoginType'>changeLoginType</button>
+</div>
+
+<script>
+  let vmLogin = new Vue({
+    el : '#login',
+    data : {
+      loginType : 'username'
+    },
+    methods : {
+      toggleLoginType() {
+        this.loginType  = this.loginType === 'email' ? 'username' : 'email';
+      }
+    }
+  });
+</script>
+
+<div class='panle wrap-line' id='logo'>
+  <img v-show='ok' src='./images/logo.png'>
+</div>
+
+<script>
+let logo = new Vue({
+  el : '#logo',
+  data : {
+    ok : true
+  }
+})
+</script>
+
+<ul id='example-1'>
+  <li v-for='item in items'>
+    {{item.messages}}
+  </li>
+</ul>
+
+<script>
+  let list1 = new Vue({
+    el : '#example-1',
+    data : {
+      items: [
+        {id : 1,messages : 'Foo'},
+        {id : 2,messages : 'Bar'}
+      ]
+    }
+  });
+</script>
+
+<ul id='example-2'>
+  <li v-for='(item,index) in items'>
+    {{parentMessage}} - {{index}} - {{item.messages}}
+  </li>
+</ul>
+
+<script>
+
+let list2 = new Vue({
+  el : '#example-2',
+  data : {
+    parentMessage : 'Parent',
+    items : [
+      {messages : 'Foo'},
+      {messages : 'Bar'}
+    ]
+  }
+});
+
+</script>
+
+
+<ul id='v-for-object'>
+  <li v-for='(value,name) in object'>
+    {{name}} : {{value}}
+  </li>
+</ul>
+
+<script>
+
+let objectValue = new Vue({
+  el : '#v-for-object',
+  data : {
+    object : {
+      title : 'How to do lists in Vue',
+      author : 'Jane Doe',
+      publishedAt : '2016-04-10'
+    }
+  }
+});
+
+</script>
+
+
+<div id='todo-list-example'>
+  <form v-on:submit.prevent='addNewTodo'>
+    <label for='new-todo'>Add a todo</label>
+    <input
+      v-model='newTodoText'
+      id='new-todo' 
+      placeholder="E.g. Feed the cat"
+    />
+    <input type='submit' value='add'/>
+  </form>
+  <ul>
+    <li 
+      is='todo-item'
+      v-for='(todo,index) in todos'
+      :key='todo.id' 
+      :title='todo.title' 
+      v-on:remove = 'todos.splice(index,1);'
+    >
+    </li>
+  </ul>
+</div>
+
+<script>
+
+Vue.component('todo-item',{
+  template : ` 
+    <li>
+      {{title}}
+      <button v-on:click = "$emit('remove');">Remove</button>\
+    </li>
+  `,
+  props : ['title']
+});
+
+new Vue({
+  el : '#todo-list-example',
+  data : {
+    newTodoText : '',
+    todos : [
+      {
+        id : 1,
+        title : 'Do th dishes'
+      },
+      {
+        id : 2,
+        title : 'Take out the trash'
+      },
+      {
+        id:3,
+        title : 'Mow the lawn'
+      }
+    ],
+    nextTodoId : 4
+  },
+  methods : {
+    addNewTodo() {
+      this.todos.push(
+        {
+          id : this.nextTodoId++,
+          title : this.newTodoText
+        }
+      );
+      this.newTodoText = '';
+    }
+  }
+})
+
+</script>
+
+
+<div id='example-1'>
+  <button v-on:click='counter += 1;'>Add 1</button>
+  <label>The button above has been clicked {{counter}} times.</label>
+</div>
+
+<script>
+
+let e = new Vue({
+  el : '#example-1',
+  data : {
+    counter : 1
+  }
+});
+</script>
+-->
+
+<div id='example-2'>
+  <button @click='greet'>Greet</button>
+</div>
+
+<script type='text/javascript'>
+
+let vm_event = new Vue({
+  el : '#example-2',
+  data : {
+    name : 'Hello Vue'
+  },
+  methods : {
+    greet(event) {
+      alert(this.name);
+      if(event) {
+        console.log(event.target.tagName);
+      }
+    } 
+  }
+})
+
+</script>
+
+<form id='f' action='/' method='Get'>
+
+<input type='submit' value='submit'/>
+
+</form>
+
+<script>
+
+let f = cm.g('#f');
+
+console.log();
+
+</script>
+
+<div id='t'>
+  <input v-model='messages' placeholder="edit me"/>
+  <p>Messages is : {{messages}}</p>
+</div>
+
+<script>
+
+let t = new Vue({
+  el : '#t',
+  data : {
+    messages : ''
+  }
+});
+
+</script>
+
+<div id='multiT'>
+  <span>Multipleline message is:</span>
+  <p style='white-space: pre-line;'>{{message}}</p>
+  <textarea v-model='message' placeholder="edit multiple line"></textarea>
+</div>
+
+<script>
+
+let mt = new Vue({
+  el : '#multiT',
+  data: {
+    message : ''
+  }
+});
+
+</script>
+
+<div id='checkbox'>
+  <input type='checkbox' v-model='checkbox' value='selectd'/>
+  <span>{{checkbox}}</span>
+</div>
+
+<script>
+
+let checkb = new Vue({
+  el : '#checkbox',
+  data : {
+    checkbox : false
+  }
+});
+
+</script>
+
+<div id='checkgroup'>
+  <input type='checkbox' id='jack' value='Jack' v-model='checkedNames'/>
+  <label for='jack'>Jack</label>
+  <input type='checkbox' id='john' value='John' v-model='checkedNames'/>
+  <label for='john'>John</label>
+  <input type='checkbox' id='mike' value='Mike' v-model='checkedNames'/>
+  <label for='mike'>Mike</label>
+  <p>checkedNames : {{checkedNames}}</p>
+</div>
+
+<script>
+
+let checkgroup = new Vue({
+  el : '#checkgroup',
+  data : {
+    checkedNames : []
+  }
+});
+
+</script>
+
+<div id='pickBox'>
+  <input type='radio' id='one' value='one' v-model='picked'/>
+  <label for='one'>One</label>
+  <br/>
+  <input type="radio" id='two' value='two' v-model='picked'/>
+  <label for='two'>Two</label>
+
+  <p>picked : {{picked}} </p>
+</div>
+
+<script>
+
+let pick = new Vue({
+  el : '#pickBox',
+  data : {
+    picked : ''
+  }
+});
+
+</script>
+
+<div id='example-3'>
+  <select v-model='selected'>
+    <option value='' disabled>请选择...</option>
+    <option>A</option>
+    <option>B</option>
+    <option>C</option>
+  </select>
+  <span>selected : {{selected}}</span>
+</div>
+<script>
+
+let example3 = new Vue({
+  el : '#example-3',
+  data : {
+    selected : ''
+  }
+});
+
+</script>
+
+<div id='example-4'>
+  <select multiple v-model='selectedNames'>
+    <option disabled value=''>请选用</option>
+    <option>A</option>
+    <option>B</option>
+    <option>C</option>
+    <option>D</option>
+  </select>
+  <span>selectedNames: {{selectedNames}}</span>
+</div>
+
+<script>
+
+let example = new Vue({
+  el : '#example-4',
+  data : {
+    selectedNames : []
+  }
+});
+
+</script>
+
+<div id='example-5'>
+  <select v-model='selected'>
+    <option value='' disabled>请选择...</option>
+    <option v-for='option in options' v-bind:value='option.value'> {{option + ''}} </option>
+  </select>
+  <span>selected : {{selected}}</span>
+</div>
+
+<script>
+
+let example5 = new Vue({
+  el : '#example-5',
+  data : {
+    selected : '',
+    options : [
+      { text : 'one' , value : 'A',toString() { return this.text.toLocaleUpperCase(); }},
+      { text : 'two' , value : 'B' ,toString() { return this.text.toLocaleLowerCase(); }},
+      { text : 'three', value : 'C',toString() { return this.text.toLocaleLowerCase(); }}
+    ]
+  }
+});
+
+</script>
+
+<div id='example-6'>
+  <input type='checkbox' true-value='yes' false-value='no' v-model='checked'/>
+  <label>checked : {{checked}}</label>
+</div>
+
+<script>
+
+let example6 = new Vue({
+  el : '#example-6',
+  data : {
+    checked : ''
+  }
+})
+
+</script>
+
+<div id='selectObj'>
+  <input type='checkbox' v-bind:value='{name : "one"}' v-model='objs'/>
+  <input type='checkbox' v-bind:value='{name : "two"}' v-model='objs'/>
+  <input type='checkbox' v-bind:value='{name : "three"}' v-model='objs'/>
+  <input type='checkbox' v-bind:value='{name : "four"}' v-model='objs'/>
+  <button @click='objContent = JSON.stringify(objs);'>show Obj</button>
+  <label>objs : {{objContent}} </label>
+</div>
+
+<script>
+
+let pickObj = new Vue({
+  el : '#selectObj',
+  data : {
+    objs : [],
+    objContent : '',
+    arr : ['1','2','3']
+  }
+});
+
+let o = {
+  counter : 0
+}
+
+Vue.component('btn',{
+  data () {
+    return o;
+  },
+  template : `
+    <button @click='counter++'>clicked me {{ counter }} times</button>
+    `
+});
+
+</script>
+<!--
+<div id='component-dome'>
+  <btn></btn>
+  <btn></btn>
+  <btn></btn>
+</div>
+
+<script>
+
+new Vue({
+  el : '#component-dome',
+  data : {
+  }
+});
+
+Vue.component('blog-post',{
+  data(){
+    return {
+      title : 'Vue'
+    }
+  },
+  props : ['title'],
+  template : 
+            `<h3> {{ title }} </h3>`
+});
+
+</script>
+<div id='blog'>
+  <blog-post v-for='post in posts'
+             v-bind:key='post.id'
+             v-bind:title='post.title' >
+  </blog-post>
+</div>
+
+<script>
+
+new Vue({
+  el : '#blog',
+  data : {
+    posts : [
+      { id : 1, title : 'My journey with Vue' },
+      { id : 2, title : 'Blogging with Vue'},
+      { id : 3, title : 'Why Vue is so fun'},
+    ]
+  }
+});
+</script>
+-->
+
+<script>
+
+Vue.component('blog-post', {
+  template : 
+  ` <div class="blog-post"> 
+      <h3> {{ post.title }} </h3>
+      <div v-html='post.content'> </div>
+      <span> {{ post.publishedAt }} </span>
+      <div> {{post.comments}} </div>
+      <button @click='$emit("enlarge-text",.1)'>large text</button>
+    </div> `,
+    props : [
+      'post'
+    ]
+});
+
+</script>
+
+<div id='blog'>
+
+<blog-post
+  v-for='post in posts'
+  :key = 'post.id' 
+  v-bind:post='post' 
+  :style = '{fontSize : fontSize + "em"}'
+  v-on:enlarge-text='enlargeText($event);'
+></blog-post>
+
+</div>
+
+<script>
+
+new Vue({
+  el : '#blog',
+  data : {
+    fontSize : 1,
+    posts : [
+      { id : 1, title : 'now title', content : 'This is connet', publishedAt : 'public',comments : 'GOGO' },
+      { id : 2, title : 'now title', content : 'This is connet', publishedAt : 'public',comments : 'GOGO' },
+      { id : 3, title : 'now title', content : 'This is connet', publishedAt : 'public',comments : 'GOGO' },
+      { id : 4, title : 'now title', content : 'This is connet', publishedAt : 'public',comments : 'GOGO' },
+    ]
+  },
+  methods : {
+    enlargeText(addSize) {
+      console.log(addSize);
+      return this.fontSize += addSize; 
+    }
+  }
+});
+
+Vue.component('model-dome',{
+  template  : `
+    <input :value='text' @input='$emit("input",$event.target.value)'/>
+  `,
+  props : [
+    'text'
+  ]
+})
+
+</script>
+<div id='model'>
+  <model-dome :text='msg' v-on:input='updateMsg($event)'></model-dome>
+  <span>messages:{{msg}}</span>
+</div>
+<script>
+'use strict';
+new Vue({
+  el : '#model',
+  data : {
+    msg : 'HelloWorld'
+  },
+  methods : {
+    updateMsg(str) {
+      console.log('updateMsg');
+      this.msg = str;
+    }
+  }
+});
+
+Vue.component('da',{
+  template : '<input placeholder="This component D"/>'
+});
+Vue.component('ea',{
+  template : '<input placeholder="This component F"/>'
+});
+Vue.component('ca',{
+  template : '<input placeholder="This component C"/>'
+});
+</script>
+
+<div id='changeComponent'>
+  <component v-bind:is='type'> </component>
+  <input type='button' @click='type = "da"' value='toggle da'/>
+  <input type='button' @click='type = "ea"' value='toggle ea'/>
+  <input type='button' @click='type = "ca"' value='toggle ca'/>
+</div>
+
+<script>
+
+new Vue({
+  el : '#changeComponent',
+  data : {
+    type : 'da'
+  }
+});
+
+Vue.component('alert-box', {
+  template : `
+    <div style="border:1px solid #f09898;background:#f3beb8;">
+      Error!
+      <slot name='msg'></slot>
+    </div>
+  `
+});
+
+</script>
+
+<div id='box'>
+  <alert-box>
+    <span slot='msg'>Something bad happened.</span>
+  </alert-box>
+</div>
+
+<script>
+
+new Vue({
+  el : '#box', 
+  data : {
+
+  }
+})
+
+</script>
+
+</body>
 </html>

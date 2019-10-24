@@ -1,0 +1,65 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<script src="js/base.js"></script>
+<script src="js/myjs1.4.js"></script>
+<script src='js/vue.js'></script>
+<script src="js/vue-router.js"></script>
+<script>
+  const col = collections;
+  const base = col.base;
+  const methods = base.method;
+  //Vue.config.productionTip = false;
+  Vue.use(VueRouter);
+</script>
+</head>
+<body>
+
+<script>
+
+const Home = { template : `<div> This is Home </div>` };
+const Foo = { template : `<div> This is Foo </div>` };
+const Bar =  { template : `<div> This is Bar {{ $route.params.id }}<button @click="show">显示</button></div> `,
+               methods : {
+                 show() {
+                   console.log(this.$route);
+                 }
+               }};
+
+const router = new VueRouter({
+  routes : [
+    { 
+      path : '/',name : 'home',components: {
+        default : Home,foo : Foo 
+      }
+    },
+    {
+      path : '/user/bar',
+      components : {
+        default : Bar
+      }
+    }
+  ]
+});
+
+window.onload = () => {
+  new Vue({
+    router, 
+    el : '#app'
+  });
+}
+
+</script>
+
+<div id='app'>
+  <h1>Named Routed</h1>
+  <p>Current route name : {{ $route.name }}</p>
+  <router-link to="/user/bar"> Go to Bar </router-link>
+  <router-view></router-view>
+  <router-view name="foo"></router-view>
+  <router-view name="bar"></router-view>
+</div>
+
+</body>
+</html>

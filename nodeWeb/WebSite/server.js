@@ -5,6 +5,7 @@ let log = console.log.bind(console.log);
 let {[Symbol.for('server')] : serverConfig,mysql : mysqlConfig} = config;
 let fs = require('fs');
 
+
 // 创建服务器
 let server = http.createServer();
 server.on('request',main);
@@ -22,9 +23,14 @@ const sessionClearTake = Session.clearExpired(sessionSet);
 // token
 const tokens = require('./includes/lib_base').createToken(config.token_number,config.token_expired);
 
+// 捕捉全局错误.
+
+process.on('uncaughtException',(err) => {
+  console.log('global Error:',err);
+})
+
 // 得到请求。
 function main(req,res) {
-
   let {...GLOBALS} = require('./constant').time;
   GLOBALS.PHYSICAL_ROOT = process.cwd();          // 物理路径
   GLOBALS.curTIME = new Date().getTime();
@@ -42,7 +48,7 @@ function main(req,res) {
       sessionSet,
       tokens
     });
-    
+
     res.writeHead(status,header);
     if(data !== null) {
       res.write(data);
@@ -54,7 +60,7 @@ function main(req,res) {
     
   }
   response(req,res,sql,GLOBALS,config,sessionSet,tokens).catch((err) => {
-    log(err);
+    log('error:',err);
     res.writeHead(404);
     res.end('404');
   });

@@ -1,0 +1,378 @@
+<!DOCTYPE html>       <!-- 这是一个 HTML5 文件 -->
+<html>                <!-- 根节点 -->
+<head>                <!-- 标题、脚本和样式都放在这里 -->
+  <meta http-quive='content-type' charset='utf-8'>
+<script src="js/base.js"></script>
+<script src="js/myjs1.4.js"></script>
+<script src='js/vue.js'></script>
+<script>
+  const col = collections;
+  const base = col.base;
+  const methods = base.method;
+  Vue.config.productionTip = false;
+</script>
+<style>                           
+</style>
+</head>
+<body>
+
+<script>
+
+Vue.component('base-input')
+
+</script>
+
+<!--
+<script> 
+
+Vue.component('user-area',{
+  data() {
+    return {
+      person : {
+        userName : 'ZhangSan',
+        sex : 1
+      },
+      attr : {
+        price : 50
+      }
+    }
+  },
+  template : `
+    <div>
+      <slot name="person" v-bind:user="person">
+        {{attr.price}}
+      </slot>
+    </div>
+  `
+});
+
+window.onload = () => {
+  !(function() {
+    let vm = new Vue({
+      el : `#userInfo`
+    }) 
+  }());
+}
+
+</script>
+
+<div id="userInfo">
+  <user-area v-slot:person="slotPerson">
+    {{slotPerson.user.userName}}
+  </user-area>
+</div>
+
+
+<script>
+
+Vue.component('blog-post',{
+  template : `
+  <div>
+    <h3> {{ title }} </h3>
+    <span> likes: {{ likes}} </span>
+    <p>isPublished : {{isPublished}} </p>
+    <p>initialCounter: {{initialCounter}}</p>
+    <p>size : {{size}} </p>
+    <p>propE : {{propE}} </p>
+  </div>
+    `,
+  props : {
+    title : String,
+    likes : Number,
+    isPublished : Boolean,
+    initialCounter : Number,
+    propE : {
+      type  : String,
+      validator(value) {
+        return value.indexOf('hello') > -1;
+      },
+    },
+    //value : String
+  },
+  data() {
+    return {
+      //initialCounter : 20
+    }
+  },
+  computed : {
+    size() {
+      return this.likes + parseFloat(this.initialCounter);
+    }
+  },
+  //inheritAttrs : false
+});
+
+</script>
+
+<div id='blog'>
+  <blog-post :value='posts.value' :prop-e='"helloWorld"' :initial-counter='50' v-bind:title='posts.title' v-bind:likes='posts.likes' v-bind:isPublished='posts.isPublished'></blog-post>
+</div>
+
+<script>
+
+new Vue({
+  el : '#blog',
+  data : {
+    posts : {
+      title : 'This is Vue page.',
+      likes : 20,
+      isPublished : true,
+      value : 'bb'
+    }
+  }
+});
+
+Vue.component('base-checkbox', {
+  model : {
+    prop : 'checkout',
+    event : 'change'
+  },
+  props : {
+    'checkout' : Boolean
+  },
+  template : `
+    <input type="checkbox" :checked="checkout" v-on="checkboxListeners"/>
+  `,
+  computed : {
+    checkboxListeners() {
+      const vm = this;
+      return {...this.$listeners,change(event) { vm.$emit('change',event.target.checked); }};
+    }
+  }
+});
+
+</script>
+
+<div id="example">
+  <base-checkbox v-model="pick"></base-checkbox>
+  <span>{{pick}}</span>
+</div>
+
+<script>
+
+new Vue({
+  el : '#example',
+  data : {
+    pick : false
+  },
+  methods : {
+  }
+});
+
+Vue.component('base-input',{
+  template : `
+    <label>Please You Name : <input v-on:focus="$emit('focus',$event.target.value);"/></label>
+  `,
+  methods : {
+    show() {
+      alert('child node');
+    }
+  }
+});
+
+</script>
+
+<div id='showMsg'>
+  <base-input v-on:focus="show()"></base-input>
+</div>
+
+<script>
+
+new Vue({
+  el : '#showMsg',
+  methods : {
+    show() {
+      console.log('parent Node');
+    }
+  }
+})
+
+</script>
+
+
+<script>
+
+Vue.component('base-input',{
+  template : `
+    <label>
+      {{label}}
+      <input
+        v-bind="$attrs"
+        v-bind:value="value"
+      />
+      <button v-on="inputListener"> 修改 </button>
+    </label>
+  `,
+  inheritAttrs : false,
+  computed : {
+    inputListener() {
+      return {
+        ...this.$listeners,
+        input : (event) => {
+          this.$emit('input',event.target.value);
+        }
+      }
+    }
+  },
+  props : [
+    'label','value','changeParent'
+  ]
+});
+
+</script>
+
+<div id='baseInput'>
+  <p>Title : {{msg}}</p>
+  <base-input ref="pBase" :label='label'  v-model="msg" @click="logRef();"></base-input>
+</div>
+
+<script>
+
+let vm = new Vue({
+  el : '#baseInput',
+  data : {
+    msg : 'Hello',
+    label : 'Title',
+    
+  },
+  methods : {
+    logRef() {
+      console.log(this.$ref);
+    }
+  }
+})
+
+</script>
+
+-->
+<style>
+
+.wrap{
+  padding : 10px;
+  margin : 10px;
+  border: 1px solid grey;
+  overflow: hidden;
+}
+
+.wrap button {
+  float : left;
+} 
+
+.btn {
+  display: block;
+  float: left;
+  border:1px solid darkgrey;
+  border-radius : 3px;
+  margin : 1px;
+}
+
+.icon {
+  width: 22px;
+  height:22px;
+  float: left;
+}
+
+.btn button {
+  border : 0px;
+  height:22px;
+  background-color: white;
+  float:left;
+}
+
+</style>
+
+<script>
+
+Vue.component('base-btn', {
+  template : `
+    <span class="btn" @click="$emit('click',param)"><img class="icon" :src="url"/><button>{{text}}</button></span>
+  `,
+  props : {
+    text : {
+      type : String,
+      default : 'submit'
+    },
+    url : {
+      type : String,
+      default : 'http://qzonestyle.gtimg.cn/aoi/sola/20170214175951_TA6qW1X7ob.png'
+    },
+    param : null
+  }
+});
+
+Vue.component('son',{
+  template : `
+    <div class="wrap">
+      <p>我是子组件，我所拥有的数据</p>
+      <p>智力:{{wisdom}}</p>
+      <p>魔法:{{magic}}</p>
+      <p>攻击:{{attack}}</p>
+      <p>防御:{{defense}}</p>
+      <base-btn v-for='(item,id) in items' :param="item.param" :text=item.text @click="increment" :key='id'></base-btn>
+      <br/>
+      <button @click="modifyData">修改</button>
+    </div>
+  `,
+  props : [
+    'wisdom','magic','attack','defense','analysisData'
+  ],
+  methods : {
+    increment(valName) {
+      //const newData = JSON.parse(JSON.stringify(this.analysisData));
+      //newData[valName] += 1;
+      this.$emit(`update:${valName}`, this[valName] + 1 );
+    },
+    modifyData() {
+    }
+  },
+  data() {
+    return {
+      items : [
+        { param : 'wisdom', text : '智力' },
+        { param : 'magic', text : '魔法' },
+        { param : 'attack', text : '攻击' },
+        { param : 'defense', text : '防御' },
+      ]
+    }
+  },
+});
+
+const module = {};
+
+window.onload = () => {
+  module.vm = new Vue({
+      el : '#father',
+      data : {
+        analysisData : {
+          wisdom : 90,
+          magic : 160,
+          attack : 100,
+          defense : 80
+        }
+      }
+    });
+
+};
+
+
+</script>
+
+<div id="father">
+  <div class="wrap">
+    我是父组件，我接收到了
+    <son 
+      :wisdom.sync="analysisData.wisdom"
+      :magic.sync="analysisData.magic"
+      :attack.sync="analysisData.attack"
+      :defense.sync="analysisData.defense"
+      :analysis-data="analysisData"
+    >This is Parent Component</son>
+    <p>智力: {{analysisData.wisdom}}</p>
+    <p>魔法: {{analysisData.magic}}</p>
+    <p>攻击: {{analysisData.attack}}</p>
+    <p>防御: {{analysisData.defense}}</p>
+  </div>
+</div>
+
+</body>
+</html>

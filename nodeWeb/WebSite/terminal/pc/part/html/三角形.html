@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  
+  .sanjiaoxing { /* 三角形 */
+    border-right-width : 20px;
+    border-right-style : solid;
+    border-right-color : red;
+    border-top-width : 20px;
+    border-top-style : solid;
+    border-top-color : transparent;
+    border-bottom-width : 20px;
+    border-bottom-style : solid;
+    border-bottom-color : transparent;
+    border-left-width : 20px;
+    border-left-style : solid;
+    border-left-color : transparent;
+    width:0px;
+    height:0px;
+    margin-left: -20px;
+    font-family : 宋体;
+    font-style : italic;
+    font-size : 18px;
+    font-weight : normal;
+    color : blue;
+  }
+
+  </style>
+  <script>
+  
+  document.addEventListener('DOMContentLoaded',(e) => { console.log('DOM Loaded...') })
+
+  </script>
+</head>
+<body>
+  <div class="sanjiaoxing">
+</div>
+<div class="sanjiaoxing" v-for="re"></div>
+</body>
+</html>

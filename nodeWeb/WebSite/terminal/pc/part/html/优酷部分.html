@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * { margin:0;padding:0; }
+    img {display:block;}
+    ul { list-style:none; }
+    a { text-decoration:none; color:black; }
+    h1,h2,h3 { font-size:16px; }
+
+    .l {float: left;}
+    .r {float:right;}
+    .clear:after { content:'';display:block;font-size:0px;clear:both; }
+
+    #main { width:80%;margin:0 auto;overflow: hidden;}
+    #main .title { font-size:24px;height:52px;line-height: 52px;color:#333333;padding-left:4px;}
+    /* #main ul li { width:237px;height:132px; } */
+    #main ul li {float:left;padding:0px 4px;box-sizing:border-box;width:16.6%;}
+    #main ul li:after { content:'';display:block;font-size:0px;clear:both; }
+
+    .container { position:relative; }
+    
+    .container img,.container p,.container span { width:100%; }
+
+    .container p,.container span { overflow: hidden; }
+    .container p { font-size:12px;font-weight:bold;}
+    .container span { font-size :11px;color:#999999;}
+
+    .container a:hover img { box-shadow:0px 0px 10px #999; }
+    .container a:hover p { color:#14a7ff; }
+
+    .container .mark { position: absolute;font-size:12px;height:16px;line-height:16px;background:#f92253;padding:0 5px; top:10px;right:10px;}
+
+    .word-line { width:100px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  </style>
+</head>
+<body>
+  <div id="main">
+    <div class="title"><h2>正在热播</h2></div>
+    <div class="l clear">
+      <ul>
+        <li>
+          <div class="container">
+            <a href="#">
+              <div class="mark">Lorem.</div>
+              <img src="./images/img-1.jpg" alt="">
+              <p>Lorem.</p>
+              <span>Lorem.</span>
+            </a>
+          </div>
+        </li>
+        <li>
+          <div class="container">
+            <a href="#">
+              <div class="mark">Lorem.</div>
+              <img src="./images/img-2.jpg" alt="">
+              <p>Modi?</p>
+              <span>Id!</span>
+            </a>
+          </div>
+        </li>
+        <li>
+          <div class="container">
+            <a href="#">
+              <div class="mark">Lorem.</div>
+              <img src="./images/img-3.jpg" alt="">
+              <p>Eum.</p>
+              <span>Ducimus.</span>
+            </a>
+          </div>
+        </li>
+        <li>
+          <div class="container">
+            <a href="#">
+              <div class="mark">Lorem.</div>
+              <img src="./images/img-4.jpg" alt="">
+              <p>A.</p>
+              <span>Perferendis.</span>
+            </a>
+          </div>
+        </li>
+        <li>
+          <div class="container">
+            <a href="#">
+              <div class="mark">Lorem.</div>
+              <img src="./images/img-5.jpg" alt="">
+              <p>Repudiandae.</p>
+              <span>In.</span>
+            </a>
+          </div>
+        </li>
+        <li>
+          <div class="container">
+            <a href="#">
+              <div class="mark">Lorem.</div>
+              <img src="./images/img-6.jpg" alt="">
+              <p>At?</p>
+              <span>Ab?</span>
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="word-line">Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt, provident libero. In quis recusandae suscipit vel quidem ipsum, mollitia odit pariatur eos, deserunt harum voluptate. Repellendus officiis error libero itaque?</div>
+</body>
+</html>
