@@ -21,7 +21,6 @@ let router = (function(args) {
     // SESSION COOKIES GET POST
     const COOKIES = lib_base.fetchCookies(req);
     const GET = lib_base.fetchGETData(urlObj.query);
-<<<<<<< HEAD
     const fetchPOSTData = lib_base.fetchPOSTDataCurring(req,contentType,boundary);
     const readPage = lib_base.readPage;
     const fileStat = lib_base.fileStat;
@@ -35,12 +34,6 @@ let router = (function(args) {
 
     const SESSION = lib_base.buildSession(SESS_ID,sessionSet,GLOBALS.curTIME,config.session_expired);
 
-=======
-    let fetchPOSTData = lib_base.fetchPOSTDataCurring(req,contentType,boundary);
-    let readPage = lib_base.readPage;
-    let fileStat = lib_base.fileStat;
-  
->>>>>>> pro/master
     // 取得访问方法和accept.
     if(req.method === 'GET' || req.method === 'POST') {
       if(!contentType) {
@@ -119,14 +112,9 @@ let router = (function(args) {
             SESSION,
             token : tokens(SESS_ID,GET.token,urlObj.pathname,GET,GLOBALS.curTIME),
         });
-<<<<<<< HEAD
         // 处理返回null和undefined的情况.
         data = data === void 0 || data === null ? '' : data.toString();
       } catch(e) {
-=======
-      } catch(e) {  
-        // 处理非程序文件
->>>>>>> pro/master
         if(e instanceof Error && 
           e.message.search('Cannot find module') > -1) {
           //TODO:读取文件
