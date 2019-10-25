@@ -14,4 +14,3 @@ let index = (function(args){
 });
 
 (typeof module ==='object' && (module.exports = index)) || '';
-asdfsadf
