@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  
+    #parent { 
+      width:300px;height:300px;border:1px solid black;display: flex;
+      /* align-items:flex-end; */flex-wrap: wrap;/* align-content:flex-end; */
+      /* justify-content: center; */
+      /* justify-content: space-evenly; */
+      
+    }
+    .box { width: 100px;height:50px;background:red;color:white;
+      order:2;
+    }
+    #box6 {
+      /* align-self:flex-start; */
+      order:1;
+    }
+  </style>
+  <script>
+  /* align-items:副轴上单项的对齐方式(单行内) */
+  // params : stretct、flex-strat、flex-end、center
+  /* align-content:副轴上整行的对齐方式(所有行间距)*/
+  // params : stretch、flex-start、flex-end、center、space-between、space-around、space-evenly
+  /* justify-item:主轴上单项的对齐方式(忽略margin) */
+  // params : stretct、flex-strat、flex-end、center
+  /* justify-content:主轴上整行的对齐方式 */
+  // params : stretch、flex-start、flex-end、center、space-between、space-around、space-evenly
+  /* flex-wrap:主轴上的换行方式 */
+  // params : nowrap、wrap、wrap-reverse
+  /* flex-direction:指定主轴，设定主轴上起点，并且会影响到子元素的排序 */
+  // params : row、row-reverse、column、column-reverse
+  /* flex-flow:flex-wrap和flex-direction的复合选项 */
+  // params : {flex-direction、flex-direction}
+  /* 应用在子元素上. */
+  // 行内，行间距.
+  // order : 调节子元素的排序顺序，顺序为升序。
+  // params : {number}
+  // flex-grow : 暂用未使用的空白区域，当所有的值加起来小等于1时用百分比，大于一是用分数制(x/y)。
+  // params : {number}
+  // flex-grow : 当主轴上空间不够时，缩小比例的因子（默认为1），使用的是分数制(x/y)值越大缩小的越大.
+  // params : {number}
+  // align-self : 设置单个项在副轴上的对齐方式.
+  // params : {align-items}
+  </script>
+</head>
+<body>
+  <div id="parent">
+    <div class="box">1 Lorem ipsum dolor sit amet. Lorem ipsum dolor sit.</div>
+    <div class="box">2 Lorem ipsum dolor sit.</div>
+    <div class="box">3 Lorem, ipsum dolor.</div>
+    <div class="box">4</div>
+    <div class="box">5</div>
+    <!-- <div class="box" id="box6">6</div> -->
+    <div class="box">7</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  
+    .box { width:200px;height:50px;position: relative;}
+    .large-dot { border:12.5px solid blue;border-radius:50%;position: absolute;animation:1s line-loading infinite}
+    .large-dot:nth-child(1) { left:0;     animation-delay:-0.8s ;}
+    .large-dot:nth-child(2) { left:25px;  animation-delay:-0.7s ;}
+    .large-dot:nth-child(3) { left:50px;  animation-delay:-0.6s ;}
+    .large-dot:nth-child(4) { left:75px;  animation-delay:-0.5s ;}
+    .large-dot:nth-child(5) { left:100px; animation-delay:-0.4s ;}
+    .large-dot:nth-child(6) { left:125px; animation-delay:-0.3s ;}
+    .large-dot:nth-child(7) { left:150px; animation-delay:-0.2s ;}
+    .large-dot:nth-child(8) { left:175px; animation-delay:-0.1s ;}
+
+    @keyframes line-loading {
+      0% { transform: scale(1); }
+      50% { transform: scale(2); }
+      100% { transform: scale(1); }
+    }
+
+    
+    .anim-box {
+      width:50px;
+      height:1px;
+      border:1px solid black;
+      position:absolute;
+      animation:10s _scale 2s infinite;
+      animation-fill-mode : forwards;
+      animation-direction: alternate;
+    }
+
+    .anim-box:nth-child(2) {
+      top:51px;
+    }
+
+    @keyframes _scale{
+      from { height:1px;background:red;}
+      to { height: 50px; } 
+    }
+
+    
+
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="large-dot"></div>
+    <div class="large-dot"></div>
+    <div class="large-dot"></div>
+    <div class="large-dot"></div>
+    <div class="large-dot"></div>
+    <div class="large-dot"></div>
+    <div class="large-dot"></div>
+    <div class="large-dot"></div>
+  </div>
+  <div class="box">
+    <div class="anim-box"></div>
+    <div class="anim-box"></div>
+  </div>
+</body>
+</html>

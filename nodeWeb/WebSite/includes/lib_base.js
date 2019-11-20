@@ -61,16 +61,10 @@ let lib_base = (function() {
       }).then(() => {
         if(!getFile) return queryString.parse(post);
           else {
-<<<<<<< HEAD
-            // 处理post表单提交
-            if(contentType === config.formSubmitType.mul) {
-              return dataSplit(post,boundary);
-=======
             // 通过ajax访问时可以没有contentType的.
             if(contentType) {
               let data = dataSplit(post,boundary);
               ({post,files} = data);
->>>>>>> pro/master
             }
             return {POST:queryString.parse(post),files};
           }

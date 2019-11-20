@@ -1,4 +1,5 @@
 const deepDelete = require('./includes/lib_base').deepDelete;
+
 class Session {
   // 生存时间默认15分钟。
   constructor(expired) {

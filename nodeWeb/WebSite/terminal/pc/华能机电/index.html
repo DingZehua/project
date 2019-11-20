@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>华能机电</title>
+  <link rel="stylesheet" href="./iconfont/iconfont.css">
+  <link rel="stylesheet" href="./css/common.css">
+  <link rel="stylesheet" href="./css/page.css">
+  <script src="./js/vue.js"></script>
+  <script src="./js/vue-router.js"></script>
+  <script src="./js/util.js"></script>
+  <script>
+  window.onload = () => {
+
+    Vue.component('my-banner',{
+      data : function() {
+        return {
+          imgBase : './images/',
+          items : [
+            {
+              active : true,
+              href : '#',
+              file_name : 'banner-1.jpg',
+              name : 'follow'
+            },
+            {
+              active : false,
+              href : '#',
+              file_name : 'banner-1.jpg',
+              name : 'follow'
+            },
+            {
+              active : false,
+              href : '#',
+              file_name : 'banner-1.jpg',
+              name : 'follow'
+            },
+          ]
+        }
+      },
+      template : `
+      <div class="banner">
+      <ul>
+        <li v-for="(item,i) in items" v-bind:key="i" v-bind:class="{active : item.active}">
+          <a :href="item.href"><img :src="imgBase + item.file_name"/></a>
+        </li>
+      </ul>
+      <ol>
+        <li v-for="(item,i) in items" v-bind:key="i" :class="{active : item.active}"><a href="#"></a></li>
+      </ol>
+    </div>
+      `
+    });
+
+    Vue.component('my-nav',{
+      data : function() {
+        return {
+          items : [
+            {
+              iconfont : 'icon-ziyuan',
+              text : 'EN'
+            },
+            {
+              iconfont : 'icon-jianzhu',
+              text :  '关于我们'
+            },
+            {
+              iconfont : 'icon-xinwen',
+              text :  '应用领域'
+            },
+            {
+              iconfont : 'icon-jiangpaixunzhang-wuxing-hui',
+              text :  '产品展示'
+            },
+            {
+              iconfont : 'icon-anquan',
+              text : '人才招聘'
+            },
+            {
+              iconfont : 'icon-jianzhu',
+              text : '联系我们'
+            },
+          ]
+        }
+      },
+      template : `
+      <div class="nav">
+        <ul>
+          <li v-for="(item,i) in items" :key="item.i"><i class="iconfont" :class="[item.iconfont]"></i><p>{{item.text}}</p></li>
+        </ul>
+      </div>
+      `
+    });
+
+    Vue.component('box', {
+      data() {
+        return {
+
+        };
+      },
+      template : `
+        <div class="box" :class="boxType">
+          <h2>{{title}}</h2>
+          <slot name="default"></slot>
+          <slot name='btn'>
+            <div class="btn-box">
+              <button>查看更多</button>
+            </div>
+          </slot>
+        </div>
+      `,
+      props : {
+        title : {
+          type : String,
+          default : '关于我们'
+        },
+        boxType : {
+          type : String,
+          default : 'about-us'
+        }
+      }
+    });
+
+    Vue.component('box-input-list', {
+      data() {
+        return {};
+      },
+      template :`
+        <box :title="title" :box-type="boxType">
+          <template #default>
+            <ul>
+              <li v-for="(item,i) in items">
+                <base-input v-bind=item.attrs v-if="!item.isComponent"></base-input>
+                <component v-else :is="item.component" v-bind="item.attrs"></component>
+              </li>
+            </ul>
+          </template>
+          <template #btn>
+            <div class="btn-box"><button class="btn-full">提交</button></div>
+          </template>
+        </box>
+      `,
+      props : {
+        title : {
+          default : null
+        },
+        boxType : {
+          default : null
+        },
+        items : {
+          type : Array
+        }
+      }
+    });
+
+    Vue.component('verifiction-code',{
+      data() {
+        return {};
+      },
+      inheritAttrs : false,
+      template :`
+        <div>
+          <base-input v-bind="$attrs"></base-input>
+          <span class="code-img"></span>
+        </div>
+      `
+    });
+
+    Vue.component('base-input',{ template : `<input :type="type"></input>` , props : { type:{ default : 'text' } } })
+    Vue.component('base-textarea',{template : `<textarea></textarea>`})
+    Vue.component('box-list',{
+      data : function() {
+        return {
+          isShow : false
+        }
+      },
+      template : `
+        <box :title="title" :box-type="boxType">
+          <template slot:default>
+            <ul>
+              <li v-for="(item,i) in items" :is="component" :item="item" :img-base="imgBase" :key="item.i"></li>
+            </ul>
+          </template>
+        </box>
+      `,
+      props : {
+        title : {
+          default : null
+        },
+        boxType : {
+          default : null
+        },
+        component : {
+          default : null
+        },
+        items : {
+          type : Array
+        },
+        imgBase : {
+          type : String,
+          default : ''
+        }
+      }
+    });
+
+    
+
+    Vue.component('cont-1',{
+      data() {
+        return {};
+      },
+      template :`
+        <li>
+          <img :src="imgBase + item.file_name"/>
+          <p> {{item.text}} </p>
+        </li>
+      `,
+      props : {
+        item : {
+          type : Object
+        },
+        imgBase : {
+          type : String
+        }
+      }
+    });
+    Vue.component('cont-2',{
+      data() {
+        return {};
+      },
+      template :`
+        <li>
+          <div class="photo"><img :src="imgBase + item.file_name"></div>
+          <p>{{item.text}}</p>
+        </li>
+      `,
+      props : {
+        item : {
+          type : Object
+        },
+        imgBase : {
+          default : ''
+        }
+      }
+    });
+    Vue.component('cont-3', {
+      data() {
+        return {};
+      },
+      template : `
+        <li><a href="#"><span></span>{{item.text}}</a></li>
+      `,
+      props :[
+        'item'
+      ]
+    });
+
+    Vue.component('bartab', {
+      template : `
+        <div class="bartab">
+          <div v-for="(item,i) in items" :key="item.i">
+            <i class="iconfont" :class="[item.iconfont,item.active ? 'active' : '']"></i>
+            <p>{{item.text}}</p>
+          </div>
+        </div>
+      `,
+      props : [
+        'items'
+      ]
+    })
+
+    new Vue({
+      el : '#app',
+      data : {
+        name_en : 'Wonon',
+        name_cn : '华能机电',
+        products : [
+          {
+            file_name : 'img-1.jpg',
+            text : '铝合金碳钢混合检修平台(配备门禁五防系统)'
+          },
+          {
+            file_name : 'img-1.jpg',
+            text : '淋雨试验台'
+          },
+          {
+            file_name : 'img-1.jpg',
+            text : '移动式架车机'
+          },
+          {
+            file_name : 'img-1.jpg',
+            text : '空气弹簧试验台'
+          },
+          {
+            file_name : 'img-1.jpg',
+            text : '门驱拆装升降台'
+          },
+          {
+            file_name : 'img-1.jpg',
+            text : '转向架更换设备'
+          }
+        ],
+        application_field : {
+          title : '应用领域',
+          boxType : 'appliaction-field',
+          component : 'cont-2',
+          imgBase : './images/',
+          items : [
+            {
+              file_name : 'img-1.jpg',
+              text : '东莞地铁2号线'
+            },
+            {
+              file_name : 'img-1.jpg',
+              text : '宁波市轨道交通1号线'
+            },
+            {
+              file_name : 'img-1.jpg',
+              text : '广佛线'
+            },
+            {
+              file_name : 'img-1.jpg',
+              text : '广州地铁5号线'
+            },
+          ]
+        },
+        news : {
+          title : "咨询中心",
+          boxType : 'news',
+          component : "cont-3",
+          items : [
+            {
+              text : '喜迎国庆 | 华能机电祝您国庆节快乐！'
+            },
+            {
+              text : '公铁两用高空作业车顺利完成验收并交付广州地铁集团使用'
+            },
+            {
+              text : '热烈庆祝广东华能机电有限公司顺利通过知识产权贯标认证'
+            },
+          ]
+        },
+        leave_msg : {
+          title : '在线留言',
+          boxType : 'leave-msg',
+          items : [
+            {
+              isComponent : false,
+              component : '',
+              attrs : {
+                type : 'text',
+                placeholder : '姓名',
+                name : 'username'
+              }
+            },
+            {
+              isComponent : false,
+              component : '',
+              attrs : {
+                type : 'text',
+                placeholder : '电话',
+                name : 'tel'
+              }
+            },
+            {
+              isComponent : false,
+              component : '',
+              attrs : {
+                type : 'text',
+                placeholder : '姓名',
+                name : 'mail'
+              }
+            },
+            {
+              isComponent : true,
+              component : 'base-textarea',
+              attrs : {
+                cols : 30,
+                rows : 10,
+                name : 'leave-msg',
+                placeholder : '留言'
+              }
+            },
+            {
+              isComponent : true,
+              component : 'verifiction-code',
+              attrs : {
+                text : 'text',
+                name : 'code',
+                placeholder : '验证码'
+              }
+            },
+          ]
+        },
+        bartab : [
+          {
+            iconfont : 'home',
+            active : true,
+            text : '首页'
+          },
+          {
+            iconfont : 'cate',
+            active : false,
+            text : '分类'
+          },
+          {
+            iconfont : 'order',
+            active : false,
+            text : '询单'
+          },
+          {
+            iconfont : 'contant',
+            active : false,
+            text : '联系'
+          },
+        ]
+      }
+    });
+  }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <div id="header">
+        <div class="logo_text">
+          <h2>{{name_en}}<br/>{{name_cn}}</h2>
+        </div>
+        <div class="logo_list"><i class="iconfont icon-liebiao"></i></div>
+    </div>
+    <my-banner></my-banner>
+    <my-nav></my-nav>
+    <box>
+      <div class="photo"><img src="./images/banner-1.jpg" alt=""></div>
+      <p class="word">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sapiente quis quod sit illum, reiciendis rerum blanditiis ratione, obcaecati ducimus ipsum possimus ullam hic, natus enim illo provident quam quidem consequuntur?</p>
+    </box>
+    <box-list title="产品展示" box-type="product-show" component="cont-1" img-base="./images/" :items="products">
+    </box-list>
+    <box-list v-bind="application_field"></box-list>
+    <box-list v-bind="news"></box-list>
+    <box-input-list v-bind="leave_msg"></box-input-list>
+    <bartab :items="bartab"></bartab>
+  </div>
+</body>
+</html>

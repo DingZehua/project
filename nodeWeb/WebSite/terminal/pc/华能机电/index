@@ -1,0 +1,138 @@
+  <!-- 
+  <div id="header">
+      <div class="logo_text">
+        <h2>Wonon<br/>华能机电</h2>
+      </div>
+      <div class="logo_list"><i class="iconfont icon-liebiao"></i></div>
+  </div>
+  <div class="banner">
+    <ul>
+      <li class="active"><a href="#"><img src="./images/banner-1.jpg" alt=""></a></li>
+      <li><a href="#"><img src="./images/banner-1.jpg" alt=""></a></li>
+      <li><a href="#"><img src="./images/banner-1.jpg" alt=""></a></li>
+    </ul>
+    <ol>
+      <li class='active'><a href="#"></a></li>
+      <li><a href="#"></a></li>
+      <li><a href="#"></a></li>
+    </ol>
+  </div>
+  <div class="nav">
+    <ul>
+      <li><i class="iconfont icon-ziyuan"></i><p>EN</p></li>
+      <li><i class="iconfont icon-jianzhu"></i><p>关于我们</p></li>
+      <li><i class="iconfont icon-xinwen"></i><p>产品展示</p></li>
+      <li><i class="iconfont icon-jiangpaixunzhang-wuxing-hui"></i><p>应用领域</p></li>
+      <li><i class="iconfont icon-anquan"></i><p>人才招聘</p></li>
+      <li><i class="iconfont icon-jiedianshu"></i><p>联系我们</p></li>
+    </ul>
+  </div>
+  <div class="about-us box">
+      <h2>关于我们</h2>
+      <div class="photo"><img src="./images/banner-1.jpg" alt=""></div>
+      <p class="word">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sapiente quis quod sit illum, reiciendis rerum blanditiis ratione, obcaecati ducimus ipsum possimus ullam hic, natus enim illo provident quam quidem consequuntur?</p>
+      <div class="btn-box">
+        <button>查看更多</button>
+      </div>
+  </div>
+  <div class="product-show box">
+    <h2>产品展示</h2>
+    <ul>
+      <li>
+        <img src="./images/img-1.jpg" alt="">
+        <p>铝合金碳钢混合检修平台(配备门禁五防系统)</p>
+      </li>
+      <li>
+        <img src="./images/img-1.jpg" alt="">
+        <p>淋雨试验台</p>
+      </li>
+      <li>
+        <img src="./images/img-1.jpg" alt="">
+        <p>移动式架车机</p>
+      </li>
+      <li>
+        <img src="./images/img-1.jpg" alt="">
+        <p>空气弹簧试验台</p>
+      </li>
+      <li>
+        <img src="./images/img-1.jpg" alt="">
+        <p>门驱拆装升降台</p>
+      </li>
+      <li>
+        <img src="./images/img-1.jpg" alt="">
+        <p>转向架更换设备</p>
+      </li>
+    </ul>
+    <div class="btn-box">
+      <button>查看更多</button>
+    </div>
+  </div>
+  <div class="appliaction-field box">
+    <h2>应用领域</h2>
+    <ul>
+      <li>
+        <div class="photo"><img src="./images/img-1.jpg" alt=""></div>
+        <p>东莞地铁2号线</p>
+      </li>
+      <li>
+        <div class="photo"><img src="./images/img-1.jpg" alt=""></div>
+        <p>宁波市轨道交通1号线</p>
+      </li>
+      <li>
+        <div class="photo"><img src="./images/img-1.jpg" alt=""></div>
+        <p>广佛线</p>
+      </li>
+      <li>
+        <div class="photo"><img src="./images/img-1.jpg" alt=""></div>
+        <p>广州地铁5号线</p>
+      </li>
+    </ul>
+    <div class="btn-box">
+      <button>查看更多</button>
+    </div>
+  </div>
+  <div class="news box">
+    <h2>
+      咨询中心
+    </h2>
+    <ul>
+      <li><a href="#"><span></span>喜迎国庆 | 华能机电祝您国庆节快乐！</a></li>
+      <li><a href="#"><span></span>公铁两用高空作业车顺利完成验收并交付广州地铁集团使用</a></li>
+      <li><a href="#"><span></span>热烈庆祝广东华能机电有限公司顺利通过知识产权贯标认证</a></li>
+    </ul>
+    <div class="btn-box">
+      <button>查看更多</button>
+    </div>
+  </div>
+  <div class="leave-msg box">
+    <h2>在线留言</h2>
+    <ul>
+      <li><input type="text" placeholder="姓名" name="username"></li>
+      <li><input type="text" placeholder="电话" name='tel'></li>
+      <li><input type="text" placeholder="姓名" name='mail'></li>
+      <li><textarea cols="30" rows="10" name="leave-msg"  placeholder="留言"></textarea></li>
+      <li>
+        <input type="text" placeholder="验证码" name='code' >
+        <span class="code-img"></span>
+      </li>
+      <li><div class="btn-box"><button class="btn-full">提交</button></div></li>
+    </ul>
+  </div>
+  <div class="bartab">
+    <div>
+      <i class="iconfont home active"></i>
+      <p>首页</p>
+    </div>
+    <div>
+      <i class="iconfont cate"></i>
+      <p>分类</p>
+    </div>
+    <div>
+      <i class="iconfont order"></i>
+      <p>询单</p>
+    </div>
+    <div>
+      <i class="iconfont contant"></i>
+      <p>联系</p>
+    </div>
+  </div> -->

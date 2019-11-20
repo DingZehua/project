@@ -5,8 +5,86 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <style>
+  
+    * { margin:0; padding:0; }
+    ul,ol { list-style:none; }
+    .clear:after { content:'';display:block;clear:both; }
+    .photo-list { width:826px;margin:0 auto;border:1px solid #cccccc;margin-top:10px;}
+    .photo-list li { width:250px;height:250px;float:left;margin:12px;position: relative;overflow: hidden;}
+    .photo-list img { width:100%;height:100%; }
+    .photo-list .word-box { overflow: hidden;z-index:1;position:absolute;
+                    top:55px;left:30px;width:85%;height:0px;color:white;
+                    text-align:center;background-color:rgba(0,0,0,.5);transform:rotateZ(45deg);
+                    transition:0.5s;
+                  }
+    .word-box h2 { font-size:24px;line-height: 56px;height:56px;border-bottom:4px solid #ccc;}
+    .word-box p { height:80px;line-height: 26px;font-size:20px;padding-top:10px;}
+    .photo-list .rotate-box{width:350px; height:350px; position: absolute;  background:rgba(199,4,109,.5); 
+    transition:.5s;}
+    .rotate-box.top { transform:rotateZ(45deg);left:-150px;top:-450px;}
+    .rotate-box.bottom { transform:rotateZ(45deg);left:50px;top:350px;} 
+    .photo-list li:hover .rotate-box.top { top:0px; top:-150px;}
+    .photo-list li:hover .rotate-box.bottom { top:0px; top:50px;}
+    .photo-list li:hover .word-box { top:50px;left:0;transform:rotate(0deg);width:100%;height:150px; }
+  </style>
 </head>
 <body>
-  
+  <ul class="photo-list clear">
+    <li>
+      <img src="./images/img.png">
+      <div class="word-box">
+        <h2>测试文字</h2>
+        <p>测试文字测试文字测试文字测试文字测试文字</p>
+      </div>
+      <div class="rotate-box top"></div>
+      <div class="rotate-box bottom"></div>
+    </li>
+    <li>
+      <img src="./images/img.png">
+      <div class="word-box">
+        <h2>测试文字</h2>
+        <p>测试文字测试文字测试文字测试文字测试文字</p>
+      </div>
+      <div class="rotate-box top"></div>
+      <div class="rotate-box bottom"></div>
+    </li>
+    <li>
+      <img src="./images/img.png">
+      <div class="word-box">
+        <h2>测试文字</h2>
+        <p>测试文字测试文字测试文字测试文字测试文字</p>
+      </div>
+      <div class="rotate-box top"></div>
+      <div class="rotate-box bottom"></div>
+    </li>
+    <li>
+      <img src="./images/img.png">
+      <div class="word-box">
+        <h2>测试文字</h2>
+        <p>测试文字测试文字测试文字测试文字测试文字</p>
+      </div>
+      <div class="rotate-box top"></div>
+      <div class="rotate-box bottom"></div>
+    </li>
+    <li>
+      <img src="./images/img.png">
+      <div class="word-box">
+        <h2>测试文字</h2>
+        <p>测试文字测试文字测试文字测试文字测试文字</p>
+      </div>
+      <div class="rotate-box top"></div>
+      <div class="rotate-box bottom"></div>
+    </li>
+    <li>
+      <img src="./images/img.png">
+      <div class="word-box">
+        <h2>测试文字</h2>
+        <p>测试文字测试文字测试文字测试文字测试文字</p>
+      </div>
+      <div class="rotate-box top"></div>
+      <div class="rotate-box bottom"></div>
+    </li>
+  </ul>
 </body>
 </html>

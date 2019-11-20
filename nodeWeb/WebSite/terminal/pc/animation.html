@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+/*   
+  #box {
+    border:1px solid black;width:200px;height:200px;margin:0 auto;
+  }
+
+  #box-2 {
+    width:50px;height:50px;background-color:brown;
+    animation-name: move;
+    animation-duration: 2s;
+    animation-iteration-count: 2;
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);;
+  }
+
+  @keyframes move{
+    form { transform:translate(0px,0px) }
+    to { transform: translate(150px,0px); }
+  }
+
+  .wrap {
+    border:1px solid black;width:200px;height:200px;margin:0 auto;
+    animation:1s shake infinite;
+  }
+  @keyframes shake{
+    0% { transform: translate(0px,0px); }
+    10%,30% { transform:rotate(-5deg) translate(-50px,0px); }
+    20%,40% { transform:rotate(5deg) translate(50px,0px); }
+    50%,70% { transform:rotate(-3deg) translate(-60px,0px); }
+    60%,80% { transform:rotate(3deg) translate(60px,0px); }
+    90% { transform:rotate(-10deg) translate(-50px,0px); }
+    100% { transform:rotate(0deg) translate(0px,0px); }
+  } */
+  .box {
+    margin:50px auto;
+    border:1px solid black;
+    width: 500px;
+    height:500px;
+    perspective : 200px;
+    perspective-origin: top;
+  }
+  .wrap {
+    background: brown;
+    color:white;
+    width: 200px;
+    height:200px;
+    transition:2s;
+    transform:rotateX(90deg);
+    margin:50px auto;
+    transform-style: preserve-3d;
+  }
+  .box:hover .wrap {
+    transform: translateZ(100px);
+  }
+  </style>
+</head>                         
+<body>
+  <div class="box">
+    <div class="wrap">
+      Lorem.
+    </div>
+  </div>
+  
+</body>
+</html>

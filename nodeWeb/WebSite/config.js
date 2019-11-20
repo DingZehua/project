@@ -20,7 +20,7 @@ config.access = {
 }
 // 网站配置参数
 config[Symbol.for('server')] = {
-  hostName : '192.168.0.14',
+  hostName : '192.168.0.108',
   port : '80'
 }
 

@@ -1,0 +1,86 @@
+{
+  "id": "1496036",
+  "name": "百度盒子",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "169891",
+      "name": "小说",
+      "font_class": "xiaoshuo",
+      "unicode": "e6c7",
+      "unicode_decimal": 59079
+    },
+    {
+      "icon_id": "360376",
+      "name": "更多",
+      "font_class": "gengduo",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "1034620",
+      "name": "贴吧",
+      "font_class": "tieba",
+      "unicode": "e633",
+      "unicode_decimal": 58931
+    },
+    {
+      "icon_id": "1354917",
+      "name": "糯米",
+      "font_class": "nuomi",
+      "unicode": "e621",
+      "unicode_decimal": 58913
+    },
+    {
+      "icon_id": "1494665",
+      "name": "网络",
+      "font_class": "wangluo",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "2411692",
+      "name": "新闻",
+      "font_class": "news",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "3277861",
+      "name": "地图",
+      "font_class": "tubiaozhizuomoban",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "7854299",
+      "name": "地图",
+      "font_class": "tubiaozhizuomoban-copy",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "10190210",
+      "name": "图片",
+      "font_class": "tupian",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "10481724",
+      "name": "视频",
+      "font_class": "shipin",
+      "unicode": "e6d0",
+      "unicode_decimal": 59088
+    },
+    {
+      "icon_id": "10515929",
+      "name": "音乐",
+      "font_class": "music",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    }
+  ]
+}

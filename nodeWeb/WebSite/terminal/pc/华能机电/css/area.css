@@ -1,0 +1,48 @@
+.box h2 {
+  color:black;
+}
+.map {
+  margin:0 14px;
+  line-height: 24px;
+  font-size:14px;
+}
+.map h3 {
+  font-size:14px;
+  color:black;
+  height: 24px;
+  margin-top:12px;
+}
+
+.map_photo {
+  width:100%;
+  height: 60px;
+  overflow: hidden;
+  background: #868686;
+}
+
+.map_photo img {
+  width:100%;
+}
+
+.map p {
+  font-weight: bold;
+  margin-top:2px;
+}
+
+.map p span {
+  margin-left:14px;
+  margin-right:13px;
+}
+.map p a {
+  margin-right:27px;
+}
+.map_btn {
+  margin-top:21px;
+  width: 96px;
+  height: 20px;
+  line-height: 20px;
+  background:#868686 ;
+  color:white;
+  font-size:14px;
+  text-align: center;
+}

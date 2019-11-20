@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>拉钩网移动版</title>
+  <link rel="stylesheet" href="./iconfont/iconfont.css">
+  <style>
+    * {margin:0;padding:0;}
+    html { font-size:26.6666667vw; }
+    body { font-size:16px; }
+    ul {list-style:none;}
+    a { text-decoration:none; }
+    h1,h2,h3 {font-size:0.16rem;}
+    .header { height:0.45rem;background-color:#00b38a;line-height:0.45rem; }
+    .header h2 {font-size:0.18rem;text-align: center;color:white;font-weight:normal;}
+
+    .login { height: 0.43rem;display:flex;justify-content: space-between;align-items: center;}
+    .login>div { font-size:0.14rem;line-height: 0.43rem;}
+    .login .text {color:#555555;margin-left:0.16rem;height:0.16rem;line-height: 0.16rem;}
+    .login .login-link {width:0.85rem;height:0.3rem;line-height:0.3rem;margin-right:0.15rem;background: #f5f5f5;border-radius: 0.15rem;text-align: center;}
+    .login a { display: block;width:100%;height: 100%;color:#00b38a; }
+    .list,.list_li { display: flex; }
+    .list { flex-wrap:wrap; }
+    .list_li { width:100%;height:0.9rem;border-top:0.01rem solid #e8e8e8;align-items: center ; }
+    .list_li .photo { margin:0 0.1rem 0 0.14rem; }
+    .list_li .photo img { width:0.6rem;height:0.6rem; }
+    .list_li .content { flex-grow:1; }
+    
+    .list_li  h2 { font-size:0.16rem;font-family:Arial, Helvetica, sans-serif}
+    .list_li .info { display: flex;justify-content: space-between;height:0.16rem;line-height:0.16rem;margin-top:0.05rem;}
+    .list_li .info p:first-child { color:#333333;font-size:0.14rem; }
+    .list_li .info p:last-child { color:#00b38a;font-size:0.14rem;margin-right:0.14rem; }
+    .list_li .date { color:#888888;font-size:0.12rem;height:0.16rem;line-height:0.16rem;margin-top:0.08rem;}
+    .more { border:0.01rem solid #e8e8e8;background:#fafafa;height:0.5rem; }
+    .more a{ font-size:0.16rem;line-height:0.5rem;display: block;width:100%;height:100%;text-align: center;color:#333333; }
+    .footer { text-align: center;height:1.15rem;margin-bottom:0.46rem;font-size:0.12rem;overflow: hidden;}
+    .footer p { height:0.16rem;line-height: 0.16rem; }
+    .footer p:first-of-type { color:#333333;margin-top:0.3rem; }
+    .footer p:last-of-type { margin-top:0.07rem; }
+    .footer a { color:#333333; }
+    .footer span {color:#999999;font-size:0.12rem;}
+
+    .bartab { background: #f6f6f6;height:0.45rem;border-top:0.01rem solid #e8e8e8;position: fixed;bottom:0;display: flex;width:100%;}
+    .bartab>div { flex-grow:1;text-align: center;color:#c2cfce;line-height: 0.45rem;font-size:0.16rem;}
+    .bartab>div.active { background: #e7f3f0;color:#00b38a;}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>拉勾网</h2>
+  </div>
+  <div class="login">
+    <div class="text">10秒钟定制职位</div>
+    <div class="login-link"><a href="#">去登陆</a></div>
+  </div>
+  <ul class="list">
+    <li class="list_li">
+      <div class="photo"><a href="#"><img src="./images/mub.png" alt=""></a></div>
+      <div class="content">
+        <h2>四方互动</h2>
+        <div class="info">
+          <p>AM[深圳]</p>
+          <p>8k-15k</p>
+        </div>
+        <p class="date">今天13:50</p>
+      </div>
+    </li>
+    <li class="list_li">
+      <div class="photo"><a href="#"><img src="./images/mub.png" alt=""></a></div>
+      <div class="content">
+        <h2>四方互动</h2>
+        <div class="info">
+          <p>AM[深圳]</p>
+          <p>8k-15k</p>
+        </div>
+        <p class="date">今天13:50</p>
+      </div>
+    </li>
+    <li class="list_li">
+      <div class="photo"><a href="#"><img src="./images/mub.png" alt=""></a></div>
+      <div class="content">
+        <h2>四方互动</h2>
+        <div class="info">
+          <p>AM[深圳]</p>
+          <p>8k-15k</p>
+        </div>
+        <p class="date">今天13:50</p>
+      </div>
+    </li>
+    <li class="list_li">
+      <div class="photo"><a href="#"><img src="./images/mub.png" alt=""></a></div>
+      <div class="content">
+        <h2>四方互动</h2>
+        <div class="info">
+          <p>AM[深圳]</p>
+          <p>8k-15k</p>
+        </div>
+        <p class="date">今天13:50</p>
+      </div>
+    </li>
+    <li class="list_li">
+      <div class="photo"><a href="#"><img src="./images/mub.png" alt=""></a></div>
+      <div class="content">
+        <h2>四方互动</h2>
+        <div class="info">
+          <p>AM[深圳]</p>
+          <p>8k-15k</p>
+        </div>
+        <p class="date">今天13:50</p>
+      </div>
+    </li>
+    <li class="list_li">
+      <div class="photo"><a href="#"><img src="./images/mub.png" alt=""></a></div>
+      <div class="content">
+        <h2>四方互动</h2>
+        <div class="info">
+          <p>AM[深圳]</p>
+          <p>8k-15k</p>
+        </div>
+        <p class="date">今天13:50</p>
+      </div>
+    </li>
+    <li class="list_li">
+      <div class="photo"><a href="#"><img src="./images/mub.png" alt=""></a></div>
+      <div class="content">
+        <h2>四方互动</h2>
+        <div class="info">
+          <p>AM[深圳]</p>
+          <p>8k-15k</p>
+        </div>
+        <p class="date">今天13:50</p>
+      </div>
+    </li>
+    <li class="list_li">
+      <div class="photo"><a href="#"><img src="./images/mub.png" alt=""></a></div>
+      <div class="content">
+        <h2>四方互动</h2>
+        <div class="info">
+          <p>AM[深圳]</p>
+          <p>8k-15k</p>
+        </div>
+        <p class="date">今天13:50</p>
+      </div>
+    </li>
+  </ul>
+  <div class="more"><a href="#">加载更多</a></div>
+  <div class="footer">
+    <p>©2015 lagou.com,all right reserved</p>
+    <p>
+      <span>移动版</span> · <a href="#">电脑版</a> · <a href="#">回顶部</a>
+    </p>
+  </div>
+  <div class="bartab">
+    <div class='active'><i class="iconfont icon-xuanzhongshangcheng"></i> <span>职位</span></div>
+    <div><i class="iconfont icon--search"></i> <span>搜索</span></div>
+    <div><i class="iconfont icon-wodedangxuan"></i> <span>我的</span></div>
+  </div>
+</body>
+</html>

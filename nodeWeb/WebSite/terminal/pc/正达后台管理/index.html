@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>正达管理后台</title>
+  <link rel="stylesheet" href="./css/common.css">
+  <link rel="stylesheet" href="./iconfont/iconfont.css">
+  <style>
+    #main {height:calc(100% - 85px);}
+    #main .menu {height:100%;background:#424147;width:200px;float:left;text-align:center;}
+    .menu li { border-top:1px solid #49484e;border-bottom:#3a393e;background:#424147;height:139px;width:100%;float:left; }
+    .menu li.active {background:#4e4d53;}
+    .menu li.active a { color:white; }
+    .menu a {display: block;width:100%;height:100%;color:#9a999e;}
+    .menu i { font-size:40px;margin-top:35px;display:block;}
+    .menu p { font-size:16px;margin-top:15px;line-height:17px;}
+
+    #main .project {overflow: hidden;height:calc(100% - 51px);}
+    .project>div.project_container:first-child { overflow: auto;min-width:800px;height:100%;}
+    .project_title { overflow: hidden; }
+    .project_title_info { margin:21px 0 12px 22px; }
+    .project_title_info h2 { font-size:24px;line-height:25px;margin-bottom:10px;}
+    .project_title_info h2 i { margin-left:30px;position: relative;top:2px;}
+    .project_title_info h2 .icon-bianji { font-size:22px;color:#CCCCCC; }
+    .project_title_info li { font-size:14px; color:#9a999e;line-height:30px;}
+    .project_title_info li .filed { color:#333333; }
+    .project_title_photo { margin:20px 20px 0 0; }
+
+    .project_nav { height:56px;border-top:#dbe7ed solid 1px; border-bottom:#dbe7ed solid 1px;background: #f1f9fc;}
+    .project_nav_ul { margin:16px 0 0 20px;text-align: center;color:#666666;}
+    .project_nav_ul li { float:left;border:#dbe7ed solid 1px;border-bottom:0px;height:39px;line-height:39px;border-top-left-radius:3px;border-top-right-radius:3px;margin-right:10px;width:108px;background: white;cursor:pointer;}
+    .project_nav_ul li.active { background: #018ffb;position: relative;color:white;height:40px;}
+    .project_nav_ul li.active::before {content:'';display: block; position: absolute;border:6px solid transparent; border-top:6px #018ffb solid;bottom:-12px;left:50%;margin-left:-6px; }
+
+    .ziliao { margin:20px;position: relative;}
+    .ziliao .update-btn-wrap { height:32px;margin:20px 0; }
+    .ziliao .update-btn { margin-right:20px;line-height: 32px;font-size:14px;float:left;width:110px;color:white;border-radius:4px;text-align:center;height: 32px;user-select:none;cursor: pointer;}
+    .update-btn.green { background: #5fd15c; }
+    .update-btn.blue { background:#34c1da; }
+    .update-btn i { margin-right:10px; }
+    .update-btn .icon-fenxiang { font-size:13px; }
+    .update-btn .icon-shangchuan { font-size:15px;position: relative;top:1px;}
+    .search-box { position: absolute; top:0px;right:0px;line-height:30px;height:30px;border:1px solid #DBE7ED;overflow: hidden;border-radius: 3px;}
+    .search-box input {border:0px;height:30px; position: relative;top:-2px;text-indent: .5em;}
+    .search-box button {border:0px;border-left:1px solid #A1C6D4;line-height: 30px;height:30px;width:34px;background-image: linear-gradient(#F1F9FC,#FCFDFD);;}
+    .search-box button i {color:#A1C6D4;}
+
+    .ziliao .data { height:434px;}
+    .data table { border:1px solid #dbe7ed;width:100%;border-collapse: collapse;}
+    .data table tr {height: 32px;line-height: 32px;font-size:12px;color:#333333;}
+    .data table thead tr,.data table tbody tr:hover { background: #f1f9fc; }
+    .data table td { border:1px solid #dbe7ed;text-indent: 9px;}
+    .data table thead td { color:#666666;}
+    .data table tbody td { border-right:1px solid transparent;color:#333333;}
+    .data table tbody td:last-child { border-right:1px solid #dbe7ed; }
+    .data table .check-box{text-align: center;text-indent:0;}
+
+    .data .word-name i { margin-right:13px;font-size:18px;position: relative;top:2px;line-height: 8px;}
+    .data table .action i { cursor: pointer; }
+    .data table .action i:first-child{ margin-right:22px; }
+    .data .icon-xiazai,.data .icon-guanbi { font-size:13px;position: relative; top:2px;}
+    .data .word-name i.iconfont.icon-RAR { margin-right:15px; }
+    .data .word-name i.iconfont.icon-xls2 { font-size:15px;margin-left:1px;margin-right:17px; }
+    
+    .data .table_action { padding:18px 22px;font-size:12px;height:26px;border:1px solid #dbe7ed;border-top:0px;user-select:none;}
+    .table_batch-action .batch-btn { margin-right:15px;color:#1B84BA;line-height: 26px;height:26px;box-sizing:border-box;border:1px solid #c9e4f1;width:80px;text-align:center;float:left;cursor:pointer;}
+    .table_batch-action .batch-btn:active { border:2px solid #c9e4f1;line-height: 24px;background-image:linear-gradient(#42adff,white);}
+    .table_turn-action { float:right; }
+    .turn-action_ul {  }
+    .turn-action_ul li { float:left;line-height: 24px;height:24px;font-size:12px;color:#333333;border:1px solid #e6e6e6;padding:0 9px;margin-right:10px;cursor:pointer;}
+    .turn-action_ul li.active { background: #42adff;border:1px solid #3797e0;color:white; }
+  </style>
+</head>
+<body>
+  <div id="header">
+    <div class="logo l">
+      <img src="./images/logo.png" title="正达建筑" class="l">
+      <h2 class="l">正达建筑内部管理平台</h2>
+    </div>
+    <ul class="nav r">
+      <li><a href="#"><i class="iconfont icon-user">&#xe7ad;</i><span>欢迎您，武剑 管理员</span></a></li>
+      <li><a href="#"><i class="iconfont icon-mima"></i><span>修改密码</span></a></li>
+      <li><a href="#"><i class="iconfont icon-shouye"></i><span>公司官网</span></a></li>
+      <li><a href="#"><i class="iconfont icon-fenxiang1"></i><span>退出</span></a></li>
+    </ul>
+  </div>
+  <div id="main">
+    <div class="menu l">
+      <ul>
+        <li class="active">
+          <a href="#">
+            <i class="iconfont icon-Group-"></i>
+            <p>项目管理</p>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="iconfont icon-tongxunlu"></i>
+            <p>用户管理</p>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="iconfont icon-shezhi"></i>
+            <p>系统设置</p>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="project">
+      <div class="project_container">
+        <div class="project_title">
+          <div class="project_title_info l">
+            <h2>青田高湾绿园一期、二期工程<a href="#"><i class="iconfont icon-bianji"></i></a></h2>
+            <ul>
+              <li><span class="filed">项目编号：</span><span>CN0000507</span></li>
+              <li><span class="filed">项目类型：</span><span>在建工程</span></li>
+              <li><span class="filed">项目负责人：</span><span>梅海丽</span></li>
+              <li><span class="filed">手机号码：</span><span>15869168967</span></li>
+            </ul>
+          </div>
+          <div class="project_title_photo r"><img src="./images/project.jpg" alt=""></div>
+        </div>
+
+        <div class="project_nav">
+          <ul class="project_nav_ul">
+            <li><span>视频监控</span></li>
+            <li><span>考勤管理</span></li>
+            <li><span>安全巡查</span></li>
+            <li class="active"><span>资料管理</span></li>
+          </ul>
+        </div>
+        <div class="ziliao">
+          <div class="update-btn-wrap">
+            <div class="update-btn green"><i class="iconfont icon-fenxiang"></i>单个上传</div>
+            <div class="update-btn blue"><i class="iconfont icon-shangchuan"></i>批量上传</div>
+          </div>
+          <div class="search-box"><input type="search" placeholder="请输入关键字"><button><i class="iconfont icon-sousuo"></i></button></div>
+          <div class="data">
+            <table>
+              <thead>
+                <tr>
+                  <td class="check-box" width="49"><input type="checkbox"></td><td class="word-name" >文档名称</td><td class="size" width="166">文档大小</td><td class="upload-user" width="147">上传者</td><td class="date" width="167">上传时间</td><td class="action" width="80">操作</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="check-box"><input type="checkbox"></td><td class="word-name"><i class="iconfont icon-doc1"></i>安全专项方案.doc</td><td class="size">21.3 KB</td><td class="upload-user">陈文耀</td><td class="date">2016-03-14</td><td class="action"><i class="iconfont icon-xiazai"></i><i class="iconfont icon-guanbi"></i></td>
+                </tr>
+                <tr>
+                  <td class="check-box"><input type="checkbox"></td><td class="word-name"><i class="iconfont icon-doc1"></i>安全专项方案.doc</td><td class="size">21.3 KB</td><td class="upload-user">陈文耀</td><td class="date">2016-03-14</td><td class="action"><i class="iconfont icon-xiazai"></i><i class="iconfont icon-guanbi"></i></td>
+                </tr>
+                <tr>
+                  <td class="check-box"><input type="checkbox"></td><td class="word-name"><i class="iconfont icon-xls2"></i>安全专项方案.doc</td><td class="size">21.3 KB</td><td class="upload-user">陈文耀</td><td class="date">2016-03-14</td><td class="action"><i class="iconfont icon-xiazai"></i><i class="iconfont icon-guanbi"></i></td>
+                </tr>
+                <tr>
+                  <td class="check-box"><input type="checkbox"></td><td class="word-name"><i class="iconfont icon-xls2"></i>安全专项方案.doc</td><td class="size">21.3 KB</td><td class="upload-user">陈文耀</td><td class="date">2016-03-14</td><td class="action"><i class="iconfont icon-xiazai"></i><i class="iconfont icon-guanbi"></i></td>
+                </tr>
+                <tr>
+                  <td class="check-box"><input type="checkbox"></td><td class="word-name"><i class="iconfont icon-RAR"></i>安全专项方案.doc</td><td class="size">21.3 KB</td><td class="upload-user">陈文耀</td><td class="date">2016-03-14</td><td class="action"><i class="iconfont icon-xiazai"></i><i class="iconfont icon-guanbi"></i></td>
+                </tr>
+                <tr>
+                  <td class="check-box"><input type="checkbox"></td><td class="word-name"><i class="iconfont icon-doc1"></i>安全专项方案.doc</td><td class="size">21.3 KB</td><td class="upload-user">陈文耀</td><td class="date">2016-03-14</td><td class="action"><i class="iconfont icon-xiazai"></i><i class="iconfont icon-guanbi"></i></td>
+                </tr>
+                <tr>
+                  <td class="check-box"><input type="checkbox"></td><td class="word-name"><i class="iconfont icon-doc1"></i>安全专项方案.doc</td><td class="size">21.3 KB</td><td class="upload-user">陈文耀</td><td class="date">2016-03-14</td><td class="action"><i class="iconfont icon-xiazai"></i><i class="iconfont icon-guanbi"></i></td>
+                </tr>
+                <tr>
+                  <td class="check-box"><input type="checkbox"></td><td class="word-name"><i class="iconfont icon-doc1"></i>安全专项方案.doc</td><td class="size">21.3 KB</td><td class="upload-user">陈文耀</td><td class="date">2016-03-14</td><td class="action"><i class="iconfont icon-xiazai"></i><i class="iconfont icon-guanbi"></i></td>
+                </tr>
+                <tr>
+                  <td class="check-box"><input type="checkbox"></td><td class="word-name"><i class="iconfont icon-ppt"></i>安全专项方案.doc</td><td class="size">21.3 KB</td><td class="upload-user">陈文耀</td><td class="date">2016-03-14</td><td class="action"><i class="iconfont icon-xiazai"></i><i class="iconfont icon-guanbi"></i></td>
+                </tr>
+                <tr>
+                  <td class="check-box"><input type="checkbox"></td><td class="word-name"><i class="iconfont icon-doc1"></i>安全专项方案.doc</td><td class="size">21.3 KB</td><td class="upload-user">陈文耀</td><td class="date">2016-03-14</td><td class="action"><i class="iconfont icon-xiazai"></i><i class="iconfont icon-guanbi"></i></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="table_action">
+              <div class="table_batch-action">
+                <div class="batch-btn">批量下载</div>
+                <div class="batch-btn">批量删除</div>
+              </div>
+              <div class="table_turn-action">
+                <ul class="turn-action_ul">
+                  <li>共12条</li>
+                  <li>首页</li>
+                  <li>上一页</li>
+                  <li class="active">1</li>
+                  <li>2</li>
+                  <li>3</li>
+                  <li>下一页</li>
+                  <li>尾页</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="footer">Copyright © 2009 -2016 丽水市正达建筑工程有限公司  All rights reserved.  技术支持：红点智能</div>
+  </div>
+</body>
+</html>

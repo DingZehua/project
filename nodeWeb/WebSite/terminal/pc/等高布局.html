@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>等高布局</title>
+  <style>
+  
+  * {margin:0;padding:0;}
+
+  /* .parent {
+    border:1px solid black;
+    overflow: hidden;
+  }
+
+  .box-1 {
+    background:brown;margin-bottom:-2000px;padding-bottom: 2000px;float: left;
+  }
+  .box-2 {
+    background:brown;margin-bottom:-2000px;padding-bottom: 2000px;float:right;
+  }
+
+  .box-3 {
+    background:brown;width:500px;height:500px;margin-left:-100%;
+  }
+  .box-4 {
+    background:brown;width:500px;height:500px;
+  }
+  .mid {
+    height:500px;background:blue;padding-right:500px;overflow: hidden;
+  }
+
+  .center {
+  padding: 0 200px;
+  box-sizing: border-box;
+  height: 200px;
+  background: blue;
+  float:left;
+  width: 100%;;
+  }
+  .left {
+    margin-left: -100%;
+    height: 200px;
+    background: red;
+    float:left;
+    width: 200px;
+  }
+  .right {
+    margin-left: -200px;
+    width: 200px;
+    height: 200px;
+    background: red;
+    float:left;
+  }
+
+  .box {
+    background: lightsalmon;
+    overflow: hidden;position: relative;
+    clear:both;
+  }
+  .child {
+    position: absolute;
+    width:200px;
+    height: 200px;;
+  } */
+
+  /* .box1 {
+    padding:0 200px;
+    height:200px;
+    margin-bottom:-200px;
+    background: lime;
+  }
+
+  .box2 {
+    float: left;
+    width:200px;
+    height: 200px;
+    background: red;
+  }
+  .box3 {
+    float: right;
+    width:200px;
+    height: 200px;
+    background: red;
+  } */
+  .container { margin:0 200px 0 200px; }
+  .container::after { display: block;content: "";clear:both;}
+  .center,.left,.right { float:left;height:300px;position: relative; }
+  .center { width:100%;background: red;}
+  .left,.right { width:200px;background: blue;}
+  .left { margin-left:-100%;left:-200px; }
+  .right { margin-left:-200px;right:-200px; }
+  </style>
+</head>
+<body>
+<!--
+  <div class="parent">
+    <div class="box-1">
+      <p>asdasdasd</p>
+      <p>asdasdasd</p>
+      <p>asdasdasd</p>
+    </div>
+    <div class="box-2">
+        <p>asdasdasd</p>
+        <p>asdasdasd</p>
+        <p>asdasdasd</p>
+        <p>asdasdasd</p>
+        <p>asdasdasd</p>
+        <p>asdasdasd</p>
+        <p>asdasdasd</p>
+        <p>asdasdasd</p>
+        <p>asdasdasd</p>
+        <p>asdasdasd</p>
+        <p>asdasdasd</p>
+      </div> -->
+
+  <!-- <div class="center"></div>
+  <div class="left"></div>
+  <div class="right"></div>
+  <div class="box">
+    <div class="child"></div>
+  </div> -->
+  <!-- <div class="box1">
+    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Illum fugiat iure reprehenderit ut repellendus voluptatum adipisci doloremque ad, impedit aperiam nemo, repudiandae quod deleniti quisquam! Aliquam architecto consequuntur adipisci itaque.
+  </div>
+  <div class="box2"></div>
+  <div class="box3"></div> -->
+  <div class="container">
+    <div class="center"></div>
+    <div class="left"></div>
+    <div class="right"></div>
+  </div>
+</body>
+</html>

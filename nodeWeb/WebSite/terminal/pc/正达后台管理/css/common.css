@@ -1,0 +1,32 @@
+* { margin:0;padding:0; }
+ul,ol { list-style:none; }
+a { text-decoration:none;color:#333333;}
+h1,h2,h3 { font-size:16px;font-weight:normal; }
+.clear:after { content:'';display: block; clear:both; }
+.l { float:left; }
+.r { float:right;}
+i { font-style:normal; }
+img {display: block;}
+html,body { height:100%;overflow: hidden; }
+
+#header { background:#018ffb;height: 80px;border-top:5px solid #333333;overflow: hidden;}
+#header .logo img{ margin: 19px 14px 0 20px; }
+#header .logo h2 { font-size:24px;line-height:25px;margin-top:28px;color:#FFFFFF;}
+#header .nav {height:80px;line-height:80px;}
+#header .nav li { float:left;}
+#header .nav a{color:white;font-size:14px;}
+#header .nav span{font-size:14px;margin-right:24px;}
+#header .nav i { margin-right:8px;}
+#header .icon-user { font-size:18px;line-height: 8px;position: relative; top:1px;}
+#header .icon-mima { font-size:18px;line-height: 8px;position: relative; top:1px; }
+#header .icon-shouye { font-size:20px;line-height: 18px;position: relative; top:2px;}
+#header .icon-fenxiang1 { font-size:15px; }
+
+#footer { height: 50px;border-top:1px solid #dbe7ed;background: #f1f9fc;overflow: hidden;text-align:right;color:#888888;font-size:12px;line-height: 50px;margin-right:20px;user-select:none;}
+
+.icon-doc1 { color:#2a5699; }
+.icon-ppt { color:#d24625; }
+.icon-guanbi { color:#d94141; }
+.icon-xiazai { color:#3DA2F0; }
+.icon-RAR { color:#21a675; }
+.icon-xls2 { color:#207245; }

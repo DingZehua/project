@@ -1,3 +1,8 @@
+
+process.on('uncaughtException',(err) => {
+  console.log('Global error:',err);
+});
+
 let http = require('http');
 let config = require('./config');
 let {mysql : mysqlDB} = require('./includes/sql');
@@ -19,15 +24,9 @@ let sql = new mysqlDB(mysqlConfig);
 const sessionSet = new (require('./session'))(config.session_expired);
 const Session = sessionSet.constructor;
 const sessionClearTake = Session.clearExpired(sessionSet);
-
 // token
 const tokens = require('./includes/lib_base').createToken(config.token_number,config.token_expired);
-
 // 捕捉全局错误.
-
-process.on('uncaughtException',(err) => {
-  console.log('global Error:',err);
-})
 
 // 得到请求。
 function main(req,res) {
@@ -37,6 +36,7 @@ function main(req,res) {
   if(parseInt((Math.random() * 10)) === 1) {
     sessionClearTake.next(GLOBALS.curTIME);
   }
+
 
   async function response(request,response,sql,GLOBALS,config,sessionSet,tokens) {
     let {data,status,header,generalFileName} = await require('./router')({
@@ -65,8 +65,8 @@ function main(req,res) {
     res.end('404');
   });
 };
-
-/** 
+/*
+* 
  * TODO:
  * --1.SESSION怎么销毁最有效率.
  * --2.非程序文件或找不到对应的处理程序的请求用pipe管道.

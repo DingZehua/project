@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * { margin:0;padding:0; }    
+    .box {
+      width:300px;height:300px;background-image:url('./images/girl.jpg');position: relative;-webkit-box-reflect:below 20px linear-gradient(rgba(0,0,0,0) 50%,rgba(255,255,255,1));
+    }
+
+    .box_mask { width:100%;height: 100%;background:rgba(0,0,0,0.65);position: absolute;display: none; }
+    .box_mask_p { 
+      width:100%;height:32px;text-align: center;font-size:0px;
+      position: absolute;top:50%;margin-top:-16px;
+    }
+
+    .box_mask_p .btn { 
+      border:1px solid white;border-radius:2px;
+      height: 32px;line-height:30px;padding:0 10px;
+      box-sizing:border-box;
+      background-color:rgba(0,0,0,0.65);
+      display:inline-block;font-size:12px;
+      color:white;
+      user-select:none;
+      cursor:pointer;
+      transition:1s;
+    }
+
+    .box_mask_p .btn:active { background-image: linear-gradient(0deg,rgba(255,255,255,0.5),rgba(0,0,0,0.5));box-shadow:0px 0px 5px 3px black;}
+
+    .box:hover { -webkit-mask:url('./images/love.png') center center / 300px 300px no-repeat;}
+    .box:hover .box_mask { display: block;}
+
+    .box-2 {
+      width:200px;height:200px;background-image:linear-gradient(0deg,rgba(255,255,255,0) 50%,rgba(0,0,0,1));
+    }
+
+    i::selection { background:blue; }
+
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="box_mask">
+      <p class="box_mask_p">
+        <span class="btn">
+          确定
+        </span>
+      </p>
+    </div>
+  </div>
+  <!-- <div class="box-2"></div> -->
+  <i>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Necessitatibus earum consequuntur officiis pariatur. Totam quam itaque incidunt in accusamus vero facere illo saepe ducimus quae. Inventore sapiente voluptate dicta dolorum.</i>
+
+  <span style="width:200px;height:300px;float:left;border:1px solid black;">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Atque saepe fuga minus repellat laudantium dolorem quos consequatur at odio? Eos debitis dolore suscipit velit esse repudiandae inventore vel illo tenetur.</span>
+
+</body>
+</html>

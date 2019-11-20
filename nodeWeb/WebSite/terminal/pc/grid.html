@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  
+    .gbox { grid-template-columns: repeat(4,auto);grid-template-rows:repeat(4,auto);width:500px;height:500px;display: grid;
+            /* grid-template-areas:
+            "a1 a1 a1 a2"
+            "a3 a3 a3 a2"
+            "a4 a4 a4 a2"
+            "a5 a5 a5 a2";
+            justify-items: center;
+            align-items : end;
+             */
+            /* align-content: center; */
+            align-content: center;
+            justify-content: center;
+            border:1px dotted black;
+            }
+    .gbox>div { background: brown;border:1px solid black;}
+    .gbox>div:nth-child(1) { /* align-self: center;justify-self: start;  */align-self: end;}
+    .gbox>div:nth-child(2) { height:200px; }
+    .gbox>div:nth-child(3) {  }
+    .gbox>div:nth-child(4) {  }
+    /*.gbox>div:nth-child(2) { grid-area: a2; }
+    .gbox>div:nth-child(3) { grid-area: a3; }
+    .gbox>div:nth-child(4) { grid-area: a4; }
+    .gbox>div:nth-child(5) { grid-area: a5; } */
+  </style>
+  <script>
+  
+  /* grid和flex的区别是flex会占用满整个容器，而grid则不会，他会分割成一个一个小方格。 */
+  /* grid-template-columns:列取决于多少个参数,参数可以是px正常单位也可以是fr单位，如果使用函数repeat(cnt,unit)第一个参数表示列数，第二个表示单位。子元素和单元格可以分别设置自己的宽度大小,如果子元素超出单元格，那么超出的部分则被隐藏起来。 */
+  // params : repeat()、{number}px;
+  /* grid-template-rows:和columns一致，列数变成行数. */
+  // parmas : {grid-template-columns}
+  /* grid-template-areas : 可以定义每个单元格的名称这与name属性相似，需要用空格隔开（可以定义重复，但必须是上下左右相隔），每一行需要用回车分割，每一行前后必须加上双引号,子元素引用时只需要在其的css样式中使用属性grid-area:(父元素定义的名称)即可*/
+  // parmas: String
+  /* justify-items:设定每个单元格在主轴上自身空间内的对齐方式(子元素宽度或高度未超过单元格才有效) */
+  // params: stretch、left、center、right
+  /* align -items:设定每个单元格在副轴上自身空间内的对齐方式 */
+  // params : {justify-items}
+  /* grid-row-gap:设置单元格上下间距 */
+  // params : {number}unit
+  /* grid-column-gap: 设置单元格左右间距 */
+  // params : {number}unit
+  /* justify-content:调节主轴上的对齐方式(只有剩余空间时才有效或grid-template单位长度设置为auto时,并且子元素未设定宽度值，并且内容不足时),如果子元素溢出单元格时隐藏*/
+  // params : stretch、start、end、center、space-between、space-around、
+  /* align-content:调节副轴上的对齐方式(只有剩余空间时才有效) */
+  // params : {justify-content }
+  </script>
+</head>
+<body>
+  <div class="gbox">
+    <div>Lorem ipsum dolor sit.</div>
+    <div>Lorem ipsum dolor sit.</div>
+    <div>Lorem ipsum dolor sit.</div>
+    <div>Lorem ipsum dolor sit.</div>
+    <div>Lorem ipsum dolor sit.</div>
+    <div>Lorem ipsum dolor sit.</div>
+    <div>Lorem ipsum dolor sit.</div>
+    <div>Lorem ipsum dolor sit.</div>
+    <div>Lorem ipsum dolor sit.</div>
+    <div>Lorem ipsum dolor sit.</div>
+    <div>Lorem ipsum dolor sit.</div>
+    <div>Lorem ipsum dolor sit.</div>
+    <div>Lorem ipsum dolor sit.</div>
+    <div>Lorem ipsum dolor sit.</div>
+    <div>Lorem ipsum dolor sit.</div>
+    <div>Lorem ipsum dolor sit.</div>
+  </div>
+</body>
+</html>

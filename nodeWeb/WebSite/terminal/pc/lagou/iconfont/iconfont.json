@@ -1,0 +1,30 @@
+{
+  "id": "1499645",
+  "name": "拉钩网",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "7636878",
+      "name": "我 的",
+      "font_class": "wodedangxuan",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "9515016",
+      "name": "home",
+      "font_class": "xuanzhongshangcheng",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "10318558",
+      "name": "search",
+      "font_class": "-search",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    }
+  ]
+}
