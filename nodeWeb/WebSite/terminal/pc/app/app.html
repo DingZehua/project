@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>华能机电</title>
+  <link rel="stylesheet" href="./iconfont/iconfont.css">
+  <link rel="stylesheet" href="./css/common.css">
+  <link rel="stylesheet" href="./css/page.css">
+  <script src="./js/vue.js"></script>
+  <script src="./js/vue-router.js"></script>
+  <script src="./js/util.js"></script>
+
+  <script>
+
+  function copy(o) {
+    return JSON.parse(JSON.stringify(o));
+  }
+
+  /* begin -- constant */
+
+  const CN = 'cn';
+  const EN = 'en';
+  let lang = CN;
+
+  /* end -- constant */
+  /* begin -- data */
+    
+    const globalData = {
+      cn : {
+        list : {
+          aboutUs : {
+            text : `
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sapiente quis quod sit illum, reiciendis rerum blanditiis ratione, obcaecati ducimus ipsum possimus ullam hic, natus enim illo provident quam quidem consequuntur?
+            `,
+            title : '关于我们',
+            boxType : 'about-us',
+            imgSrc : './images/banner-1.jpg'
+          },
+          productShow : {
+            boxType : 'product-show',
+            title:'产品展示',
+            items : [
+              {
+                imgSrc : './images/img-1.jpg',
+                text : '铝合金碳钢混合检修平台(配备门禁五防系统)'
+              },
+              {
+                imgSrc : './images/img-1.jpg',
+                text : '淋雨试验台'
+              },
+              {
+                imgSrc : './images/img-1.jpg',
+                text : '移动式架车机'
+              },
+              {
+                imgSrc : './images/img-1.jpg',
+                text : '空气弹簧试验台'
+              },
+              {
+                imgSrc : './images/img-1.jpg',
+                text : '门驱拆装升降台'
+              },
+              {
+                imgSrc : './images/img-1.jpg',
+                text : '转向架更换设备'
+              }
+            ]
+          },
+          appliactionField : {
+            boxType : 'appliaction-field',
+            title : '应用领域',
+            items : [
+              {
+                imgSrc : './images/img-1.jpg',
+                text : '东莞地铁2号线'
+              },
+              {
+                imgSrc : './images/img-1.jpg',
+                text : '东莞地铁2号线'
+              },
+              {
+                imgSrc : './images/img-1.jpg',
+                text : '广佛线'
+              },
+              {
+                imgSrc : './images/img-1.jpg',
+                text : '广州地铁5号线'
+              },
+            ]
+          },
+          news : {
+            boxType : 'news',
+            title : '咨询中心',
+            items : [
+              {
+                text : '喜迎国庆 | 华能机电祝您国庆节快乐！'
+              },
+              {
+                text : '公铁两用高空作业车顺利完成验收并交付广州地铁集团使用'
+              },
+              {
+                text : '热烈庆祝广东华能机电有限公司顺利通过知识产权贯标认证'
+              },
+            ]
+          },
+          leaveMsg : {
+            boxType : 'leave-msg',
+            title : '在线留言',
+            items : [
+              {
+                isComponent : false,
+                component : '',
+                attrs : {
+                  type : 'text',
+                  placeholder : '姓名',
+                  name : 'username'
+                }
+              },
+              {
+                isComponent : false,
+                component : '',
+                attrs : {
+                  type : 'text',
+                  placeholder : '电话',
+                  name : 'tel'
+                }
+              },
+              {
+                isComponent : false,
+                component : '',
+                attrs : {
+                  type : 'text',
+                  placeholder : '邮件',
+                  name : 'mail'
+                }
+              },
+              {
+                isComponent : true,
+                component : 'base-textarea',
+                attrs : {
+                  cols : '30',
+                  rows : '10',
+                  name : 'leave-msg',
+                  placeholder : '留言'
+                }
+              },
+              {
+                isComponent : true,
+                component : 'verification-code',
+                attrs : {
+                  type : 'text',
+                  placeholder : '验证码',
+                  name : 'code'
+                }
+              }
+            ]
+          }
+        },
+        nav : {
+          lang : {
+            iconfont : 'icon-ziyuan',
+            text : 'EN',
+            toggle_lang : 'en'
+          },
+          items : [
+            {
+              iconfont : 'icon-jianzhu',
+              text :  '关于我们',
+              router : 'about-us',
+            },
+            {
+              iconfont : 'icon-xinwen',
+              text :  '应用领域',
+              router : 'appliaction-field'
+            },
+            {
+              iconfont : 'icon-jiangpaixunzhang-wuxing-hui',
+              text :  '产品展示',
+              router : 'product-show'
+            },
+            {
+              iconfont : 'icon-anquan',
+              text : '招聘',
+              router : 'zhaopin'
+            },
+            {
+              iconfont : 'icon-jianzhu',
+              text : '联系我们',
+              router : 'contant'
+            },
+            {
+              iconfont : 'icon-news',
+              text : '咨询',
+              router : 'news'
+            },
+            {
+              iconfont : 'icon-leave_msg_ico',
+              text : '留言',
+              router : 'leave-msg'
+            }
+          ]
+        },
+        bartab : {
+          items : 
+          [
+            {
+            iconfont : 'home',
+            active : true,
+            text : '首页',
+            router : '/Home'
+            },
+            {
+              iconfont : 'cate',
+              active : false,
+              text : '分类',
+              router : '/cate'
+            },
+            {
+              iconfont : 'order',
+              active : false,
+              text : '询单',
+              router : '/order'
+            },
+            {
+              iconfont : 'contant',
+              active : false,
+              text : '联系',
+              router : '/contant'
+            },
+          ]
+        }
+      },
+      en : {
+        list : {
+          aboutUs : {
+            text : `
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sapiente quis quod sit illum, reiciendis rerum blanditiis ratione, obcaecati ducimus ipsum possimus ullam hic, natus enim illo provident quam quidem consequuntur?
+            `,
+            title : 'about-us',
+            boxType : 'about-us',
+            imgSrc : './images/banner-1.jpg'
+          },
+          productShow : {
+            boxType : 'product-show',
+            title:'product',
+            items : [
+              {
+                imgSrc : './images/img-1.jpg',
+                text : 'dolor sit amet consectetur adipisicing elit.'
+              },
+              {
+                imgSrc : './images/img-1.jpg',
+                text : 'Lorem ipsum'
+              },
+              {
+                imgSrc : './images/img-1.jpg',
+                text : 'Sapiente'
+              },
+              {
+                imgSrc : './images/img-1.jpg',
+                text : 'reiciendis'
+              },
+              {
+                imgSrc : './images/img-1.jpg',
+                text : 'blanditiis'
+              },
+              {
+                imgSrc : './images/img-1.jpg',
+                text : 'ducimus'
+              }
+            ]
+          },
+          appliactionField : {
+            boxType : 'appliaction-field',
+            title : 'appliaction-field',
+            items : [
+              {
+                imgSrc : './images/img-1.jpg',
+                text : 'possimus'
+              },
+              {
+                imgSrc : './images/img-1.jpg',
+                text : 'ducimus'
+              },
+              {
+                imgSrc : './images/img-1.jpg',
+                text : 'adipisicing'
+              },
+              {
+                imgSrc : './images/img-1.jpg',
+                text : 'amet'
+              },
+            ]
+          },
+          news : {
+            boxType : 'news',
+            title : 'news',
+            items : [
+              {
+                text : 'eum ut adipisci eligendi explicabo'
+              },
+              {
+                text : 'quod explicabo maxime ipsam architecto similique'
+              },
+              {
+                text : 'facere ut modi nam voluptate perferendis'
+              },
+            ]
+          },
+          leaveMsg : {
+            boxType : 'leave-msg',
+            title : 'leave Message',
+            items : [
+              {
+                isComponent : false,
+                component : '',
+                attrs : {
+                  type : 'text',
+                  placeholder : 'name',
+                  name : 'username'
+                }
+              },
+              {
+                isComponent : false,
+                component : '',
+                attrs : {
+                  type : 'text',
+                  placeholder : 'tel',
+                  name : 'tel'
+                }
+              },
+              {
+                isComponent : false,
+                component : '',
+                attrs : {
+                  type : 'text',
+                  placeholder : 'mail',
+                  name : 'mail'
+                }
+              },
+              {
+                isComponent : true,
+                component : 'base-textarea',
+                attrs : {
+                  cols : '30',
+                  rows : '10',
+                  name : 'leave-msg',
+                  placeholder : 'leave message'
+                }
+              },
+              {
+                isComponent : true,
+                component : 'verification-code',
+                attrs : {
+                  type : 'text',
+                  placeholder : 'verification code',
+                  name : 'code'
+                }
+              }
+            ]
+          }
+        },
+        nav : {
+          lang : {
+            iconfont : 'icon-ziyuan',
+            text : '中文',
+            toggle_lang : 'cn'
+          },
+          items : [
+            {
+              iconfont : 'icon-jianzhu',
+              text :  'about Us ',
+              router : 'about-us',
+            },
+            {
+              iconfont : 'icon-xinwen',
+              text :  'appliaction Field',
+              router : 'appliaction-field'
+            },
+            {
+              iconfont : 'icon-jiangpaixunzhang-wuxing-hui',
+              text :  'product',
+              router : 'product-show'
+            },
+            {
+              iconfont : 'icon-anquan',
+              text : 'zhaopin',
+              router : 'zhaopin'
+            },
+            {
+              iconfont : 'icon-jianzhu',
+              text : 'contant us',
+              router : 'contant'
+            },
+            {
+              iconfont : 'icon-news',
+              text : 'news',
+              router : 'news'
+            },
+            {
+              iconfont : 'icon-leave_msg_ico',
+              text : 'leave message',
+              router : 'leave-msg'
+            }
+          ]
+        },
+        bartab : {
+          items : 
+          [
+            {
+            iconfont : 'home',
+            active : true,
+            text : 'home',
+            router : '/Home'
+            },
+            {
+              iconfont : 'cate',
+              active : false,
+              text : 'cate',
+              router : '/cate'
+            },
+            {
+              iconfont : 'order',
+              active : false,
+              text : 'order',
+              router : '/order'
+            },
+            {
+              iconfont : 'contant',
+              active : false,
+              text : 'contant',
+              router : '/contant'
+            },
+          ]
+        }
+      },
+    }
+
+  /* end -- data */
+    Object.defineProperty(globalData,'lang',{ enumerable:true,get(){return lang;},set(v) { lang = v; },configurable : false })
+  </script>
+
+  <script>
+    Vue.use(VueRouter);
+
+    Vue.component('my-head',{
+      template : `
+        <div id="header">
+          <div class="logo_text">
+            <h2>{{name_en}}<br/>{{name_cn}}</h2>
+          </div>
+          <div class="logo_list"><i class="iconfont icon-liebiao"></i></div>
+        </div>
+      `,
+      props : [ 'name_en','name_cn' ]
+    });
+
+    Vue.component('bartab',{
+      template : ` 
+      <div class="bartab">
+        <div v-for="(item,i) in items" :key="item.i">
+          <router-link :to="item.router">
+          <i class="iconfont" :class="[item.iconfont,item.active ? 'active' : '']"></i>
+          <p>{{item.text}}</p>
+          </router-link>
+        </div>
+      </div>
+      `,
+      props : ['items']
+    });
+
+    const banner = {
+      data : function() {
+        return {
+          imgBase : './images/',
+          items : [
+            {
+              active : true,
+              href : '#',
+              file_name : 'banner-1.jpg',
+              name : 'follow'
+            },
+            {
+              active : false,
+              href : '#',
+              file_name : 'banner-1.jpg',
+              name : 'follow'
+            },
+            {
+              active : false,
+              href : '#',
+              file_name : 'banner-1.jpg',
+              name : 'follow'
+            },
+          ]
+        }
+      },
+      template : `
+      <div class="banner">
+        <ul>
+          <li v-for="(item,i) in items" v-bind:key="i" v-bind:class="{active : item.active}">
+            <a :href="item.href"><img :src="imgBase + item.file_name"/></a>
+          </li>
+        </ul>
+        <ol>
+          <li v-for="(item,i) in items" v-bind:key="i" :class="{active : item.active}"><a href="#"></a></li>
+        </ol>
+      </div>
+      `
+    };
+
+    const nav = {
+      template : `
+      <div class="nav">
+        <ul>
+          <li @click="toggle(lang.toggle_lang);"><router-link to="/"><i class="iconfont" :class="[lang.iconfont]"></i><p>{{lang.text}}</p></router-link></router-link></li>
+          <li v-for="(item,i) in items" :key="item.i"><router-link :to="router(item.router)"><i class="iconfont" :class="[item.iconfont]"></i><p>{{item.text}}</p></router-link></li>
+        </ul>
+      </div>
+      `,
+      computed : {
+        router() {
+          return function(router){
+           return this.base + '/' + router;
+          };
+        }
+      },
+      props : {
+        base : {
+          default : '/'
+        },
+        items : {
+          default : []
+        },
+        lang : {}
+      },
+      methods : {
+        toggle : function(_lang) {
+          lang = _lang;
+          this.$emit('toggle_lang',_lang);
+        }
+      }
+    }
+
+    const loading = {
+      template : `
+        <div class="loading">
+          <p>loading...</p>
+        </div>
+      `
+    }
+
+    const box = {
+      template : `
+        <div class="box" :class="boxType">
+          <h2>{{title}}</h2>
+          <slot name="default"></slot>
+          <slot name='btn'>
+            <div class="btn-box">
+              <button>查看更多</button>
+            </div>
+          </slot>
+        </div>
+      `,
+      props : {
+        title : {
+          type : String,
+          default : '关于我们'
+        },
+        boxType : {
+          type : String,
+          default : 'about-us'
+        }
+      }
+    }
+
+    const aboutUs = {
+      template : `
+        <box :title="title" :box-type="boxType">
+          <template #default v-if="loaded">
+            <div class="photo">
+              <img :src="imgSrc"/>
+            </div>
+            <p class="word">{{text}}</p>
+          </template>
+          <template #default v-else>
+            <loading></loading>
+          </template>
+        </box>
+      `,
+      data () {
+        return {
+          title : '',
+          boxType : '',
+          text : '',
+          imgSrc : '',
+          loaded : false
+        }
+      },
+      created() {
+        setTimeout(()=> {
+          this.loaded = true;
+          const vm = this;
+          const data = globalData[globalData.lang].list.aboutUs;
+          data.keys().foreach(function(key,i){
+            vm[key] = this[key];
+          },data);
+        },300);
+      },
+      components : {
+        box,loading
+      }
+    };
+
+    const productShow = {
+      template : `
+        <div>
+          <img :src="imgSrc"/>
+          <p>{{text}}</p>
+        </div>
+      `,
+      props : [
+        'imgSrc','text'
+      ]
+    };
+
+    const appliactionField = {
+      template : `
+        <div>
+          <div class="photo">
+            <img :src="imgSrc"/>
+          </div>
+          <p>{{text}}</p>
+        </div>
+      `,
+      props : [
+        'imgSrc','text'
+      ]
+    };
+    
+    const news = {
+      template : `
+        <div>
+          <a href="#"><span></span>{{text}}</a>
+        </div>
+      `,
+      props : [
+        'text'
+      ]
+    }
+
+    const baseInput = {
+      template : `<input></input>`
+    }
+
+    const verificationCode = {
+      template : `
+        <div>
+          <base-input v-bind="$attrs"></base-input>
+          <span class="code-img"></span>
+        </div>
+      `,
+      components : { 'base-input' : baseInput },
+      inheritAttrs : false
+    }
+
+    const baseTextarea = {
+      template : `
+        <textarea></textarea>
+      `
+    }
+
+
+    const boxlistInput = {
+      template : `
+      <box :title="title" :class="boxType">
+        <template #default v-if="loaded">
+          <ul>
+            <li v-for="(item,i) in items" :key="i">
+              <base-input v-if="!item.isComponent" v-bind="item.attrs"></base-input>
+              <component v-else :is="item.component" v-bind="item.attrs"></component>
+            </li>
+          </ul>
+        </template>
+        <template #default v-else>
+          <loading></loading>
+        </template>
+        <template #btn v-if="loaded">
+          <div class="btn-box"><button class="btn-full">提交</button></div>  
+        </template>
+      </box>
+      `,
+      components : {
+        box , 'base-input' : baseInput,'verification-code' : verificationCode,'base-textarea' : baseTextarea,loading
+      },
+      beforeRouteEnter(to,from,next) {
+        next((vm) => {
+          setTimeout(()=> {
+            vm.loaded = true;
+            const data = globalData[globalData.lang].list[vm.dataName];
+            data.keys().foreach(function(key,i){
+              vm[key] = this[key];
+            },data);
+          },300);
+        })
+      },
+      props : [
+        'dataName'
+      ],
+      data() {
+        return {
+          items : [],
+          loaded : false,
+          title : '',
+          boxType : ''
+        }
+      }
+    }
+
+    const boxlist = {
+      template : `
+        <box :title="title" :box-type="boxType">
+          <ul v-if="loaded">
+            <li v-for="(item,i) in items" :key="i">
+              <component :is="component" v-bind="item"></component>
+            </li>
+          </ul>
+          <loading v-else></loading>
+        </box>
+      `,
+      components : {box,loading,'product-show':productShow,'appliaction-field':appliactionField,news},
+      data () {
+        return {
+          loaded : false,
+          items : null,
+          title : '',
+          boxType : ''
+        }
+      },
+      props : [
+        'component','dataName'
+      ],beforeRouteEnter(to,from,next){
+        next((vm)=> {
+          vm.fetch();
+        });
+      },
+      beforeRouteLeave(to,from,next) {
+        this.loaded = false;
+        next();
+      },
+      methods : {
+        fetch() {
+          setTimeout(()=> {
+            this.loaded = true;
+            const vm = this;
+            globalData[globalData.lang]
+                .list[this.dataName].forin(function(value,key){
+                  vm[key] = value;
+            });
+          },300);
+        }
+      }
+    }
+
+    const Home = {
+      template : `
+      <div>
+        <my-head v-bind="head"></my-head>
+        <banner></banner>
+        <my-nav base="/home" :lang="navLang" :items="navItems" @toggle_lang=toggle_lang($event)></my-nav>
+        <router-view></router-view>
+        <bartab v-bind="bartabItems"></bartab>
+      </div>`,
+      components : {
+        myNav : nav,
+        banner
+      },
+      computed : {
+        navLang() {
+          return copy(globalData[this.lang].nav.lang);
+        },
+        navItems() {
+          return copy(globalData[this.lang].nav.items);
+        },
+        bartabItems() {
+          return copy(globalData[this.lang].bartab);
+        }
+      },
+      props : [
+        'lang','head'
+      ],
+      methods : {
+        toggle_lang(lang) {
+          this.$emit('toggle_lang',lang);
+        }
+      }
+    };
+
+    window.onload = () => {
+      const router = new VueRouter({
+        routes : [
+          {
+            path : '/home',
+            components : {default:Home},
+            children : [
+              {
+                path : 'about-us',
+                component : aboutUs
+              },
+              {
+                path : 'product-show',
+                component : boxlist,
+                props : {component : 'product-show',dataName : 'productShow' }
+              },
+              {
+                path : 'appliaction-field',
+                component : boxlist,
+                props : { component : 'appliaction-field',dataName : 'appliactionField' }
+              },
+              {
+                path : 'news',
+                component : boxlist,
+                props : {
+                  component : 'news', dataName : 'news'
+                }
+              },
+              {
+                path : 'leave-msg',
+                component : boxlistInput,
+                props : {
+                  dataName : 'leaveMsg'
+                }
+              }
+            ]
+          },
+          {
+            path : '*',redirect : '/home'
+          }
+        ]
+      });
+
+      new Vue({
+        el : '#app',
+        data : {
+          head : {
+            name_cn : '华能机电',
+            name_en : 'Wonon'
+          },
+          lang : 'cn'
+        },
+        router
+      });
+    }
+  </script>
+</head>
+<body>
+<div id="app">
+  <router-view :head="head" @toggle_lang="lang=$event" :lang="lang"></router-view>
+</div>
+</body>
+</html>

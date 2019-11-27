@@ -77,6 +77,7 @@ let router = (function(args) {
     // TODO:对非网页进行操作
     let moduleName = `${GLOBALS.PHYSICAL_ROOT}\\${paths.join('\\')}\\${script}`;
     let fullFileName = moduleName + (suffix !== null ? '.' + suffix : '');
+    console.log(urlObj.pathname);
     // 检测脚本类型.
     const isActivePage = (function(){
             return !!(

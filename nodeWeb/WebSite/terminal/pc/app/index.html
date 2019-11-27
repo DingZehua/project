@@ -13,7 +13,7 @@
   <script src="./js/util.js"></script>
   <script>
   window.onload = () => {
-
+    Vue.use(VueRouter);
     Vue.component('my-banner',{
       data : function() {
         return {
@@ -88,13 +88,18 @@
       template : `
       <div class="nav">
         <ul>
-          <li v-for="(item,i) in items" :key="item.i"><i class="iconfont" :class="[item.iconfont]"></i><p>{{item.text}}</p></li>
+          <li v-for="(item,i) in items" :key="item.i"><router-link to='\app2'"<i class="iconfont" :class="[item.iconfont]"></i><p>{{item.text}}</p></router-link></li>
         </ul>
       </div>
       `
     });
 
     Vue.component('box', {
+      data() {
+        return {
+
+        };
+      },
       template : `
         <div class="box" :class="boxType">
           <h2>{{title}}</h2>

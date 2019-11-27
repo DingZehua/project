@@ -172,6 +172,25 @@
     return o;
   }
 
+  Object.prototype.keys = function() {
+    return Object.keys(this);
+  }
+
+  Object.prototype.forin = function(fn,ctx) {
+    let exit;
+    for(key in this) {
+      if(!this.hasOwnProperty(key)){ 
+        continue;
+      }
+      
+      exit = fn.call(ctx || null,this[key],key,this);
+      
+      if(exit === null || exit === false){ 
+        break; 
+      }
+    }
+  }
+
   hideAttr(Arr);
   hideAttr(String);
   hideAttr(Date);

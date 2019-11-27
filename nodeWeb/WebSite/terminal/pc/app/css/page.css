@@ -1,0 +1,30 @@
+
+.about-us .photo {margin-top:0.11rem;overflow: hidden;width:100%;height:0.68rem;}
+.about-us .word {font-size:0.12rem;line-height: 0.22rem;margin-top:0.11rem;text-indent:0.48rem;}
+
+.product-show {overflow: hidden;}
+.product-show ul { display: flex;justify-content:space-around;flex-wrap:wrap;text-align: center;margin-top:0.1rem;}
+.product-show li { display:block;width:1.22rem;overflow: hidden;}
+.product-show img {width:100%;height: 1.1rem;border-radius:0.05rem;box-sizing:border-box;border:0.01rem solid #ccd3db;}
+.product-show li p { font-size:0.08rem;line-height: 0.18rem;width:100%;margin-top:0.05rem;margin-bottom:0.06rem;}
+
+.appliaction-field {overflow: hidden;}
+.appliaction-field ul { display: flex;justify-content:space-around;flex-wrap:wrap;text-align: center;margin-top:0.04rem;}
+.appliaction-field li { display:block;width:1.67rem;overflow: hidden;margin-top:0.1rem;}
+.appliaction-field .photo {height:1.18rem;display: flex;box-sizing:border-box;border:0.01rem solid #ccd3db;}
+.appliaction-field img {width:100%;display: block;margin:auto 0;}
+.appliaction-field li p { font-size:0.08rem;line-height: 0.24rem;width:100%;margin-top:0.05rem;margin-bottom:0.06rem;}
+
+.news {overflow: hidden;}
+.news li {height:0.33rem;line-height: 0.33rem;overflow: hidden;white-space: nowrap;text-overflow:ellipsis;position: relative;padding-left:0.18rem;font-size:0.12rem;}
+.news a {color:black;}
+.news ul span {display: block;width:0.04rem;height: 0.04rem;background:#ff6501;position: absolute;left:0.07rem;top:50%;margin-top:-0.02rem;}
+.news li:after{position: absolute;width:0.18rem;height:0.01rem;background: #ededed;bottom:0;display: block;content: "";left:0;}
+
+.leave-msg { color:#747474;padding-bottom:0.15rem;font-size:0; }
+.leave-msg li {margin-top:0.11rem;position: relative;}
+.leave-msg input,.leave-msg textarea {width: 100%;background:#f6f6f6;line-height: 0.33rem;font-size:0.12rem;box-sizing: border-box;border:0.01rem solid #dedede;box-shadow: 0rem 0rem 0rem;text-indent:1em;border-radius:0.02rem;}
+.leave-msg textarea {height:1.33rem;}
+.leave-msg  input[name="code"] {width:1.7rem;display: inline-block;}
+.leave-msg .btn-box {margin-top:0.11rem;}
+.leave-msg .code-img,.leave-msg img {width:0.6rem;height:0.26rem;display: inline-block;background: #8e8e8e;vertical-align: bottom;position: relative;top:-0.01rem;margin-left:0.11rem;}
